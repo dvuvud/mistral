@@ -13,6 +13,29 @@ Konventionen för branch-namn är kebab-case, men vi behöver inte ha något str
   * `bugfix/namn-på-bugfix`
   * `hotfix/namn-på-hotfix`
 
+## Rebase före merge till main
+
+För att hålla commit-historiken så ren och lättläst som möjligt bör alla branches rebasas mot `main` innan de mergas.
+
+Det innebär att man lägger sina commits ovanpå den senaste versionen av `main`, istället för att skapa en merge commit.
+
+```bash
+git checkout <din-branch>
+git fetch origin
+git rebase origin/main
+```
+
+Om det uppstår konflikter löser man dessa och kör:
+```bash
+git add <fil>
+git rebase --continue
+```
+
+Detta gör att historiken förblir linjär och enklare att följa, samtidigt som man undviker onödiga merge commits.
+
+> [!WARNING]
+> Detta skriver om historiken. Om branchen redan liggeer på remote behöver du använda `--force-with-lease` när du pushar (det står mer om det här i [följande avsnitt](#du-har-råkat-commita-något-du-inte-ville-ha-med)).
+
 ## Vanliga problem
 
 Det finns ett antal vanliga problem som man kan stöta på när man arbetar i git.
