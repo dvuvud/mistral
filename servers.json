@@ -1,0 +1,13 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "Mistral Local",
+            "Group": "Servers",
+            "Host": "postgres",
+            "Port": 5432,
+            "MaintenanceDB": "mistral",
+            "Username": "admin",
+            "SSLMode": "prefer"
+        }
+    }
+}
