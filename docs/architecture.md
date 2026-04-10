@@ -33,7 +33,7 @@ För att utveckla systemet behövs följande bibliotek och grejer:
 * **Spring Data JPA (Hibernate):** Fungerar som bryggan mellan Java-koden och databasen. Sköter automatisk generering av SQL och mappning av Entities till tabeller.
 * **Spring Messaging (STOMP/WebSocket):** Möjliggör push-kommunikation från servern till klienten för realtidsuppdateringar.
 * **Lombok:** Automatiserar generering av boilerplate-kod som getters, setters och constructors för att hålla koden ren.
-* **Yjs (Frontend):** Implementerar CRDT-algoritmer för att möjliggöra simultant skrivande utan låsning. Notera att det här biblioteket inte är konfigurerat för tillfället.
+* **Yjs or ot.js:** Implementerar algoritmer för att möjliggöra simultant skrivande utan låsning. Notera att inget utav dessa biblioteket är konfigurerade för tillfället.
 
 ---
 
@@ -63,11 +63,11 @@ Används för statusuppdateringar (t.ex. incheckning av barn).
 * **Hur?:** Användning av `@Version` i JPA på Entities.
 * **Resultat:** Förhindrar att en incheckning skrivs över av en gammal status om två lärare klickar samtidigt.
 
-### CRDT (Final boss)
+### CRDT or Operational Transformation (OT)
 Används för journaler för att tillåta att flera användare skriver i samma stycke samtidigt.
-* **Hur??:** Yjs-integration.
-* **Resultat:** Skickar binära ändringsset via WebSockets. Algoritmen garanterar att alla klienter når samma tillstånd utan behovet av en auktoritet som bestämmer vad som är rätt.
-
+* **Hur??** (OT): OT (t.ex. via bibliotek som ot.js) fungerar genom att varje klient skickar operationer (t.ex. insert/delete). En central server tar emot dessa operationer, transformerar dem mot samtidiga ändringar och säkerställer korrekt ordning innan de skickas vidare till andra klienter.
+* **Skillnad mot CRDT**: Till skillnad från CRDT kräver OT normalt en central auktoritet (server) som koordinerar och transformerar operationer för att lösa konflikter.
+* **Resultat:** Alla klienter konvergerar till samma slutliga dokumenttillstånd genom att operationer transformeras och appliceras i rätt ordning. Kommunikation sker ofta via WebSockets, där operationer skickas som strukturerade ändringar snarare än hela dokument.
 ---
 
 ## Realtidssamarbete med WebSockets
