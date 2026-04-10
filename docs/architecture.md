@@ -46,6 +46,7 @@ Följande endpoints skulle kunna utgöra gränssnittet mellan frontend och backe
 | **Autentisering** | POST | `/api/auth/login` | Autentiserar användare och returnerar en JWT. |
 | **Autentisering** | POST | `/api/auth/logout` | Invaliderar sessionen (raderar JWT lokalt hos klienten). |
 | **Barn** | GET | `/api/children` | Hämtar alla barn och incheckningsstatus. |
+| **Barn** | GET | `/api/classes/{class_id}/children` | Hämtar alla barn i en klass samt deras incheckningsstatus. |
 | **Incheckning** | PATCH | `/api/children/{id}` | Uppdaterar status (in/utcheckning) via optimistisk låsning. |
 | **Journal** | GET | `/api/journals/{id}` | Hämtar dokumentets initiala binära tillstånd. |
 | **Användare** | GET | `/api/users/me` | Hämtar information om den aktuella användaren. |
