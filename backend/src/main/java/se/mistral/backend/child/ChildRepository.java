@@ -5,6 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChildRepository extends JpaRepository<Child, Long> {
-    // findAll() finns redan inbyggt, inget behövs läggas till
 }
 
