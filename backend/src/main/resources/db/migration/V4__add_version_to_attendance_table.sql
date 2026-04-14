@@ -1,0 +1,2 @@
+ALTER TABLE attendance
+ADD COLUMN version INT NOT NULL DEFAULT 0;
