@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { ChildList } from './child-list/child-list';
+import { ChildList } from '../main-child-list/main-child-list';
 
 @Component({
-  selector: 'app-main-panel',
+  selector: 'main-panel',
   imports: [ChildList],
   templateUrl: './main-panel.html',
   styleUrl: './main-panel.scss',
