@@ -4,11 +4,11 @@ import { MainPage } from './main-page/main-page';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: '', // Detta innebär att rotsidan alltid kommer vara LoginPage. TODO: Detta borde redirectas till /app om man redan är inloggad
     component: LoginPage
   },
   {
-    path: 'app',
+    path: 'app', // Detta innebär att localhost:4200/app leder till main-page komponenten.
     component: MainPage
   }
 ];
