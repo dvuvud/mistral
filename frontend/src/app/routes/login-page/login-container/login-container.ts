@@ -5,10 +5,11 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'login-container',
-  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatCard, MatCardContent, MatCardHeader, MatCardTitle],
+  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatCard, MatCardContent, MatCardHeader, MatCardTitle, MatTabGroup, MatTab],
   templateUrl: './login-container.html',
   styleUrl: './login-container.scss',
 })
@@ -20,6 +21,8 @@ export class LoginContainer {
   */
   email = model.required<string>();
   password = model.required<string>();
+  name = model.required<string>();
+  lastName = model.required<string>();
 
   /*
   Detta är lite data för password-fältet

@@ -11,12 +11,15 @@ import { form } from '@angular/forms/signals';
 export class LoginPage {
   email = signal('');
   password = signal('');
+  name = signal('');
+  lastName = signal('');
 
   onLoginSubmit() {
     console.log(this.email(), this.password());
   }
 
   onRegisterSubmit() {
-    console.log(this.email(), this.password());
+    let namn = this.name() + " " + this.lastName();
+    console.log(namn, this.email(), this.password());
   }
 }
