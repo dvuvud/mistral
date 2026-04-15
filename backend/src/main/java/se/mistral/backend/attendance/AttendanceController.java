@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import se.mistral.backend.attendance.dto.AttendanceDto;
 import se.mistral.backend.attendance.dto.AttendanceDtoList;
 import se.mistral.backend.attendance.dto.AttendanceRequest;
+import se.mistral.backend.attendance.dto.AttendancesRequest;
 
 @RestController
 @RequestMapping("/api/attendance")
@@ -21,7 +22,7 @@ public class AttendanceController {
     }
 
     @GetMapping()
-    public ResponseEntity<AttendanceDtoList> getAttendances(@Valid @RequestBody AttendanceRequest request) {
+    public ResponseEntity<AttendanceDtoList> getAttendances(@Valid @RequestBody AttendancesRequest request) {
         return ResponseEntity.ok(attendanceService.getAttendances(request));
     }
 }
