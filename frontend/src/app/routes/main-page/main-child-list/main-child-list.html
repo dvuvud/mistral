@@ -1,8 +1,18 @@
+<h2>Nyckelpigorna</h2>
 <div class="child-list-container">
-  <h2>Detta är child list</h2>
-  hhhhhhhhhhhhhhhhhhhhh
-  ddddddddddddddddddddd
-  ddddddddddddddddddddd
-  ddddddddddddddddddddd
-  
+  <mat-action-list>
+    @for (child of children(); track child; let last = $last) {
+      <li>
+        <button mat-list-item (click)="onSelectChild(child)">
+          <span matListItemLabel>{{child.name}}</span>
+        </button>
+      </li>
+
+      @if (!last) {
+        <mat-divider></mat-divider>
+      }
+    }
+  </mat-action-list>
 </div>
+
+

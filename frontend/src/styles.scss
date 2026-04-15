@@ -7,12 +7,14 @@
 
 html {
   height: 100%;
-  @include mat.theme((color: (primary: mat.$magenta-palette,
-        tertiary: mat.$violet-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    ));
+  @include mat.theme((
+    color: (
+      primary: mat.$magenta-palette,
+      tertiary: mat.$violet-palette,
+    ),
+    typography: arial,
+    density: 0,
+  ));
 }
 
 body {
