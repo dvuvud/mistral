@@ -162,7 +162,8 @@ Started BackendApplication in X seconds
 
 Backend körs på [http://localhost:8080](http://localhost:8080).
 
-> **Notera:** Se till att Docker-containrarna körs **innan** du startar backend, annars kan den inte ansluta till databasen.
+> [!NOTE]
+> Se till att Docker-containrarna körs **innan** du startar backend, annars kan den inte ansluta till databasen.
 
 ### Om det inte fungerar
 
