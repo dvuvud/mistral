@@ -2,6 +2,8 @@
 
 Inget i den här filen är ett måste, men tänkte att det kan vara bra att ha lite samlad information om hur man kan jobba i Git för att göra det enklare om man känner sig osäker någon gång.
 
+---
+
 ## Branch-struktur
 
 Alla nya features, bugfixar, förbättringar etc. ska utvecklas i egna branches (main har branch protection så det går inte att pusha till den ens).
@@ -12,6 +14,8 @@ Konventionen för branch-namn är kebab-case, men vi behöver inte ha något str
   * `feature/namn-på-feature`
   * `bugfix/namn-på-bugfix`
   * `hotfix/namn-på-hotfix`
+
+---
 
 ## Rebase före merge till main
 
@@ -36,6 +40,8 @@ Detta gör att historiken förblir linjär och enklare att följa, samtidigt som
 > [!WARNING]
 > Detta skriver om historiken. Om branchen redan liggeer på remote behöver du använda `--force-with-lease` när du pushar (det står mer om det här i [följande avsnitt](#du-har-råkat-commita-något-du-inte-ville-ha-med)).
 
+---
+
 ## Vanliga problem
 
 Det finns ett antal vanliga problem som man kan stöta på när man arbetar i git.
@@ -48,6 +54,8 @@ Därför har jag gjort en liten snabb guide med åtgärder till dessa.
 - [Du har råkat commita något du inte ville ha med](#du-har-råkat-commita-något-du-inte-ville-ha-med)
 - [Du har byggt en ny feature ovanpå en branch som inte mergats till main än](#du-har-byggt-en-ny-feature-ovanpå-en-branch-som-inte-mergats-till-main-än)
 - [Du vill navigera till eller ändra i tidigare commits](#du-vill-navigera-till-eller-ändra-i-tidigare-commits)
+
+---
 
 ### Din lokala branch är bakom remote och push nekas
 
@@ -64,6 +72,8 @@ git rebase --continue
 
 git push origin <branch-namn>
 ```
+
+---
 
 ### Du glömde något i ditt senaste commit
 
@@ -82,6 +92,8 @@ git commit --amend --no-edit
 
 > [!WARNING]
 > Amend skriver om historiken. Om du redan pushat det committet behöver du använda `--force-with-lease` (det står mer om det här i [följande avsnitt](#du-har-råkat-commita-något-du-inte-ville-ha-med)).
+
+---
 
 ### Du har råkat commita något du inte ville ha med
 
@@ -130,6 +142,8 @@ git push --force-with-lease origin <branch-namn>
 > ```
 > Se därför till att undvika stora omskrivningar, och prata alltid med berörda personer innan du force-pushar till en branch som flera jobbar på.
 
+---
+
 ### Du har byggt en ny feature ovanpå en branch som inte mergats till main än
 
 Det händer lätt att man fortsätter jobba på `feature/b` med `feature/a` som utgångspunkt, innan `feature/a` är mergad. Om `feature/a` sedan uppdateras eller får nya commits behöver `feature/b` hållas synkroniserad.
@@ -147,6 +161,8 @@ git rebase main
 ```
 
 På så vis följer `feature/b` alltid med utan att historiken blir rörig.
+
+---
 
 ### Du vill navigera till eller ändra i tidigare commits
 
@@ -195,6 +211,8 @@ git rebase --continue
 
 Git applicerar sedan resten av committsen ovanpå. Om det uppstår konflikter längs vägen får du lösa dem och köra `git rebase --continue` igen.
 Precis som vid vanlig force-push skriver detta om historiken, så samma regler gäller. Om du redan pushat behöver du `git push --force-with-lease` efteråt.
+
+---
 
 ## Commit-guidelines
 
