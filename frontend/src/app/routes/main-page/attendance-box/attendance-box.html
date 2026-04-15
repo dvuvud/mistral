@@ -1,3 +1,12 @@
 <div>
-    <mat-checkbox labelPosition="before">Registrera närvaro för {{childSignal()}}</mat-checkbox> 
+    <mat-checkbox 
+        labelPosition="before" 
+        [checked]="isChecked"
+        (change)="onCheckBox($event)">
+        Registrera närvaro för {{childSignal()}}
+    </mat-checkbox> 
+
+    @if (errorMessage) {
+        <p class="error-text">{{ errorMessage }}</p>
+    }
 </div>

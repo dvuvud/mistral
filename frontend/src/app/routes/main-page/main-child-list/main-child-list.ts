@@ -13,7 +13,7 @@ import { child, MockChildList } from '../../../models/TestChildren'; // TESTDATA
 })
 
 export class ChildList {
-    children = signal(MockChildList);  //TESTDATA FÖR VISUELL GUIDE
+    children = signal(MockChildList);  //TODO: fetcha riktiga datan
     childSignal = model.required<string>();
 
     onSelectChild(child: child) {
