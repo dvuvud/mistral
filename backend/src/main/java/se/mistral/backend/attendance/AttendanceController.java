@@ -15,12 +15,12 @@ public class AttendanceController {
 
     private final AttendanceService attendanceService;
 
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<AttendanceDto> updateAttendance(@Valid @RequestBody AttendanceRequest request) {
         return ResponseEntity.ok(attendanceService.updateAttendance(request));
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<AttendanceDtoList> getAttendances(@Valid @RequestBody AttendanceRequest request) {
         return ResponseEntity.ok(attendanceService.getAttendances(request));
     }
