@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.mistral.backend.attendance.dto.AttendanceDto;
 import se.mistral.backend.attendance.dto.AttendanceDtoList;
+import se.mistral.backend.attendance.dto.AttendanceListItem;
 import se.mistral.backend.attendance.dto.AttendanceRequest;
 import se.mistral.backend.attendance.dto.AttendancesRequest;
 import se.mistral.backend.child.Child;
@@ -20,21 +21,17 @@ public class AttendanceService {
     private final AttendanceRepository attendanceRepository;
     private final ChildRepository childRepository;
 
-    private AttendanceDto entityToDto(Attendance attendance) {
-        return new AttendanceDto(
-                attendance.getId(),
-                attendance.getChild().getId(),
-                attendance.getDate(),
-                attendance.getPresent()
-                );
-    }
-
     public AttendanceDtoList getAttendances(AttendancesRequest request) {
-        List<AttendanceDto> attendanceDtoList = attendanceRepository.findByChildId(request.childId())
+        List<AttendanceListItem> list = attendanceRepository.findByDate(request.date())
                                                                     .stream()
-                                                                    .map(this::entityToDto)
+                                                                    .map(attendance -> new AttendanceListItem(
+                                                                                attendance.getChild().getId(),
+                                                                                attendance.getChild().getName(),
+                                                                                attendance.getPresent()
+                                                                                )
+                                                                            )
                                                                     .toList();
-        return new AttendanceDtoList(attendanceDtoList, attendanceDtoList.size());
+        return new AttendanceDtoList(list, list.size());
     }
 
     public AttendanceDto updateAttendance(AttendanceRequest request) {
@@ -47,7 +44,12 @@ public class AttendanceService {
             );
         attendance.setPresent(request.present());
         attendanceRepository.save(attendance);
-        return entityToDto(attendance);
+        return new AttendanceDto(
+                attendance.getId(),
+                attendance.getChild().getId(),
+                attendance.getDate(),
+                attendance.getPresent()
+            );
     }
 }
 

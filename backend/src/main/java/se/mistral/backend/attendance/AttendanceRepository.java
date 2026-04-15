@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
-    List<Attendance> findByChildId(Long childId);
+    List<Attendance> findByDate(LocalDate date);
     Optional<Attendance> findByChildIdAndDate(Long childId, LocalDate date);
 }
