@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import se.mistral.backend.child.Child;
 
 import java.util.Date;
 @Data
@@ -14,10 +15,15 @@ public class Attendance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private long child_id;
+    @ManyToOne
+    @JoinColumn(name = "child_id")
+    private Child child;
     private Date date;
-    private boolean present;
+    private Boolean present;
     @Version
-    private Version version;
+    private Long version;
 
+    public Attendance(Long child_id, Date date, boolean present) {
+
+    }
 }
