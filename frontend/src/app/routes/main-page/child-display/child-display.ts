@@ -1,9 +1,8 @@
 import { Component, model } from '@angular/core';
-import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-child-display',
-  imports: [MatCheckbox],
+  imports: [],
   templateUrl: './child-display.html',
   styleUrl: './child-display.scss',
 })

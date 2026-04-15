@@ -2,5 +2,8 @@
   <h1>Detta är huvudpanelen</h1>
   <main-child-list [(childSignal)]="childSignal"></main-child-list>
   <mat-divider></mat-divider>
-  <app-child-display [(childSignal)]="childSignal"></app-child-display>
+  @if (childSignal() != ''){
+    <app-child-display [(childSignal)]="childSignal"></app-child-display>
+    <app-attendance-box [(childSignal)]="childSignal"></app-attendance-box>
+  }
 </div>
