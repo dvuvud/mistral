@@ -1,4 +1,6 @@
 package se.mistral.backend.attendance.dto;
 
-public record AttendancesRequest(Long childId) {
+import java.time.LocalDate;
+
+public record AttendancesRequest(LocalDate date) {
 }
