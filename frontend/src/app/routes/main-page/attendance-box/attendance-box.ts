@@ -1,7 +1,6 @@
 import { C } from '@angular/cdk/keycodes';
-import { Component, effect, model } from '@angular/core';
+import { Component, model } from '@angular/core';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
-import { child } from '../../../models/TestChildren';
 
 @Component({
   selector: 'app-attendance-box',
@@ -10,24 +9,15 @@ import { child } from '../../../models/TestChildren';
   styleUrl: './attendance-box.scss',
 })
 export class AttendanceBox {
-    childSignal = model.required<child>();
+    childSignal = model.required<string>();
     isChecked = false;
     errorMessage = '';
-
-    constructor() {
-      effect(() => {
-        const currentChild = this.childSignal(); 
-
-        this.isChecked = this.childSignal().attendance; //TODO: current child lol
-        this.errorMessage = ''; 
-      });
-    }
 
 
     onCheckBox(event: MatCheckboxChange) {
           if (event.checked) {
               
-            const isValid = true; //TODO: byt ut mot registreringscheck
+            const isValid = false; //TODO: byt ut mot check in logik
 
             if(isValid) {
               this.isChecked = true; 
@@ -38,11 +28,9 @@ export class AttendanceBox {
               
               setTimeout(() => {
                 this.errorMessage = '';
-              }, 2000)
+              }, 50)
             }
 
-          } else {
-            this.isChecked = false;
           }
       }
 }
