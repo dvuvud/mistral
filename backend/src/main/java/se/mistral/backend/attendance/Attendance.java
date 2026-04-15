@@ -1,29 +1,37 @@
 package se.mistral.backend.attendance;
 
+import se.mistral.backend.child.Child;
+
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import se.mistral.backend.child.Child;
 
 import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @Table(name = "attendance", uniqueConstraints = {@UniqueConstraint(name = "UniqueChildIdAndDate", columnNames = {"child_id", "date"})})
 public class Attendance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "child_id")
-    private Child child;
+
+    @Column(nullable = false)
     private Date date;
+
+    @Column(nullable = false)
     private Boolean present;
+
     @Version
     private Long version;
 
-    public Attendance(Long child_id, Date date, boolean present) {
-
-    }
+    @ManyToOne
+    @JoinColumn(name = "child_id")
+    private Child child;
 }
+

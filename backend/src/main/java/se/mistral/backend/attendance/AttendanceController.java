@@ -1,5 +1,6 @@
 package se.mistral.backend.attendance;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +16,12 @@ public class AttendanceController {
     private final AttendanceService attendanceService;
 
     @PostMapping("/")
-    public ResponseEntity<AttendanceDto> updateAttendance(@RequestBody AttendanceRequest request) {
+    public ResponseEntity<AttendanceDto> updateAttendance(@Valid @RequestBody AttendanceRequest request) {
         return ResponseEntity.ok(attendanceService.updateAttendance(request));
     }
 
     @GetMapping("/")
-    public ResponseEntity<AttendanceDtoList> getAttendances(@RequestBody AttendanceRequest request) {
+    public ResponseEntity<AttendanceDtoList> getAttendances(@Valid @RequestBody AttendanceRequest request) {
         return ResponseEntity.ok(attendanceService.getAttendances(request));
     }
 }

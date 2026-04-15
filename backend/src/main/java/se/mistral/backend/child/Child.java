@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import org.hibernate.mapping.List;
+import java.util.List;
 import se.mistral.backend.attendance.Attendance;
 
 @Data
@@ -17,10 +17,10 @@ public class Child {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @OneToMany(mappedBy = "child", cascade = CascadeType.REMOVE)
-    private List<Attendance> attendances;
     private Long id;
 
+    @OneToMany(mappedBy = "child", cascade = CascadeType.REMOVE)
+    private List<Attendance> attendances;
 
     @NotBlank
     private String name;
