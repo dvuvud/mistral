@@ -1,5 +1,5 @@
 import { C } from '@angular/cdk/keycodes';
-import { Component, model } from '@angular/core';
+import { Component, effect, model } from '@angular/core';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
@@ -13,11 +13,20 @@ export class AttendanceBox {
     isChecked = false;
     errorMessage = '';
 
+    constructor() {
+      effect(() => {
+        const currentChild = this.childSignal(); 
+
+        this.isChecked = false; 
+        this.errorMessage = ''; 
+      });
+    }
+
 
     onCheckBox(event: MatCheckboxChange) {
           if (event.checked) {
               
-            const isValid = false; //TODO: byt ut mot registreringscheck
+            const isValid = true; //TODO: byt ut mot registreringscheck
 
             if(isValid) {
               this.isChecked = true; 
@@ -28,9 +37,11 @@ export class AttendanceBox {
               
               setTimeout(() => {
                 this.errorMessage = '';
-              }, 50)
+              }, 2000)
             }
 
+          } else {
+            this.isChecked = false;
           }
       }
 }

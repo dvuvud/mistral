@@ -1,7 +1,7 @@
 <h2>Nyckelpigorna</h2> <!--TODO: klassnamn variabel-->
 <div class="child-list-container">
   <mat-action-list>
-    @for (child of children(); track child; let last = $last) {
+    @for (child of children(); track child; let last = $last) { <!--TODO: tracka id istället-->
       <li>
         <button mat-list-item (click)="onSelectChild(child)">
           <span matListItemLabel>{{child.name}}</span>
