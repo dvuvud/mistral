@@ -20,12 +20,12 @@ public class ChildController {
     
     private final ChildService childService;
 
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<ChildResponse> createChild(@RequestBody CreateChildRequest request) {
         return ResponseEntity.ok(childService.createChild(request));
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<List<ChildResponse>> getAllChildren() {
         return ResponseEntity.ok(childService.getAllChildren());
     }

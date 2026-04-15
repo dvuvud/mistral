@@ -12,7 +12,7 @@ import java.util.List;
 public class ChildService {
 
     private final ChildRepository childRepository;
-    
+
     public ChildResponse createChild(CreateChildRequest request) {
         Child child = new Child();
         child.setName(request.name());
@@ -20,9 +20,10 @@ public class ChildService {
         return new ChildResponse(saved.getId(), saved.getName());
     }
 
-        public List<ChildResponse> getAllChildren() {
-            return childRepository.findAll().stream()
-                    .map(child -> new ChildResponse(child.getId(), child.getName()))
-                    .toList();
-        }
+    public List<ChildResponse> getAllChildren() {
+        return childRepository.findAll()
+            .stream()
+            .map(child -> new ChildResponse(child.getId(), child.getName()))
+            .toList();
+    }
 }
