@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { Component, signal } from '@angular/core';
 import { MainPanel } from './main-panel/main-panel';
 import { ChildList } from './main-child-list/main-child-list';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -20,9 +19,5 @@ import { MatCard } from '@angular/material/card';
   styleUrl: './main-page.scss',
 })
 export class MainPage {
-
-  constructor(private router: Router) { }
-  logout() {
-    this.router.navigateByUrl("/");
-  }
+    childSignal = signal('')
 }

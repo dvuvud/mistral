@@ -1,8 +1,6 @@
-<h1>Närvaroöversikt</h1>
-
-<mat-card>
-  <div class="content">
-    <main-child-list></main-child-list>
-
-  </div>
-</mat-card>
+<div class="main-panel">
+  <h1>Detta är huvudpanelen</h1>
+  <main-child-list [(childSignal)]="childSignal"></main-child-list>
+  <mat-divider></mat-divider>
+  <app-child-display [(childSignal)]="childSignal"></app-child-display>
+</div>
