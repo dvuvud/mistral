@@ -7,7 +7,7 @@ import se.mistral.backend.attendance.dto.AttendanceDtoList;
 import se.mistral.backend.attendance.dto.AttendanceRequest;
 import se.mistral.backend.child.Child;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -34,7 +34,7 @@ public class AttendanceService {
     }
 
     public AttendanceDto updateAttendance(AttendanceRequest request) {
-        Date date = request.date().orElseThrow(()-> new RuntimeException("No date given"));
+        LocalDate date = request.date().orElseThrow(()-> new RuntimeException("No date given"));
         Attendance attendance = attendanceRepository.findByChildIdAndDate(request.childId(), date).orElseThrow(()-> new RuntimeException("Attendance not found"));
         attendance.setPresent(request.present());
         return entityToDto(attendance);

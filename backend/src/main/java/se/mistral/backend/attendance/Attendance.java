@@ -3,13 +3,12 @@ package se.mistral.backend.attendance;
 import se.mistral.backend.child.Child;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -22,7 +21,7 @@ public class Attendance {
     private Long id;
 
     @Column(nullable = false)
-    private Date date;
+    private LocalDate date;
 
     @Column(nullable = false)
     private Boolean present;
