@@ -1,0 +1,62 @@
+:host {
+  width: 40%;
+}
+
+.login-container {
+  display: flex;
+  flex: 1;
+  width: 100%;
+}
+
+.login-container-header {
+  text-align: center;
+  margin-bottom:1em;
+}
+
+.login-container-card {
+  width: 100%;
+}
+
+.login-container-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-container-fields {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.login-container-fields::after {
+  content: "";
+}
+
+.login-container-fields::before {
+  content: "";
+}
+
+.login-container-fields mat-form-field {
+  width: 33%;
+}
+
+.login-container-buttons {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.login-container-buttons::after {
+  content: "";
+}
+
+.login-container-button::before {
+  content: "";
+}
+
+.login-container-button {
+  width: 7em;
+  margin-left: 1em;
+  margin-right: 1em;
+}

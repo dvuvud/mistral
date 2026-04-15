@@ -1,11 +1,10 @@
-<h1>login-page works!</h1>
 <!--
   [(denna)] syntax är för 2-vägsbindning. Vi binder email från login-page.ts till email från login-container.ts
   (event)=callback() syntax lysnar efter ett event och anropar callback() från .ts filen.
 -->
-<app-login-container
+<login-container class="login-page-container"
   [(email)]="email"
   [(password)]="password"
-  (loginSubmitEvent)="onLoginSubmit()">
-
-</app-login-container>
+  (loginSubmitEvent)="onLoginSubmit()"
+  (registerSubmitEvent)="onRegisterSubmit()">
+</login-container>

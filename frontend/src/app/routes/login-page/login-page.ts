@@ -15,4 +15,8 @@ export class LoginPage {
   onLoginSubmit() {
     console.log(this.email(), this.password());
   }
+
+  onRegisterSubmit() {
+    console.log(this.email(), this.password());
+  }
 }

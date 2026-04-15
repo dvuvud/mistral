@@ -1,30 +1,44 @@
 <div class="login-container">
-  <!-- Här är det simpla fältet för email-->
-  <mat-form-field>
-    <mat-label>Enter your email</mat-label>
-    <!-- Notera hur vi binder vår required model email (från login-container.ts) till [(ngModel)].
-    Det innebär att när en föränding sker i fältet så uppdateras vår email model direkt.
-    Vi gör exakt samma för password -->
-    <input matInput [(ngModel)]="email"/>
-  </mat-form-field>
-  <!-- Här är det lite mer invecklade fältet för lösenord,
-  notera att majoriteten av koden bara är för styling-->
-  <mat-form-field>
-    <mat-label>Enter your password</mat-label>
-    <input matInput [(ngModel)]="password" [type]="hide() ? 'password' : 'text'" />
-    <button
-      matIconButton
-      matSuffix
-      (click)="clickEvent($event)"
-      [attr.aria-label]="'Hide password'"
-      [attr.aria-pressed]="hide()"
-    >
-      <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
-    </button>
-  <!-- Och här är det simpla fältet för login-knappen -->
-  </mat-form-field>
-  <!-- Notera här hur vi binder (click) eventet till submitLogin() (från login-container.ts) -->
-  <button matButton (click)="submitLogin()">
-    Login
-  </button>
+  <mat-card id="logincard" class="login-container-card" appearance="outlined">
+    <mat-card-header class="login-container-header">
+      <mat-card-title>Välkommen tillbaka till <b>KindGuard</b></mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="login-container-card-content">
+      <div class="login-container-fields">
+        <!-- Här är det simpla fältet för email-->
+        <mat-form-field>
+          <mat-label>E-post adress</mat-label>
+          <!-- Notera hur vi binder vår required model email (från login-container.ts) till [(ngModel)].
+          Det innebär att när en föränding sker i fältet så uppdateras vår email model direkt.
+          Vi gör exakt samma för password -->
+          <input matInput [(ngModel)]="email"/>
+        </mat-form-field>
+        <!-- Här är det lite mer invecklade fältet för lösenord,
+        notera att majoriteten av koden bara är för styling-->
+        <mat-form-field>
+          <mat-label>Lösenord</mat-label>
+          <input matInput [(ngModel)]="password" [type]="hide() ? 'password' : 'text'" />
+          <button
+            matIconButton
+            matSuffix
+            (click)="clickEvent($event)"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide()"
+          >
+            <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <!-- Och här är det simpla fältet för login-knappen -->
+        </mat-form-field>
+      </div>
+      <div class="login-container-buttons">
+        <!-- Notera här hur vi binder (click) eventet till submitLogin() (från login-container.ts) -->
+        <button class="login-container-button" matButton="elevated" (click)="submitLogin()">
+          Login
+        </button>
+        <button class="login-container-button" matButton="elevated" (click)="submitRegister()">
+          Register
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

@@ -1,4 +1,5 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, input, model, Output, signal} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, input, model, Output, signal } from '@angular/core';
+import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
@@ -6,8 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-login-container',
-  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule],
+  selector: 'login-container',
+  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatCard, MatCardContent, MatCardHeader, MatCardTitle],
   templateUrl: './login-container.html',
   styleUrl: './login-container.scss',
 })
@@ -35,5 +36,10 @@ export class LoginContainer {
   @Output() loginSubmitEvent = new EventEmitter();
   submitLogin() {
     this.loginSubmitEvent.emit();
+  }
+
+  @Output() registerSubmitEvent = new EventEmitter();
+  submitRegister() {
+    this.registerSubmitEvent.emit();
   }
 }
