@@ -5,12 +5,14 @@ import se.mistral.backend.child.Child;
 import jakarta.persistence.*;
 
 import lombok.Data;
+import lombok.Builder;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
