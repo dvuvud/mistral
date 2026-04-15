@@ -1,0 +1,41 @@
+mat-toolbar[color="primary"] {
+    background-color: #00008B;
+    /* Magenta */
+    color: white;
+    display: flex;
+    align-items: center;
+
+}
+
+.example-container {
+    height: calc(100vh - 64px);
+    border: 1px solid #555;
+}
+
+.example-spacer {
+    flex: 1 1 auto;
+}
+
+mat-sidenav-container {
+    height: 100%;
+    flex: 1;
+    padding: 20px;
+}
+
+mat-sidenav {
+    height: 100%;
+    width: 300px;
+    padding: 24px;
+    background: #f5f5f5;
+    box-sizing: border-box;
+
+}
+
+mat-sidenav-content {
+    padding: 45px;
+    box-sizing: border-box;
+}
+
+mat-card {
+    padding: 20px;
+}

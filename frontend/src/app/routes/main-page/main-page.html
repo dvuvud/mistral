@@ -1,2 +1,16 @@
-<h1>main-page works!</h1>
-<main-panel></main-panel>
+<mat-toolbar color="primary">
+    <span>KîndGuard</span>
+    <span class="example-spacer"></span>
+    <button mat-flat-button color="primary" (click)="logout()">Logout</button>
+</mat-toolbar>
+
+<mat-sidenav-container class="example-container">
+    <mat-sidenav #rightSidenav position="end" mode="side" opened>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <main-panel></main-panel>
+
+    </mat-sidenav-content>
+
+</mat-sidenav-container>
