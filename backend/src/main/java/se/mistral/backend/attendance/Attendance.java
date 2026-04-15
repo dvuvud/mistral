@@ -27,7 +27,7 @@ public class Attendance {
     private Boolean present;
 
     @Version
-    private Long version;
+    private int version;
 
     @ManyToOne
     @JoinColumn(name = "child_id")
