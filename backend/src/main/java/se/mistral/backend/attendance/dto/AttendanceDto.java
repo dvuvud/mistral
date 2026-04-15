@@ -1,6 +1,6 @@
 package se.mistral.backend.attendance.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-public record AttendanceDto(Long id, Long childId, Date date, Boolean precent) {
+public record AttendanceDto(Long id, Long childId, LocalDate date, Boolean precent) {
 }
