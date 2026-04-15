@@ -3,7 +3,7 @@
         labelPosition="before" 
         [checked]="isChecked"
         (change)="onCheckBox($event)">
-        Registrera närvaro för {{childSignal().name}}
+        Registrera närvaro för {{childSignal()}}
     </mat-checkbox> 
 
     @if (errorMessage) {
