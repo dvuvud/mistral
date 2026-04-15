@@ -1,4 +1,5 @@
 import { Component, model } from '@angular/core';
+import { child } from '../../../models/TestChildren';
 
 @Component({
   selector: 'app-child-display',
@@ -7,5 +8,5 @@ import { Component, model } from '@angular/core';
   styleUrl: './child-display.scss',
 })
 export class ChildDisplay {
-  childSignal = model.required<string>();
+  childSignal = model.required<child>();
 }

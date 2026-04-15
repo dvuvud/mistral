@@ -14,9 +14,9 @@ import { child, MockChildList } from '../../../models/TestChildren'; // TESTDATA
 
 export class ChildList {
     children = signal(MockChildList);  //TODO: fetcha riktiga datan
-    childSignal = model.required<string>();
+    childSignal = model.required<child>();
 
     onSelectChild(child: child) {
-      this.childSignal.set(child.name);
+      this.childSignal.set(child); //TODO: SKA VARA DATA STRUKTUREN
     }
 }
