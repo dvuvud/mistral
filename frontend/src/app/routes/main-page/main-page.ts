@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCard } from '@angular/material/card';
 
 @Component({
   selector: 'app-main-page',
@@ -14,7 +13,6 @@ import { MatCard } from '@angular/material/card';
     MainPanel,
     MatSidenavModule,
     MatButtonModule,
-    MatCard,
   ],
 
   templateUrl: './main-page.html',
@@ -22,7 +20,7 @@ import { MatCard } from '@angular/material/card';
 })
 export class MainPage {
   childSignal = signal<Child>({ name: '', id: 0 });
-  
+
   constructor(private router: Router) {}
 
   logout() {
