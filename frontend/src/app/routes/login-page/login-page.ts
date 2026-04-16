@@ -14,6 +14,7 @@ export class LoginPage {
   password = signal('');
   name = signal('');
   lastName = signal('');
+  errorMessage = signal('');
 
   constructor(
     private router: Router,
@@ -23,6 +24,9 @@ export class LoginPage {
   onLoginSubmit() {
     console.log(this.email(), this.password());
     this.authService.login(this.email(), this.password()).subscribe({
+      error: (err) => {
+        this.errorMessage.set(err.error.error);
+      },
       next: () => {
         this.router.navigate(['/app']);
       }
@@ -35,6 +39,9 @@ export class LoginPage {
     const password = this.password();
 
     this.authService.register(name, email, password).subscribe({
+      error: (err) => {
+        this.errorMessage.set(err.error.error);
+      },
       next: () => {
         this.router.navigate(['/app']);
       }

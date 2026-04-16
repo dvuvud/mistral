@@ -1,6 +1,6 @@
 <div class="login-container">
   <mat-card id="logincard" class="login-container-card" appearance="outlined">
-    <mat-tab-group>
+    <mat-tab-group (selectedIndexChange)="clearError()">
       <mat-tab label="Logga in">
         <mat-card-header class="login-container-header">
           <mat-card-title>Välkommen tillbaka till <b>KindGuard</b></mat-card-title>
@@ -29,9 +29,14 @@
               >
                 <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
               </button>
-              <!-- Och här är det simpla fältet för login-knappen -->
             </mat-form-field>
           </div>
+          @if(errorMessage() != "") {
+            <div class="login-container-error">
+              <mat-error>{{errorMessage()}}</mat-error>
+            </div>
+          }
+          <!-- Och här är det simpla fältet för login-knappen -->
           <div class="login-container-buttons">
             <!-- Notera här hur vi binder (click) eventet till submitLogin() (från login-container.ts) -->
             <button class="login-container-button" matButton="elevated" (click)="submitLogin()">
@@ -74,6 +79,11 @@
               </button>
             </mat-form-field>
           </div>
+          @if(errorMessage() != "") {
+            <div class="login-container-error">
+              <mat-error>{{errorMessage()}}</mat-error>
+            </div>
+          }
           <div class="login-container-buttons">
             <button class="login-container-button" matButton="elevated" (click)="submitRegister()">
               Registrera
