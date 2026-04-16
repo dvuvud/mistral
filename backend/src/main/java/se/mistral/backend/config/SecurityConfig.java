@@ -36,6 +36,7 @@ public class SecurityConfig {
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/auth/**").permitAll() // TODO: give different roles different endpoint perms
+                    .requestMatchers("/api/auth/validate").authenticated()
                     .requestMatchers("/api/children/**").hasRole("TEACHER")
                     .anyRequest().authenticated()
             )
