@@ -21,12 +21,12 @@ public class AttendanceController {
         return ResponseEntity.ok(attendanceService.updateAttendance(request));
     }
 
-    @GetMapping()
+    @PostMapping("/fetch")
     public ResponseEntity<AttendanceDto> getAttendance(@Valid @RequestBody AttendanceFetchRequest request) {
         return ResponseEntity.ok(attendanceService.getAttendance(request));
     }
 
-    @GetMapping("/all")
+    @PostMapping("/fetch-all")
     public ResponseEntity<AttendanceDtoList> getAttendances(@Valid @RequestBody AttendancesRequest request) {
         return ResponseEntity.ok(attendanceService.getAttendances(request));
     }
