@@ -2,6 +2,7 @@ import { C } from '@angular/cdk/keycodes';
 import { Component, model } from '@angular/core';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { Child } from '../../../core/child/child.service';
+import { AttendanceService, AttendanceGetInfo } from '../../../core/child/attendance.service';
 
 @Component({
   selector: 'app-attendance-box',
@@ -14,22 +15,20 @@ export class AttendanceBox {
     isChecked = false;
     errorMessage = '';
 
-    constructor() {
+    constructor(private attendanceService: AttendanceService) {
       effect(() => {
-        const currentChild = this.childSignal(); 
-
+        this.isChecked = this.getAttendance();
         this.errorMessage = ''; 
       });
     }
 
 
     onCheckBox(event: MatCheckboxChange) {
-          if (event.checked) {
-              
-            const isValid = false; //TODO: byt ut mot check in logik
+      if (event.checked) {     
+        const isValid = true; //TODO: byt ut mot registreringscheck
 
             if(isValid) {
-              this.isChecked = true; 
+              this.isChecked = this.setAttendance(); 
             } else {
               event.source.checked = false;
               this.isChecked = false;
@@ -40,6 +39,30 @@ export class AttendanceBox {
               }, 50)
             }
 
+          } else {
+            this.isChecked = this.setAttendance();
           }
-      }
+    }
+
+    getAttendance(): boolean {
+      this.attendanceService.getAttendance(new Date().toISOString().split('T')[0]).subscribe({
+      next: (data) => {
+        for (let child of data.list) {
+          if (child.childId == this.childSignal().id) {
+            return child.present
+          }
+        }
+        return false;
+      }})
+      return false;
+    }
+
+    setAttendance(): boolean {
+      this.attendanceService.setAttendance(this.childSignal().id, new Date().toISOString().split('T')[0], this.isChecked).subscribe({
+      next: (data) => {
+        console.log(data)
+        return data.present
+      }})
+      return false;
+    }
 }
