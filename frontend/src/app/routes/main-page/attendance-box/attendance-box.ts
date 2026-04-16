@@ -1,5 +1,5 @@
 import { C } from '@angular/cdk/keycodes';
-import { Component, model } from '@angular/core';
+import { Component, model, effect } from '@angular/core';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { Child } from '../../../core/child/child.service';
 import { AttendanceService, AttendanceGetInfo } from '../../../core/child/attendance.service';
@@ -18,22 +18,22 @@ export class AttendanceBox {
     constructor(private attendanceService: AttendanceService) {
       effect(() => {
         this.isChecked = this.getAttendance();
-        this.errorMessage = ''; 
+        this.errorMessage = '';
       });
     }
 
 
     onCheckBox(event: MatCheckboxChange) {
-      if (event.checked) {     
+      if (event.checked) {
         const isValid = true; //TODO: byt ut mot registreringscheck
 
             if(isValid) {
-              this.isChecked = this.setAttendance(); 
+              this.isChecked = this.setAttendance();
             } else {
               event.source.checked = false;
               this.isChecked = false;
-              this.errorMessage = 'Misslyckades! Detta barn är redan registrerad som närvarande.'     
-              
+              this.errorMessage = 'Misslyckades! Detta barn är redan registrerad som närvarande.'
+
               setTimeout(() => {
                 this.errorMessage = '';
               }, 50)
