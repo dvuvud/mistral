@@ -2,8 +2,7 @@ import { Component, model, signal } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
-
-import { child, MockChildList } from '../../../models/TestChildren'; // TESTDATA
+import { Child, ChildService } from '../../../core/child/child.service';
 
 @Component({
   selector: 'main-child-list',
@@ -12,11 +11,27 @@ import { child, MockChildList } from '../../../models/TestChildren'; // TESTDATA
   styleUrl: './main-child-list.scss',
 })
 
-export class ChildList {
-    children = signal(MockChildList);  //TODO: fetcha riktiga datan
-    childSignal = model.required<child>();
 
-    onSelectChild(child: child) {
+export class ChildList {
+    children = signal<Child[]>([]);  
+    childSignal = model.required<Child>();
+
+    constructor(private childService: ChildService) {}
+
+    ngOnInit() {
+      this.loadChildren();
+    }
+
+    onSelectChild(child: Child) {
       this.childSignal.set(child); //TODO: SKA VARA DATA STRUKTUREN
     }
+
+    loadChildren() {
+      this.childService.getChildren().subscribe({
+      next: (data) => {
+        this.children.set(data);
+        console.log('children:', this.children);
+      }
+    });
+  }
 }
