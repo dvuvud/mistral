@@ -1,6 +1,7 @@
 package se.mistral.backend.attendance;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import se.mistral.backend.attendance.dto.AttendanceDto;
 import se.mistral.backend.attendance.dto.AttendanceDtoList;
@@ -34,6 +35,18 @@ public class AttendanceService {
         return new AttendanceDtoList(list, list.size());
     }
 
+    public AttendanceDto getAttendance(AttendanceRequest request) {
+        Attendance attendance = attendanceRepository.findByChildIdAndDate(request.childId(), request.date())
+            .orElse(Attendance.builder()
+                .date(request.date())
+                .child(childRepository.findById(request.childId()).orElseThrow(() -> new RuntimeException("Child not found")))
+                .present(request.present())
+                .build()
+            );
+        attendanceRepository.save(attendance);
+        return new AttendanceDto(attendance.getPresent());
+    }
+
     public AttendanceDto updateAttendance(AttendanceRequest request) {
         Attendance attendance = attendanceRepository.findByChildIdAndDate(request.childId(), request.date())
             .orElse(Attendance.builder()
@@ -43,13 +56,13 @@ public class AttendanceService {
                 .build()
             );
         attendance.setPresent(request.present());
-        attendanceRepository.save(attendance);
-        return new AttendanceDto(
-                attendance.getId(),
-                attendance.getChild().getId(),
-                attendance.getDate(),
-                attendance.getPresent()
-            );
+        try {
+            attendanceRepository.save(attendance);
+        }
+        catch (ObjectOptimisticLockingFailureException e) {
+            throw new RuntimeException("Another teacher is currently updating this entry");
+        }
+        return new AttendanceDto(attendance.getPresent());
     }
 }
 

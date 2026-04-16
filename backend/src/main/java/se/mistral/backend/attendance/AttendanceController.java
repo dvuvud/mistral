@@ -8,7 +8,6 @@ import se.mistral.backend.attendance.dto.AttendanceDto;
 import se.mistral.backend.attendance.dto.AttendanceDtoList;
 import se.mistral.backend.attendance.dto.AttendanceRequest;
 import se.mistral.backend.attendance.dto.AttendancesRequest;
-
 @RestController
 @RequestMapping("/api/attendance")
 @RequiredArgsConstructor
@@ -22,6 +21,11 @@ public class AttendanceController {
     }
 
     @GetMapping()
+    public ResponseEntity<AttendanceDto> getAttendance(@Valid @RequestBody AttendanceRequest request) {
+        return ResponseEntity.ok(attendanceService.getAttendance(request));
+    }
+
+    @GetMapping("/all")
     public ResponseEntity<AttendanceDtoList> getAttendances(@Valid @RequestBody AttendancesRequest request) {
         return ResponseEntity.ok(attendanceService.getAttendances(request));
     }
