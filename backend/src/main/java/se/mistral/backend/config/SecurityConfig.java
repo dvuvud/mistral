@@ -37,6 +37,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/auth/validate").authenticated()
                     .requestMatchers("/api/auth/**").permitAll() // TODO: give different roles different endpoint perms
+                    .requestMatchers("/api/auth/validate").authenticated()
                     .requestMatchers("/api/children/**").hasRole("TEACHER")
                     .requestMatchers("/api/attendance/**").hasRole("TEACHER")
                     .anyRequest().authenticated()
