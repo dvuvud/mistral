@@ -23,6 +23,7 @@ export class LoginContainer {
   password = model.required<string>();
   name = model.required<string>();
   lastName = model.required<string>();
+  errorMessage = model.required<string>();
 
   /*
   Detta är lite data för password-fältet
@@ -31,6 +32,10 @@ export class LoginContainer {
   clickEvent(event: MouseEvent) {
     this.hide.set(!this.hide());
     event.stopPropagation();
+  }
+
+  clearError() {
+    this.errorMessage.set('');
   }
 
   /*
