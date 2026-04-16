@@ -4,10 +4,11 @@ import { MatDivider, MatDividerModule } from '@angular/material/divider';
 import { ChildDisplay } from "../child-display/child-display";
 import { AttendanceBox } from '../attendance-box/attendance-box';
 import { Child } from '../../../core/child/child.service';
+import { MatCard } from '@angular/material/card';
 
 @Component({
   selector: 'main-panel',
-  imports: [ChildList, MatDividerModule, ChildDisplay, AttendanceBox],
+  imports: [ChildList, MatDividerModule, ChildDisplay, AttendanceBox, MatCard],
   templateUrl: './main-panel.html',
   styleUrl: './main-panel.scss',
 })

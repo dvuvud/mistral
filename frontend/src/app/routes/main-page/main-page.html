@@ -1,5 +1,16 @@
-<div class="flex-container">
-    <main-panel class="center-wrapper" [(childSignal)]="childSignal"> 
-    </main-panel>
-</div>
+<mat-toolbar color="primary">
+    <span>KÃ®ndGuard</span>
+    <span class="example-spacer"></span>
+    <button mat-flat-button color="primary" (click)="logout()">Logout</button>
+</mat-toolbar>
 
+<mat-sidenav-container class="example-container">
+    <mat-sidenav #rightSidenav position="end" mode="side" opened>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <main-panel [(childSignal)]="childSignal"></main-panel>
+
+    </mat-sidenav-content>
+
+</mat-sidenav-container>
