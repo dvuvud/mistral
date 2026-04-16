@@ -45,14 +45,11 @@ export class AttendanceBox {
     }
 
     getAttendance(): boolean {
-      this.attendanceService.getAttendance(new Date().toISOString().split('T')[0]).subscribe({
+      console.log(this.childSignal().id, new Date().toISOString().split('T')[0]);
+      this.attendanceService.getAttendance(this.childSignal().id, new Date().toISOString().split('T')[0]).subscribe({
       next: (data) => {
-        for (let child of data.list) {
-          if (child.childId == this.childSignal().id) {
-            return child.present
-          }
-        }
-        return false;
+        console.log(data)
+        return data.present
       }})
       return false;
     }

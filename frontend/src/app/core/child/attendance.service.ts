@@ -10,15 +10,11 @@ export type AttendanceSetInfo = {
 };
 
 export type AttendanceGetInfo = {
-    list: {
-        childId: number,
-        name: string,
-        present: boolean
-    }[];
-    count: number;
+    present: boolean;
 };
 
 type GetAttendanceRequest = {
+    childId: number;
 	date: string;
 };
 
@@ -35,20 +31,13 @@ export class AttendanceService {
 
   constructor(private http: HttpClient) {}
 
-  getAttendance(date: string): Observable<AttendanceGetInfo>  {
+  getAttendance(childId: number, date: string): Observable<AttendanceGetInfo>  {
     const data: GetAttendanceRequest = {
+        childId,
         date,
     };
 
-    return this.http.get<{
-        list: { childId: number; name: string; present: boolean }[];
-        count: number;
-    }>(this.url, { params: data }).pipe(
-        map((response) => ({
-            list: response.list,
-            count: response.count,
-        }))
-    );
+    return this.http.post<AttendanceGetInfo>("http://localhost:8080/api/attendance/fetch", data)
   } 
 
   setAttendance(childId: number, date: string, present: boolean): Observable<AttendanceSetInfo> {
