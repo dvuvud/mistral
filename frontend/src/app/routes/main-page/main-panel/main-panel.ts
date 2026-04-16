@@ -3,7 +3,7 @@ import { ChildList } from '../main-child-list/main-child-list';
 import { MatDivider, MatDividerModule } from '@angular/material/divider';
 import { ChildDisplay } from "../child-display/child-display";
 import { AttendanceBox } from '../attendance-box/attendance-box';
-import { child } from '../../../models/TestChildren';
+import { Child } from '../../../core/child/child.service';
 
 @Component({
   selector: 'main-panel',
@@ -12,5 +12,5 @@ import { child } from '../../../models/TestChildren';
   styleUrl: './main-panel.scss',
 })
 export class MainPanel {
-    childSignal = model.required<child>();
+    childSignal = model.required<Child>();
 }
