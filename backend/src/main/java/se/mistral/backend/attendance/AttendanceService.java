@@ -1,7 +1,6 @@
 package se.mistral.backend.attendance;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import se.mistral.backend.attendance.dto.AttendanceDto;
 import se.mistral.backend.attendance.dto.AttendanceDtoList;
@@ -11,6 +10,8 @@ import se.mistral.backend.attendance.dto.AttendanceFetchRequest;
 import se.mistral.backend.attendance.dto.AttendancesRequest;
 import se.mistral.backend.child.Child;
 import se.mistral.backend.child.ChildRepository;
+
+import se.mistral.backend.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -38,35 +39,26 @@ public class AttendanceService {
 
     public AttendanceDto getAttendance(AttendanceFetchRequest request) {
         Attendance attendance = attendanceRepository.findByChildIdAndDate(request.childId(), request.date())
-            .orElse(Attendance.builder()
-                    .date(request.date())
-                    .child(childRepository.findById(request.childId()).orElseThrow(() -> new RuntimeException("Child not found")))
-                    .present(false)
-                    .build()
-                   );
-        try {
-            attendanceRepository.save(attendance);
-        }
-        catch (ObjectOptimisticLockingFailureException e) {}
-
+            .orElseGet(() -> attendanceRepository.save(Attendance.builder()
+                        .date(request.date())
+                        .child(childRepository.findById(request.childId()).orElseThrow(() -> new NotFoundException("Child not found")))
+                        .present(false)
+                        .build()
+                        )
+                    );
         return new AttendanceDto(attendance.getPresent());
     }
 
     public AttendanceDto updateAttendance(AttendanceRequest request) {
         Attendance attendance = attendanceRepository.findByChildIdAndDate(request.childId(), request.date())
-            .orElse(Attendance.builder()
+            .orElseGet(() -> Attendance.builder()
                     .date(request.date())
-                    .child(childRepository.findById(request.childId()).orElseThrow(() -> new RuntimeException("Child not found")))
+                    .child(childRepository.findById(request.childId()).orElseThrow(() -> new NotFoundException("Child not found")))
                     .present(request.present())
                     .build()
                    );
         attendance.setPresent(request.present());
-        try {
-            attendanceRepository.save(attendance);
-        }
-        catch (ObjectOptimisticLockingFailureException e) {
-            throw new RuntimeException("Another teacher is currently updating this entry");
-        }
+        attendanceRepository.save(attendance);      // throws ObjectOptimisticLockingFailureException on conflict
         return new AttendanceDto(attendance.getPresent());
     }
 }
