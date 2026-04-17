@@ -23,7 +23,7 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
   styleUrl: './main-page.scss',
 })
 export class MainPage {
-  childSignal = signal<Child>({ name: '', id: 0 });
+  childSignal = signal<Child>({ name: '', id: 0, date: "", present: false });
 
   private router = inject(Router);
 

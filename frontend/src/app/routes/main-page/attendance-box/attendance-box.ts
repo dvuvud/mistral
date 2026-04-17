@@ -31,9 +31,15 @@ export class AttendanceBox {
 
       const sig = this.attendanceService.getSignal(child.id, this.dateStr);
       if (sig() === null) {
-        this.attendanceService.getAttendance(child.id, this.dateStr).subscribe({
+        this.attendanceService.getAttendance(child.id).subscribe({
           next: (data) => sig.set(data.present),
-          error: (err) => console.error('Kunde inte hämta', err),
+          error: (err: HttpErrorResponse) => {
+            if (err.status === 404) {
+              sig.set(false);
+              return;
+            }
+            console.error('Kunde inte hämta', err);
+          },
         });
       }
     });
