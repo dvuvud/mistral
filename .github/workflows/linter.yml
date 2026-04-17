@@ -17,9 +17,11 @@ jobs:
       - name: Lint Code Base
         uses: github/super-linter@v7
         env:
-          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_ALL_CODEBASE: true
           DEFAULT_BRANCH: "main"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FILTER_REGEX_EXCLUDE: (node_modules/|target/|dist/|.*\.spec\.ts)
+          ACTIONS_RUNNER_DEBUG: true
           VALIDATE_JAVA: true
           VALIDATE_TYPESCRIPT_ES: true
           VALIDATE_ANGULAR: true
