@@ -9,7 +9,6 @@ import se.mistral.backend.child.ChildRepository;
 import se.mistral.backend.attendance.dto.AttendanceDto;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
