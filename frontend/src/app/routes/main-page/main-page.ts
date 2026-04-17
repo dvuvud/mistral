@@ -21,7 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
 export class MainPage {
   childSignal = signal<Child>({ name: '', id: 0 });
 
-  constructor(private router: Router) {}
+  private router: Router = inject(Router);
 
   logout() {
     this.router.navigateByUrl("/");

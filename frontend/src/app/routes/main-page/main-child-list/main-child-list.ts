@@ -14,21 +14,21 @@ import { AttendanceBox } from '../attendance-box/attendance-box';
 
 
 export class ChildList {
-    children = signal<Child[]>([]);  
-    childSignal = model.required<Child>();
+  children = signal<Child[]>([]);
+  childSignal = model.required<Child>();
 
-    constructor(private childService: ChildService) {}
+  constructor(private childService: ChildService) {}
 
-    ngOnInit() {
-      this.loadChildren();
-    }
+  ngOnInit() {
+    this.loadChildren();
+  }
 
-    onSelectChild(child: Child) {
-      this.childSignal.set(child); //TODO: SKA VARA DATA STRUKTUREN
-    }
+  onSelectChild(child: Child) {
+    this.childSignal.set(child); //TODO: SKA VARA DATA STRUKTUREN
+  }
 
-    loadChildren() {
-      this.childService.getChildren().subscribe({
+  loadChildren() {
+    this.childService.getChildren().subscribe({
       next: (data) => {
         this.children.set(data);
         console.log('children:', this.children);
