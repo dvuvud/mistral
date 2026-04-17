@@ -41,12 +41,6 @@ export class AttendanceService {
     return this.attendanceSignals.get(key)!;
   }
 
-
-  getAttendance(childId: number): Observable<AttendanceGetInfo>  {
-    const params = new HttpParams().set('childId', childId);
-    return this.http.get<AttendanceGetInfo>("http://localhost:8080/api/attendance", {params});
-  }
-
   setAttendance(childId: number, date: string, present: boolean): Observable<AttendanceSetInfo> {
     const data: SetAttendanceRequest = {
         childId,

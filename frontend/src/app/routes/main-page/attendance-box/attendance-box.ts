@@ -31,16 +31,11 @@ export class AttendanceBox {
 
       const sig = this.attendanceService.getSignal(child.id, this.dateStr);
       if (sig() === null) {
-        this.attendanceService.getAttendance(child.id).subscribe({
-          next: (data) => sig.set(data.present),
-          error: (err: HttpErrorResponse) => {
-            if (err.status === 404) {
-              sig.set(false);
-              return;
-            }
-            console.error('Kunde inte hämta', err);
-          },
-        });
+        if (child.present === null) {
+          sig.set(false);
+        } else {
+          sig.set(child.present);
+        }
       }
     });
   }
