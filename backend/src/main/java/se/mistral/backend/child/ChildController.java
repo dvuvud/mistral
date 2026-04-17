@@ -7,9 +7,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import se.mistral.backend.child.dto.ChildResponse;
+import se.mistral.backend.child.dto.AttendanceResponse;
 import se.mistral.backend.child.dto.CreateChildRequest;
+
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
@@ -28,5 +32,10 @@ public class ChildController {
     @GetMapping()
     public ResponseEntity<List<ChildResponse>> getAllChildren() {
         return ResponseEntity.ok(childService.getAllChildren());
+    }
+
+    @GetMapping("/attendance")
+    public ResponseEntity<List<AttendanceResponse>> getAllChildrenWithAttendanceIfExists(@RequestParam(required = false) LocalDate date) {
+        return ResponseEntity.ok(childService.getAllChildrenWithAttendanceIfExists(date != null ? date : LocalDate.now()));
     }
 }
