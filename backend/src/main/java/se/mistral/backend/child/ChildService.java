@@ -3,8 +3,11 @@ package se.mistral.backend.child;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import se.mistral.backend.child.dto.AttendanceResponse;
 import se.mistral.backend.child.dto.ChildResponse;
 import se.mistral.backend.child.dto.CreateChildRequest;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -25,5 +28,9 @@ public class ChildService {
             .stream()
             .map(child -> new ChildResponse(child.getId(), child.getName()))
             .toList();
+    }
+
+    public List<AttendanceResponse> getAllChildrenWithAttendanceIfExists(LocalDate date) {
+        return childRepository.findAllChildrenWithAttendanceIfExists(date);
     }
 }
