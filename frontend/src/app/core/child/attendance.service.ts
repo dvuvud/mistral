@@ -1,27 +1,22 @@
 import { Injectable, signal, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface AttendanceSetInfo {
-    id: number;
-    childId: number;
-    date: string;
-    present: boolean;
+  id: number;
+  childId: number;
+  date: string;
+  present: boolean;
 }
 
 export interface AttendanceGetInfo {
-    present: boolean;
-}
-
-interface GetAttendanceRequest {
-    childId: number;
-	date: string;
+  present: boolean;
 }
 
 interface SetAttendanceRequest {
-	childId: number;
-	date: string;
-    present: boolean;
+  childId: number;
+  date: string;
+  present: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -43,9 +38,9 @@ export class AttendanceService {
 
   setAttendance(childId: number, date: string, present: boolean): Observable<AttendanceSetInfo> {
     const data: SetAttendanceRequest = {
-        childId,
-        date,
-        present,
+      childId,
+      date,
+      present,
     };
 
     return this.http.put<AttendanceSetInfo>(this.url, data);
