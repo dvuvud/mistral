@@ -1,4 +1,4 @@
-import { Component, model, signal } from '@angular/core';
+import { Component, model, signal, OnInit, inject } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
@@ -6,18 +6,18 @@ import { Child, ChildService } from '../../../core/child/child.service';
 import { AttendanceBox } from '../attendance-box/attendance-box';
 
 @Component({
-  selector: 'main-child-list',
+  selector: 'app-main-child-list',
   imports: [MatListModule, RouterModule, MatDividerModule, AttendanceBox],
   templateUrl: './main-child-list.html',
   styleUrl: './main-child-list.scss',
 })
 
 
-export class ChildList {
+export class ChildList implements OnInit {
   children = signal<Child[]>([]);
   childSignal = model.required<Child>();
 
-  constructor(private childService: ChildService) {}
+  private childService = inject(ChildService);
 
   ngOnInit() {
     this.loadChildren();

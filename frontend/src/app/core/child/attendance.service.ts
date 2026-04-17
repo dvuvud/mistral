@@ -1,28 +1,28 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
-export type AttendanceSetInfo = {
+export interface AttendanceSetInfo {
     id: number;
     childId: number;
     date: string;
     present: boolean;
-};
+}
 
-export type AttendanceGetInfo = {
+export interface AttendanceGetInfo {
     present: boolean;
-};
+}
 
-type GetAttendanceRequest = {
+interface GetAttendanceRequest {
     childId: number;
 	date: string;
-};
+}
 
-type SetAttendanceRequest = {
+interface SetAttendanceRequest {
 	childId: number;
 	date: string;
     present: boolean;
-};
+}
 
 @Injectable({ providedIn: 'root' })
 export class AttendanceService {
@@ -30,7 +30,7 @@ export class AttendanceService {
   private url = "http://localhost:8080/api/attendance";
   private attendanceSignals = new Map<string, ReturnType<typeof signal<boolean | null>>>();
 
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
 
   getSignal(childId: number, dateStr: string) {
@@ -49,7 +49,7 @@ export class AttendanceService {
     };
 
     return this.http.post<AttendanceGetInfo>("http://localhost:8080/api/attendance/fetch", data)
-  } 
+  }
 
   setAttendance(childId: number, date: string, present: boolean): Observable<AttendanceSetInfo> {
     const data: SetAttendanceRequest = {
