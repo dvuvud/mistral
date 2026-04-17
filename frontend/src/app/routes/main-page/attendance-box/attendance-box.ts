@@ -1,8 +1,7 @@
-import { C } from '@angular/cdk/keycodes';
-import { Component, model, effect } from '@angular/core';
+import { Component, input, effect} from '@angular/core';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { Child } from '../../../core/child/child.service';
-import { AttendanceService, AttendanceGetInfo } from '../../../core/child/attendance.service';
+import { AttendanceService } from '../../../core/child/attendance.service';
 
 @Component({
   selector: 'app-attendance-box',
@@ -11,55 +10,45 @@ import { AttendanceService, AttendanceGetInfo } from '../../../core/child/attend
   styleUrl: './attendance-box.scss',
 })
 export class AttendanceBox {
-    childSignal = model.required<Child>();
-    isChecked = false;
+    childSignal = input.required<Child>();
     errorMessage = '';
+
+    get dateStr() {
+        return new Date().toISOString().split('T')[0];
+    }
+
+    get isChecked(): boolean {
+        return this.attendanceService.getSignal(this.childSignal().id, this.dateStr)() ?? false;
+    }
 
     constructor(private attendanceService: AttendanceService) {
       effect(() => {
-        this.isChecked = this.getAttendance();
-        this.errorMessage = '';
+        const child = this.childSignal();
+        if (!child) return;
+
+        const sig = this.attendanceService.getSignal(child.id, this.dateStr);
+        if (sig() === null) {
+          this.attendanceService.getAttendance(child.id, this.dateStr).subscribe({
+            next: (data) => sig.set(data.present),
+            error: (err) => console.error('Kunde inte hämta', err),
+          });
+        }
       });
     }
 
+    onCheckBox(event: { checked: boolean }) {
+        const newStatus = event.checked;
+        const sig = this.attendanceService.getSignal(this.childSignal().id, this.dateStr);
+        sig.set(newStatus); 
 
-    onCheckBox(event: MatCheckboxChange) {
-      if (event.checked) {
-        const isValid = true; //TODO: byt ut mot registreringscheck
-
-            if(isValid) {
-              this.isChecked = this.setAttendance();
-            } else {
-              event.source.checked = false;
-              this.isChecked = false;
-              this.errorMessage = 'Misslyckades! Detta barn är redan registrerad som närvarande.'
-
-              setTimeout(() => {
-                this.errorMessage = '';
-              }, 50)
-            }
-
-          } else {
-            this.isChecked = this.setAttendance();
-          }
-    }
-
-    getAttendance(): boolean {
-      console.log(this.childSignal().id, new Date().toISOString().split('T')[0]);
-      this.attendanceService.getAttendance(this.childSignal().id, new Date().toISOString().split('T')[0]).subscribe({
-      next: (data) => {
-        console.log(data)
-        return data.present
-      }})
-      return false;
-    }
-
-    setAttendance(): boolean {
-      this.attendanceService.setAttendance(this.childSignal().id, new Date().toISOString().split('T')[0], this.isChecked).subscribe({
-      next: (data) => {
-        console.log(data)
-        return data.present
-      }})
-      return false;
+        this.attendanceService.setAttendance(this.childSignal().id, this.dateStr, newStatus).subscribe({
+          next: (data) => sig.set(data.present), 
+          error: (err) => {
+            console.error('Kunde inte spara', err);
+            sig.set(!newStatus); 
+            this.errorMessage = 'Misslyckades att spara till databasen.';
+            setTimeout(() => this.errorMessage = '', 2000);
+          },
+        });
     }
 }

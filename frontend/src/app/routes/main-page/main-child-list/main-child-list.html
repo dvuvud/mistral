@@ -1,10 +1,14 @@
-<h2>Nyckelpigorna</h2> <!--TODO: klassnamn variabel-->
+<h2>Nyckelpigorna</h2>
 <div class="child-list-container">
   <mat-action-list>
-    @for (Child of children(); track Child.id; let last = $last) { <!--TODO: tracka id istället-->
+    @for (Child of children(); track Child.id; let last = $last) { 
       <li>
         <button mat-list-item (click)="onSelectChild(Child)">
-          <span matListItemLabel>{{Child.name}}</span>
+          <span matListItemTitle>{{Child.name}} </span>
+
+          <div matListItemMeta class="meta-container">
+              <app-attendance-box [childSignal]="Child"></app-attendance-box>
+          </div>
         </button>
       </li>
 
@@ -14,4 +18,3 @@
     }
   </mat-action-list>
 </div>
-

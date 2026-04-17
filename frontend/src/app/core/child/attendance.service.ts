@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 
@@ -28,8 +28,19 @@ type SetAttendanceRequest = {
 export class AttendanceService {
 
   private url = "http://localhost:8080/api/attendance";
+  private attendanceSignals = new Map<string, ReturnType<typeof signal<boolean | null>>>();
 
   constructor(private http: HttpClient) {}
+
+
+  getSignal(childId: number, dateStr: string) {
+    const key = `${childId}_${dateStr}`;
+    if (!this.attendanceSignals.has(key)) {
+      this.attendanceSignals.set(key, signal<boolean | null>(null));
+    }
+    return this.attendanceSignals.get(key)!;
+  }
+
 
   getAttendance(childId: number, date: string): Observable<AttendanceGetInfo>  {
     const data: GetAttendanceRequest = {

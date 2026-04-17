@@ -7,7 +7,7 @@
     <mat-divider></mat-divider>
     @if (childSignal().name != ''){
       <app-child-display [(childSignal)]="childSignal"></app-child-display>
-      <app-attendance-box [(childSignal)]="childSignal"></app-attendance-box>
+      <app-attendance-box [childSignal]="childSignal()"></app-attendance-box>
     }
   </div>
 </mat-card>

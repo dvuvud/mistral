@@ -3,10 +3,11 @@ import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
 import { Child, ChildService } from '../../../core/child/child.service';
+import { AttendanceBox } from '../attendance-box/attendance-box';
 
 @Component({
   selector: 'main-child-list',
-  imports: [MatListModule, RouterModule, MatDividerModule],
+  imports: [MatListModule, RouterModule, MatDividerModule, AttendanceBox],
   templateUrl: './main-child-list.html',
   styleUrl: './main-child-list.scss',
 })
