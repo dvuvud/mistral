@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom, Observable, tap } from 'rxjs';
 
 interface LoginRequest {
@@ -50,10 +50,14 @@ export class AuthService {
   }
 
   async isAuthorized() {
-    let t: boolean = false;
-    let req = this.http.get<boolean>(`${this.baseUrl}/validate`, {});
-    t = await firstValueFrom(req);
-    console.log(t);
+    const x = new Promise<boolean>((resolve) => {
+      this.http.get<boolean>(`${this.baseUrl}/validate`, {}).subscribe({
+        error: () => resolve(false),
+        complete: () => resolve(true)
+      });
+    })
+    const t = await x;
+    //console.log(t);
     return t;
   }
 }
