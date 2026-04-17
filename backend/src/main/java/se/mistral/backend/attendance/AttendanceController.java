@@ -3,7 +3,9 @@ package se.mistral.backend.attendance;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,13 +26,8 @@ public class AttendanceController {
         return ResponseEntity.ok(attendanceService.updateAttendance(request));
     }
 
-    @PostMapping("/fetch")
-    public ResponseEntity<AttendanceDto> getAttendance(@Valid @RequestBody AttendanceFetchRequest request) {
-        return ResponseEntity.ok(attendanceService.getAttendance(request));
-    }
-
-    @PostMapping("/fetch-all")
-    public ResponseEntity<AttendanceDtoList> getAttendances(@Valid @RequestBody AttendancesRequest request) {
-        return ResponseEntity.ok(attendanceService.getAttendances(request));
+    @GetMapping()
+    public ResponseEntity<AttendanceDto> getAttendance() {
+        return ResponseEntity.ok(attendanceService.getAttendance());
     }
 }
