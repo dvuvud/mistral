@@ -15,6 +15,7 @@ jobs:
         with:
           java-version: '25'
           distribution: 'temurin'
+          cache: 'maven'
       - name: Run Checkstyle
         run: mvn checkstyle:check
         working-directory: backend
@@ -26,6 +27,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
       - name: Install dependencies
         run: npm ci
         working-directory: frontend
