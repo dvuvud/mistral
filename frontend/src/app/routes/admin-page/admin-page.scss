@@ -1,0 +1,14 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: scroll;
+}
+
+.container {
+  width: 85%;
+  height: 80%;
+  background-color: --var(mat-sys-surface-container)
+}
