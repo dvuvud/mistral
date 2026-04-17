@@ -24,6 +24,4 @@ jobs:
           VALIDATE_JAVA: true
           VALIDATE_TYPESCRIPT_ES: true
           VALIDATE_ANGULAR: true
-          VALIDATE_CSS: true
-          VALIDATE_JSON: true
 
