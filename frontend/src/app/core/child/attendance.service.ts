@@ -1,5 +1,5 @@
 import { Injectable, signal, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface AttendanceSetInfo {
@@ -42,13 +42,9 @@ export class AttendanceService {
   }
 
 
-  getAttendance(childId: number, date: string): Observable<AttendanceGetInfo>  {
-    const data: GetAttendanceRequest = {
-        childId,
-        date,
-    };
-
-    return this.http.post<AttendanceGetInfo>("http://localhost:8080/api/attendance/fetch", data)
+  getAttendance(childId: number): Observable<AttendanceGetInfo>  {
+    const params = new HttpParams().set('childId', childId);
+    return this.http.get<AttendanceGetInfo>("http://localhost:8080/api/attendance", {params});
   }
 
   setAttendance(childId: number, date: string, present: boolean): Observable<AttendanceSetInfo> {
@@ -58,6 +54,6 @@ export class AttendanceService {
         present,
     };
 
-    return this.http.post<AttendanceSetInfo>(this.url, data);
+    return this.http.put<AttendanceSetInfo>(this.url, data);
   }
 }

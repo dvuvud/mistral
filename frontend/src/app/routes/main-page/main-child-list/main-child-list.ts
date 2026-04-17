@@ -35,7 +35,7 @@ export class ChildList implements OnInit {
   }
 
   onSelectChild(child: Child) {
-    this.childSignal.set(child); //TODO: SKA VARA DATA STRUKTUREN
+    this.childSignal.set(child); 
   }
 
   loadChildren() {

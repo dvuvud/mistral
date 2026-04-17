@@ -5,12 +5,14 @@ import { Observable } from 'rxjs';
 export interface Child {
   id: number;
   name: string;
+  date: string;
+  present: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
 export class ChildService {
 
-  private url = "http://localhost:8080/api/children";
+  private url = "http://localhost:8080/api/children/attendance";
 
   private http = inject(HttpClient);
 
