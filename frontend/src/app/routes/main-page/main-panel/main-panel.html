@@ -1,13 +1,21 @@
-<h1>Närvaroöversikt</h1>
-
 <mat-card>
-  <div class="main-panel">
-    <h1>Lärare: "den som är inloggad"</h1> <!--TODO: namnet på den inloggade läraren-->
-    <main-child-list [(childSignal)]="childSignal"></main-child-list>
-    <mat-divider></mat-divider>
-    @if (childSignal().name !== ''){
-      <child-display [(childSignal)]="childSignal"></child-display>
-      <attendance-box [childSignal]="childSignal()"></attendance-box>
-    }
-  </div>
+  <mat-card-content class="main-card-content">
+    <div class="main-card-left">
+      <mat-card-header>
+        <span>Idag: {{getDate()}}</span>
+      </mat-card-header>
+      @if (childSignal().name !== ''){
+        <child-display [(childSignal)]="childSignal"></child-display>
+        <attendance-box [childSignal]="childSignal()"></attendance-box>
+        <main-live-journal></main-live-journal>
+      }
+      @else {
+        <main-live-journal></main-live-journal>
+      }
+    </div>
+    <div class="main-card-right">
+      <main-child-list [(childSignal)]="childSignal"></main-child-list>
+
+    </div>
+  </mat-card-content>
 </mat-card>

@@ -1,9 +1,10 @@
 <div>
-    <mat-checkbox  
+    <mat-checkbox
+        [disabled]="disabled()"
         [checked]="isChecked"
         (change)="onCheckBox($event)">
         <!--Enbart låda lägg till egen text-->
-    </mat-checkbox> 
+    </mat-checkbox>
 
     @if (errorMessage) {
         <p class="error-text">{{ errorMessage }}</p>
