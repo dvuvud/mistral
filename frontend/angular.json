@@ -74,6 +74,9 @@
           "defaultConfiguration": "development"
         },
         "test": {
+          "options": {
+            "coverage": true
+          },
           "builder": "@angular/build:unit-test"
         },
         "lint": {
