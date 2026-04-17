@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { LoginContainer } from './login-container/login-container';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
@@ -16,10 +16,8 @@ export class LoginPage {
   lastName = signal('');
   errorMessage = signal('');
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-  ) {}
+  private router = inject(Router);
+  private authService = inject(AuthService);
 
   onLoginSubmit() {
     console.log(this.email(), this.password());

@@ -3,9 +3,9 @@
 <mat-card>
     <div class="main-panel">
     <h1>Lärare: "den som är inloggad"</h1> <!--TODO: namnet på den inloggade läraren-->
-    <main-child-list [(childSignal)]="childSignal"></main-child-list>
+    <app-main-child-list [(childSignal)]="childSignal"></app-main-child-list>
     <mat-divider></mat-divider>
-    @if (childSignal().name != ''){
+    @if (childSignal().name !== ''){
       <app-child-display [(childSignal)]="childSignal"></app-child-display>
       <app-attendance-box [childSignal]="childSignal()"></app-attendance-box>
     }

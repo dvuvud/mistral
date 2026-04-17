@@ -1,30 +1,30 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
-type LoginRequest = {
+interface LoginRequest {
 	email: string;
 	password: string;
-};
+}
 
-type RegisterRequest = {
+interface RegisterRequest {
     name: string;
 	email: string;
 	password: string;
-};
+}
 
-type AuthResponse = {
+interface AuthResponse {
 	token: string;
 	email: string;
 	name: string;
 	role: string;
-};
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 	private readonly baseUrl = 'http://localhost:8080/api/auth';
 
-	constructor(private http: HttpClient) {}
+	private http = inject(HttpClient);
 
 	login(email: string, password: string): Observable<AuthResponse> {
 		const data: LoginRequest = {
