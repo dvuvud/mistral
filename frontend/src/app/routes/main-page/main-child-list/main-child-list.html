@@ -1,13 +1,13 @@
 <h2>Nyckelpigorna</h2>
 <div class="child-list-container">
   <mat-action-list>
-    @for (Child of children(); track Child.id; let last = $last) { 
+    @for (Child of children(); track Child.id; let last = $last) {
       <li>
         <button mat-list-item (click)="onSelectChild(Child)">
           <span matListItemTitle>{{Child.name}} </span>
 
           <div matListItemMeta class="meta-container">
-              <app-attendance-box [childSignal]="Child"></app-attendance-box>
+              <attendance-box [childSignal]="Child"></attendance-box>
           </div>
         </button>
       </li>

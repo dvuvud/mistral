@@ -6,7 +6,7 @@ import { Child, ChildService } from '../../../core/child/child.service';
 import { AttendanceBox } from '../attendance-box/attendance-box';
 
 @Component({
-  selector: 'app-main-child-list',
+  selector: 'main-child-list',
   imports: [MatListModule, RouterModule, MatDividerModule, AttendanceBox],
   templateUrl: './main-child-list.html',
   styleUrl: './main-child-list.scss',

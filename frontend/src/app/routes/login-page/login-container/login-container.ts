@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 
 @Component({
-  selector: 'app-login-container',
+  selector: 'login-container',
   imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatCard, MatCardContent, MatCardHeader, MatCardTitle, MatTabGroup, MatTab],
   templateUrl: './login-container.html',
   styleUrl: './login-container.scss',
