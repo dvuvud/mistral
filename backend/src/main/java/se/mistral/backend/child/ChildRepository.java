@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import se.mistral.backend.child.dto.AttendanceResponse;
+import se.mistral.backend.child.dto.ChildResponse;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,5 +17,7 @@ public interface ChildRepository extends JpaRepository<Child, Long> {
     @Query("SELECT new se.mistral.backend.child.dto.AttendanceResponse(c.id, c.name, a.date, a.present) " +
            "FROM Child c LEFT JOIN Attendance a ON a.child.id = c.id AND a.date = :date")
     List<AttendanceResponse> findAllChildrenWithAttendanceIfExists(@Param("date") LocalDate date);
+    @Query("SELECT new se.mistral.backend.child.dto.ChildResponse(c.id, c.name) FROM Child c")
+    List<ChildResponse> findAllIdsAndNames();
 }
 

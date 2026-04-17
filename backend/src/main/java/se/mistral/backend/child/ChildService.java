@@ -24,10 +24,7 @@ public class ChildService {
     }
 
     public List<ChildResponse> getAllChildren() {
-        return childRepository.findAll()
-            .stream()
-            .map(child -> new ChildResponse(child.getId(), child.getName()))
-            .toList();
+        return childRepository.findAllIdsAndNames();
     }
 
     public List<AttendanceResponse> getAllChildrenWithAttendanceIfExists(LocalDate date) {
