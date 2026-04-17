@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MainPanel } from './main-panel/main-panel';
 import { Child } from '../../core/child/child.service';
 import { Router } from '@angular/router';
@@ -24,6 +24,8 @@ export class MainPage {
   private router = inject(Router);
 
   logout() {
-    this.router.navigateByUrl("/");
+    document.cookie = 'jwtToken=""';
+    localStorage.removeItem('token');
+    this.router.navigateByUrl('/');
   }
 }
