@@ -1,9 +1,8 @@
 <div>
-    <mat-checkbox 
-        labelPosition="before" 
+    <mat-checkbox  
         [checked]="isChecked"
         (change)="onCheckBox($event)">
-        Registrera närvaro för {{childSignal().name}}
+        <!--Enbart låda lägg till egen text-->
     </mat-checkbox> 
 
     @if (errorMessage) {
