@@ -23,7 +23,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
-          VALIDATE_JAVA_FORMAT: true
+          VALIDATE_JAVA: true
+          JAVA_CHECKSTYLE_CONFIG: sun_checks.xml
+
           VALIDATE_TYPESCRIPT_ES: true
           VALIDATE_ANGULAR: true
 
