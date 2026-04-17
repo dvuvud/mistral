@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { firstValueFrom, Observable, tap } from 'rxjs';
 
 interface LoginRequest {
 	email: string;
@@ -47,5 +47,13 @@ export class AuthService {
 		return this.http
 			.post<AuthResponse>(`${this.baseUrl}/register`, data)
 			.pipe(tap((response) => localStorage.setItem('token', response.token)));
-	}
+  }
+
+  async isAuthorized() {
+    let t: boolean = false;
+    let req = this.http.get<boolean>(`${this.baseUrl}/validate`, {});
+    t = await firstValueFrom(req);
+    console.log(t);
+    return t;
+  }
 }
