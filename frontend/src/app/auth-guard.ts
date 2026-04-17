@@ -1,4 +1,4 @@
-import { ActivatedRouteSnapshot, CanActivateFn, RedirectCommand, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from './core/auth/auth.service';
 import { inject } from '@angular/core';
 
@@ -13,9 +13,9 @@ export const authGuard: CanActivateFn = async (
 
   switch (url) {
     case '': // Redirect users already signed in from login page to /app
-      return isAuthed ? new RedirectCommand(router.parseUrl("/app")) : true;
+      return isAuthed ? router.parseUrl("/app") : true;
     case 'app': // Redirect non-authorized clients from /app to login page
-      return isAuthed ? true : new RedirectCommand(router.parseUrl("/"));
+      return isAuthed ? true : router.parseUrl("/");
     default:
       return false;
   }
