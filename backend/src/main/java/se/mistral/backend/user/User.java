@@ -1,6 +1,13 @@
 package se.mistral.backend.user;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -47,12 +54,27 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
-    @Override public String getUsername()              { return email; }
-    @Override public String getPassword()              { return password; }
+    @Override public String getUsername() {
+        return email;
+    }
+    @Override public String getPassword() {
+        return password;
+    }
 
     // don't have to worry about these
-    @Override public boolean isAccountNonExpired()     { return true; }
-    @Override public boolean isAccountNonLocked()      { return true; }
-    @Override public boolean isCredentialsNonExpired() { return true; }
-    @Override public boolean isEnabled()               { return true; }
+    @Override public boolean isAccountNonExpired() {
+        return true;
     }
+
+    @Override public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override public boolean isEnabled() {
+        return true;
+    }
+}

@@ -8,13 +8,9 @@ import se.mistral.backend.attendance.dto.AttendanceListItem;
 import se.mistral.backend.attendance.dto.AttendanceRequest;
 import se.mistral.backend.attendance.dto.AttendanceFetchRequest;
 import se.mistral.backend.attendance.dto.AttendancesRequest;
-import se.mistral.backend.child.Child;
 import se.mistral.backend.child.ChildRepository;
 
 import se.mistral.backend.exception.NotFoundException;
-
-import java.time.LocalDate;
-import java.util.Optional;
 import java.util.List;
 
 @Service
