@@ -37,3 +37,12 @@ mat-card {
   width: 40%;
   height: 100%;
 }
+
+.childDisplay {
+  display: flex;
+  flex-direction: row;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
