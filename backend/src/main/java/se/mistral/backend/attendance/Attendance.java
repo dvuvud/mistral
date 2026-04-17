@@ -2,7 +2,16 @@ package se.mistral.backend.attendance;
 
 import se.mistral.backend.child.Child;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Version;
+import jakarta.persistence.Column;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.JoinColumn;
 
 import lombok.Data;
 import lombok.Builder;

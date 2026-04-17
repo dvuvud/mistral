@@ -5,11 +5,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import se.mistral.backend.auth.dto.*;
+import se.mistral.backend.auth.dto.RegisterRequest;
+import se.mistral.backend.auth.dto.AuthResponse;
+import se.mistral.backend.auth.dto.LoginRequest;
 import se.mistral.backend.user.Role;
 import se.mistral.backend.user.User;
 import se.mistral.backend.user.UserRepository;
-import se.mistral.backend.auth.JwtService;
 
 @Service
 @RequiredArgsConstructor
