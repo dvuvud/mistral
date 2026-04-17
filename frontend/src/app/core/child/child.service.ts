@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 export interface Child {
   id: number;
   name: string;
-  date: string;
-  present: boolean;
+  date: string | null;
+  present: boolean | null;
 }
 
 @Injectable({ providedIn: 'root' })
