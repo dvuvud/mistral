@@ -24,12 +24,12 @@ public class AttendanceService {
 
     public AttendanceDto updateAttendance(AttendanceRequest request) {
         Attendance attendance = attendanceRepository.findByChildIdAndDate(request.childId(), request.date())
-        .orElseGet(() -> Attendance.builder()
-            .date(request.date())
-            .child(childRepository.findById(request.childId()).orElseThrow(() -> new NotFoundException("Child not found")))
-            .present(request.present())
-            .build()
-        );
+            .orElseGet(() -> Attendance.builder()
+                .date(request.date())
+                .child(childRepository.findById(request.childId()).orElseThrow(() -> new NotFoundException("Child not found")))
+                .present(request.present())
+                .build()
+            );
         attendance.setPresent(request.present());
         attendance = attendanceRepository.save(attendance);      // throws ObjectOptimisticLockingFailureException on conflict
         return new AttendanceDto(attendance.getPresent());
