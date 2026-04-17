@@ -2,7 +2,7 @@
   [(denna)] syntax är för 2-vägsbindning. Vi binder email från login-page.ts till email från login-container.ts
   (event)=callback() syntax lysnar efter ett event och anropar callback() från .ts filen.
 -->
-<login-container class="login-page-container"
+<app-login-container class="login-page-container"
   [(email)]="email"
   [(password)]="password"
   [(name)]="name"
@@ -10,4 +10,4 @@
   [(errorMessage)]="errorMessage"
   (loginSubmitEvent)="onLoginSubmit()"
   (registerSubmitEvent)="onRegisterSubmit()">
-</login-container>
+</app-login-container>

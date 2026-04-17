@@ -1,14 +1,14 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, input, model, Output, signal } from '@angular/core';
+import { Component, EventEmitter, model, Output, signal } from '@angular/core';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
-import {MatButtonModule} from '@angular/material/button';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatIconModule} from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 
 @Component({
-  selector: 'login-container',
+  selector: 'app-login-container',
   imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatCard, MatCardContent, MatCardHeader, MatCardTitle, MatTabGroup, MatTab],
   templateUrl: './login-container.html',
   styleUrl: './login-container.scss',
