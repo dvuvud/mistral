@@ -4,7 +4,7 @@ import { Child } from '../../../core/child/child.service';
 import { AttendanceService } from '../../../core/child/attendance.service';
 
 @Component({
-  selector: 'app-attendance-box',
+  selector: 'attendance-box',
   imports: [MatCheckboxModule],
   templateUrl: './attendance-box.html',
   styleUrl: './attendance-box.scss',

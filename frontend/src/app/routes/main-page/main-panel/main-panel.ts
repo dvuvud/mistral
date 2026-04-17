@@ -7,7 +7,7 @@ import { MatCard } from '@angular/material/card';
 import { ChildList } from '../main-child-list/main-child-list';
 
 @Component({
-  selector: 'app-main-panel',
+  selector: 'main-panel',
   imports: [ChildList, MatDividerModule, ChildDisplay, AttendanceBox, MatCard],
   templateUrl: './main-panel.html',
   styleUrl: './main-panel.scss',

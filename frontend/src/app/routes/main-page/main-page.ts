@@ -7,7 +7,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-main-page',
+  selector: 'main-page',
   imports: [
     MatToolbarModule,
     MainPanel,
