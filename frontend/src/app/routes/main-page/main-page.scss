@@ -1,41 +1,52 @@
-mat-toolbar[color="primary"] {
-    background-color: #00008B;
-    /* Magenta */
-    color: white;
-    display: flex;
-    align-items: center;
+@use '@angular/material' as mat;
 
+:host {
+  background-color: var(--mat-sys-surface);
+  width: 100%;
+  height: 100%;
+  display: flex;
 }
 
-.example-container {
-    height: calc(100vh - 64px);
-    border: 1px solid #555;
+mat-toolbar {
+    background-color:var(--mat-sys-primary);
+    /* Magenta */
+    color: var(--mat-sys-on-primary);
+    display: flex;
+    align-items: center;
+    position: fixed;
+}
+
+mat-tab-group {
+  height: 100%;
+}
+
+mat-tab {
+  height: 100%;
 }
 
 .example-spacer {
-    flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 
-mat-sidenav-container {
-    height: 100%;
-    flex: 1;
-    padding: 20px;
+.mat-mdc-tab.mdc-tab {
+  background-color: var(--mat-sys-surface-container);
+  border-radius: 5px;
+  box-shadow: var(--mat-sys-level1);
 }
 
-mat-sidenav {
-    height: 100%;
-    width: 300px;
-    padding: 24px;
-    background: #f5f5f5;
-    box-sizing: border-box;
-
+::ngdeep .mat-mdc-tab-body-wrapper {
+  height: 100%;
 }
 
-mat-sidenav-content {
-    padding: 45px;
-    box-sizing: border-box;
+.main-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
-mat-card {
-    padding: 20px;
+.main-panel-container {
+  width: 85%;
+  height: 60%;
 }

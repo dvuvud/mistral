@@ -1,4 +1,4 @@
-import { Component, input, effect, inject } from '@angular/core';
+import { Component, input, effect, inject, model } from '@angular/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Child } from '../../../core/child/child.service';
 import { AttendanceService } from '../../../core/child/attendance.service';
@@ -10,7 +10,8 @@ import { AttendanceService } from '../../../core/child/attendance.service';
   styleUrl: './attendance-box.scss',
 })
 export class AttendanceBox {
-  childSignal = input.required<Child>();
+  childSignal = model.required<Child>();
+  disabled = input<boolean>();
   errorMessage = '';
 
   get dateStr() {

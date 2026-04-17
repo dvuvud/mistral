@@ -1,4 +1,3 @@
-<h2>Nyckelpigorna</h2>
 <div class="child-list-container">
   <mat-action-list>
     @for (Child of children(); track Child.id; let last = $last) {
@@ -7,7 +6,7 @@
           <span matListItemTitle>{{Child.name}} </span>
 
           <div matListItemMeta class="meta-container">
-              <attendance-box [childSignal]="Child"></attendance-box>
+              <attendance-box [disabled]=true [childSignal]="Child"></attendance-box>
           </div>
         </button>
       </li>
