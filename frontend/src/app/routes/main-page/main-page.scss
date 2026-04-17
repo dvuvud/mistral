@@ -28,13 +28,19 @@ mat-tab {
   flex: 1 1 auto;
 }
 
-.mat-mdc-tab.mdc-tab {
+::ng-deep .mat-mdc-tab {
   background-color: var(--mat-sys-surface-container);
   border-radius: 5px;
   box-shadow: var(--mat-sys-level1);
 }
 
-::ngdeep .mat-mdc-tab-body-wrapper {
+::ng-deep .mdc-tab--active {
+  background-color: var(--mat-sys-surface-container);
+  border-radius: 5px;
+  box-shadow: var(--mat-sys-level3);
+}
+
+::ng-deep .mat-mdc-tab-body-wrapper {
   height: 100%;
 }
 

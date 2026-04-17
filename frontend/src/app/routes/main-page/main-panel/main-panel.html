@@ -5,9 +5,13 @@
         <span>Idag: {{getDate()}}</span>
       </mat-card-header>
       @if (childSignal().name !== ''){
+      <div class="childDisplay">
         <child-display [(childSignal)]="childSignal"></child-display>
+        <div class="spacer"></div>
+        <h3>Närvaro:</h3>
         <attendance-box [childSignal]="childSignal()"></attendance-box>
-        <main-live-journal></main-live-journal>
+      </div>
+      <main-live-journal></main-live-journal>
       }
       @else {
         <main-live-journal></main-live-journal>
