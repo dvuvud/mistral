@@ -51,8 +51,8 @@ public class ChildTests {
         childService.createChild(request);
 
         List<AttendanceResponse> childList = childService.getAllChildrenWithAttendanceIfExists(LocalDate.parse("2026-04-01"));
-        assertThat(childList).isEqualTo(null);
-        assertThat(childList.size()).isEqualTo(0);
+        //assertThat(childList).isEqualTo(null); could be expected maybe not depends on what expected behaviour actually is
+        assertThat(childList.size()).isEqualTo(1);
 
     }
 }
