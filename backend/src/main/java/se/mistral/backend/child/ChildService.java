@@ -16,13 +16,6 @@ public class ChildService {
 
     private final ChildRepository childRepository;
 
-    public ChildResponse createChild(CreateChildRequest request) {
-        Child child = new Child();
-        child.setName(request.name());
-        Child saved = childRepository.save(child);
-        return new ChildResponse(saved.getId(), saved.getName());
-    }
-
     public List<ChildResponse> getAllChildren() {
         return childRepository.findAllIdsAndNames();
     }
