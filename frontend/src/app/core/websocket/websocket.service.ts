@@ -22,7 +22,7 @@ export interface WsJournalMessage {
 }
 
 @Injectable({
- providedIn: 'root',
+  providedIn: 'root',
 })
 
 export class WebsocketService {

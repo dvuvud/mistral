@@ -10,7 +10,11 @@ describe('ConfirmationDialog', () => {
     await TestBed.configureTestingModule({
       imports: [ConfirmationDialog]
     })
+<<<<<<< HEAD
       .compileComponents();
+=======
+    .compileComponents();
+>>>>>>> d823078 (La till basic bekräftelseruta, den är inte stylad än. Stor commit förlåt David <3)
 
     fixture = TestBed.createComponent(ConfirmationDialog);
     component = fixture.componentInstance;
