@@ -24,10 +24,7 @@ public class ChildController {
     
     private final ChildService childService;
 
-    @PostMapping()
-    public ResponseEntity<ChildResponse> createChild(@RequestBody CreateChildRequest request) {
-        return ResponseEntity.ok(childService.createChild(request));
-    }
+    
 
     @GetMapping()
     public ResponseEntity<List<ChildResponse>> getAllChildren() {
