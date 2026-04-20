@@ -1,6 +1,8 @@
 package se.mistral.backend.websocket;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import se.mistral.backend.auth.JwtService;
 import se.mistral.backend.user.Role;
 import se.mistral.backend.user.User;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 @Component
 @RequiredArgsConstructor
@@ -23,30 +27,59 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    private final Set<WebSocketSession> sessions = ConcurrentHashMap.newKeySet();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    private final Map<String, Set<WebSocketSession>> rooms = new ConcurrentHashMap<>(); // all sessions in a given room
+    private final Map<WebSocketSession, Set<String>> sessionRooms = new ConcurrentHashMap<>(); // all rooms a given session is in
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        String payload = message.getPayload();
-        // handle a message
-        for (WebSocketSession s : sessions) {
-            s.sendMessage(message);
+        JsonNode json = objectMapper.readTree(message.getPayload());
+        String type = json.get("type").asText();
+        String room = json.get("room").asText();
+
+        switch (type) {
+            case "subscribe"   -> subscribe(session, room);
+            case "unsubscribe" -> unsubscribe(session, room);
+            default            -> broadcastToRoom(room, message);
         }
     }
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) {
+    public void afterConnectionEstablished(WebSocketSession session) { // after a session is upgraded
         String token = extractToken(session);
         if (token == null || !isValid(token)) {
             closeQuietly(session);
             return;
         }
-        sessions.add(session);
+        sessionRooms.put(session, ConcurrentHashMap.newKeySet());
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-        sessions.remove(session);
+        Set<String> joined = sessionRooms.remove(session);
+        if (joined != null) {
+            joined.forEach(room -> rooms.getOrDefault(room, ConcurrentHashMap.newKeySet()).remove(session));
+        }
+    }
+
+    public void broadcastToRoom(String room, TextMessage message) throws IOException {
+        Set<WebSocketSession> roomSessions = rooms.getOrDefault(room, ConcurrentHashMap.newKeySet());
+        for (WebSocketSession s : roomSessions) {
+            synchronized (s) {
+                s.sendMessage(message);
+            }
+        }
+    }
+
+    private void subscribe(WebSocketSession session, String room) {
+        rooms.computeIfAbsent(room, k -> ConcurrentHashMap.newKeySet()).add(session);
+        sessionRooms.get(session).add(room);
+    }
+
+    private void unsubscribe(WebSocketSession session, String room) {
+        rooms.getOrDefault(room, ConcurrentHashMap.newKeySet()).remove(session);
+        sessionRooms.getOrDefault(session, ConcurrentHashMap.newKeySet()).remove(room);
     }
 
     private String extractToken(WebSocketSession session) {
