@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="1032" height="242" alt="kindguard-logo" src="https://github.com/user-attachments/assets/59fc3ea6-3935-43c6-9a37-49042ab57c0d" />
+  <img width="2116" height="496" alt="kindguard-logo" src="https://github.com/user-attachments/assets/a170cbca-3e75-482b-9a4d-a11cba0aa616" />
   <br/>
   <a href="https://github.com/dvuvud/mistral/actions/workflows/linter.yml">
     <img src="https://img.shields.io/github/actions/workflow/status/dvuvud/mistral/linter.yml?style=for-the-badge&logo=github&label=Lint" alt="Lint" />
