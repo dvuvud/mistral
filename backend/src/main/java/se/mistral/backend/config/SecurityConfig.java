@@ -35,11 +35,12 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/auth/validate").authenticated()
-                    .requestMatchers("/api/auth/**").permitAll() // TODO: give different roles different endpoint perms
-                    .requestMatchers("/api/children/**").hasRole("TEACHER")
-                    .requestMatchers("/api/attendance/**").hasRole("TEACHER")
-                    .anyRequest().authenticated()
+                .requestMatchers("/api/auth/validate").authenticated()
+                .requestMatchers("/api/auth/**").permitAll() // TODO: give different roles different endpoint perms
+                .requestMatchers("/api/children/**").hasRole("TEACHER")
+                .requestMatchers("/api/attendance/**").hasRole("TEACHER")
+                .requestMatchers("/ws").permitAll() // authentication happens inside handler
+                .anyRequest().authenticated()
             )
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
