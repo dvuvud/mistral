@@ -1,13 +1,7 @@
-<div class="flex-with-style">
-    <p class="top-text">
-        Är du säker att du vill anregistrera närvaro?
-    </p>
-    <li>
-        <button (click)="onConfirm()">
-            Ja
-        </button>
-        <button (click)="onDeny()">
-            Nej
-        </button>
-    </li>
+<div class="simple-dialog-content">
+    <p>Är du säker att du vill avregistrera närvaro?</p>
+    <div class="button-group">
+        <button (click)="onConfirm()">Ja</button>
+        <button (click)="onDeny()">Nej</button>
+    </div>
 </div>
