@@ -83,10 +83,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     }
 
     private String extractToken(WebSocketSession session) {
-        List<String> headers = session.getHandshakeHeaders().get("Authorization");
-        if (headers == null || headers.isEmpty()) return null;
-        String header = headers.get(0);
-        return header.startsWith("Bearer ") ? header.substring(7) : null;
+        Object token = session.getAttributes().get("token");
+        return token != null ? token.toString() : null;
     }
 
     private boolean isValid(String token) {
