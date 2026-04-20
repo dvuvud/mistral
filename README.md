@@ -2,8 +2,12 @@
   <img width="1200" height="280" alt="kindguard-logo" src="https://github.com/user-attachments/assets/085a9337-9495-4b5c-a62f-3c00db809bb2" />
   <br/>
   <a href="https://github.com/dvuvud/mistral/actions/workflows/linter.yml">
-    <img src="https://github.com/dvuvud/mistral/actions/workflows/linter.yml/badge.svg" alt="Lint" />
+    <img src="https://img.shields.io/github/actions/workflow/status/dvuvud/mistral/linter.yml?style=for-the-badge&logo=github&label=Lint" alt="Lint" />
   </a>
+  <br/>
+  <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="Spring Boot" />
+  <img src="https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white" alt="Angular" />
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
 </p>
 
 # Mistral – Utvecklarguide
