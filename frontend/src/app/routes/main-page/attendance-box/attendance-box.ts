@@ -46,7 +46,7 @@ export class AttendanceBox {
   }
 
     async onCheckBox(event: MatCheckboxChange) {
-      
+
       const newStatus = event.checked;
 
       if (newStatus === false) {
@@ -78,8 +78,8 @@ export class AttendanceBox {
 
   async confirmation() {
       let dialogRef = this.dialog.open(ConfirmationDialog, {
-        height: '120px',
-        width: '500px',
+        height: '100px',
+        width: '300px',
       });
       const result = await firstValueFrom(dialogRef.afterClosed());
       return result;
