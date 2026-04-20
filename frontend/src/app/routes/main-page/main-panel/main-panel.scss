@@ -31,6 +31,7 @@ mat-card {
 .main-card-left {
   width: 60%;
   height: 100%;
+  padding-right: 5%;
 }
 
 .main-card-right {
@@ -41,6 +42,11 @@ mat-card {
 .childDisplay {
   display: flex;
   flex-direction: row;
+  flex: 0.9;
+  background-color: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  border-radius: 12px;
+  height: auto;
 }
 
 .spacer {

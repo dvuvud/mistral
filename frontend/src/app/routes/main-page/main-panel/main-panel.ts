@@ -1,4 +1,4 @@
-import { Component, model } from '@angular/core';
+import { Component, model, viewChild } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { ChildDisplay } from "../child-display/child-display";
 import { AttendanceBox } from '../attendance-box/attendance-box';
@@ -22,4 +22,11 @@ export class MainPanel {
     const d = new Date();
     return `${this.days[d.getDay()]} ${d.getDate()} ${this.months[d.getMonth()]} ${d.getFullYear()}`
   }
+
+  childList = viewChild.required(ChildList);
+
+  handleWebsocketMessage(message: string) {
+    this.childList().handleWebsocketMessage(message);
+  }
+
 }

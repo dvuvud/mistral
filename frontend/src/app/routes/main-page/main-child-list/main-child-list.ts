@@ -34,7 +34,7 @@ export class ChildList implements OnInit {
   }
 
   onSelectChild(child: Child) {
-    this.childSignal.set(child); 
+    this.childSignal.set(child);
   }
 
   loadChildren() {
@@ -44,5 +44,21 @@ export class ChildList implements OnInit {
         console.log('children:', this.children);
       }
     });
+  }
+
+  handleWebsocketMessage(message: string) {
+    const messageAsJSON: { childID: number; present: boolean } = JSON.parse(message);
+    const targetChild: Child | undefined = this.children().find((child: Child) => {
+      return child.id === messageAsJSON.childID;
+    });
+
+    if (!targetChild) {
+      alert("Child not found");
+      return;
+    }
+
+    const sig = this.attendanceService.getSignal(targetChild.id, this.dateStr);
+    console.log(sig());
+    sig.set(messageAsJSON.present);
   }
 }
