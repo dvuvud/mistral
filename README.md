@@ -1,3 +1,11 @@
+<p align="center">
+  <img width="1200" height="280" alt="kindguard-logo" src="https://github.com/user-attachments/assets/085a9337-9495-4b5c-a62f-3c00db809bb2" />
+  <br/>
+  <a href="https://github.com/dvuvud/mistral/actions/workflows/linter.yml">
+    <img src="https://github.com/dvuvud/mistral/actions/workflows/linter.yml/badge.svg" alt="Lint" />
+  </a>
+</p>
+
 # Mistral – Utvecklarguide
 
 Det här dokumentet går igenom allt du behöver göra för att sätta upp din utvecklingsmiljö och komma igång med projektet.
