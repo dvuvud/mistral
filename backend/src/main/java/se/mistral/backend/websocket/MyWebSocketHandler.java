@@ -1,6 +1,8 @@
 package se.mistral.backend.websocket;
 
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,19 +12,26 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import lombok.RequiredArgsConstructor;
 import se.mistral.backend.auth.JwtService;
+import se.mistral.backend.user.Role;
+import se.mistral.backend.user.User;
 
 @Component
+@RequiredArgsConstructor
 public class MyWebSocketHandler extends TextWebSocketHandler {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final Set<WebSocketSession> sessions = ConcurrentHashMap.newKeySet();
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
         // handle a message
-        session.sendMessage(new TextMessage("Echo: " + payload));
+        for (WebSocketSession s : sessions) {
+            s.sendMessage(message);
+        }
     }
 
     @Override
@@ -32,11 +41,12 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             closeQuietly(session);
             return;
         }
+        sessions.add(session);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-        System.out.println("Disconnected: " + session.getId());
+        sessions.remove(session);
     }
 
     private String extractToken(WebSocketSession session) {
@@ -50,7 +60,10 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         try {
             String email = jwtService.extractUsername(token);
             UserDetails user = userDetailsService.loadUserByUsername(email);
-            return jwtService.isTokenValid(token, user);
+            if (!jwtService.isTokenValid(token, user)) return false;
+
+            User appUser = (User) user;
+            return appUser.getRole() == Role.TEACHER;
         } catch (Exception e) {
             return false;
         }
