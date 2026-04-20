@@ -1,7 +1,6 @@
 package se.mistral.backend.websocket;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -91,7 +90,9 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         try {
             String email = jwtService.extractUsername(token);
             UserDetails user = userDetailsService.loadUserByUsername(email);
-            if (!jwtService.isTokenValid(token, user)) return false;
+            if (!jwtService.isTokenValid(token, user)) {
+                return false;
+            }
 
             User appUser = (User) user;
             return appUser.getRole() == Role.TEACHER;
@@ -101,6 +102,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     }
 
     private void closeQuietly(WebSocketSession session) {
-        try { session.close(CloseStatus.NOT_ACCEPTABLE); } catch (Exception ignored) {}
+        try {
+            session.close(CloseStatus.NOT_ACCEPTABLE);
+        } catch (Exception ignored) { }
     }
 }
