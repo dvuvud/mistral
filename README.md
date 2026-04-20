@@ -208,3 +208,29 @@ ng serve
 
 Frontend körs på [http://localhost:4200](http://localhost:4200) och uppdateras automatiskt när du sparar filer.
 
+## Test info
+
+### Backend
+Backend-testerna sker genom Springboots egna testramverk. Det finns en fil i test-mappen som heter TemplateTests som har ett exempel test och all boilerplate som behövs. Du kan också alltid referera till en annan gjord testfil för inspiration till hur ett test kan skrivas. Coverage genereras genom JaCoCo. Sträva efter 100% coverage för filer där de är relevant, kör gärna med coverage en gång och kolla läget innan du puchar så allt ser bra ut.
+
+
+
+Alla tester körs genom:
+```bash
+./mvnw test
+```
+
+Men urval kan väljas genom t.ex:
+```bash
+./mvnw test -Dtest=ChildTests
+```
+
+Coverage genereras genom: 
+```bash
+./mvnw test jacoco:report
+```
+
+Till en html fil som hittas här: 
+```bash
+backend/target/site/jacoco/index.html
+```
