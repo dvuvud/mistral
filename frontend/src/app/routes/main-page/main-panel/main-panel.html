@@ -8,7 +8,7 @@
       <div class="childDisplay">
         <child-display [(childSignal)]="childSignal"></child-display>
         <div class="spacer"></div>
-        <h3>Närvaro:</h3>
+        <h3>Närvaro för {{childSignal().name}}:</h3>
         <attendance-box [childSignal]="childSignal()"></attendance-box>
       </div>
       <main-live-journal></main-live-journal>

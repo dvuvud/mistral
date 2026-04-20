@@ -9,7 +9,7 @@ import { AttendanceService } from '../../../core/child/attendance.service';
 
 @Component({
   selector: 'main-child-list',
-  imports: [MatListModule, RouterModule, MatDividerModule, AttendanceBox, MatCheckbox],
+  imports: [MatListModule, RouterModule, MatDividerModule, AttendanceBox],
   templateUrl: './main-child-list.html',
   styleUrl: './main-child-list.scss',
 })

@@ -1,0 +1,9 @@
+.flex-with-style {
+    display: flex;
+    flex-direction: column;
+}
+
+.top-text {
+    align-items: flex-start;
+    font-weight: bold;
+}
