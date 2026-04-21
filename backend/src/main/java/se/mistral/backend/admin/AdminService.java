@@ -29,5 +29,4 @@ public class AdminService {
         User saved = userRepository.save(user);
         return new UserResponse(saved.getId(), saved.getName(), saved.getRole(), saved.getEmail());
     }
-
 }
