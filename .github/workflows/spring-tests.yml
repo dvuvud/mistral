@@ -10,26 +10,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_DB: mistral
-          POSTGRES_USER: admin
-          POSTGRES_PASSWORD: secret
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd="pg_isready -U admin -d mistral"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
-    env:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/mistral
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: secret
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
