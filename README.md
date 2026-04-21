@@ -24,6 +24,7 @@ Det här dokumentet går igenom allt du behöver göra för att sätta upp din u
 - [3. Starta databasen](#3-starta-databasen)
 - [4. Starta backend](#4-starta-backend)
 - [5. Starta frontend](#5-starta-frontend)
+- [Test info](#Test-info)
 
 ---
 
@@ -209,7 +210,10 @@ ng serve
 
 Frontend körs på [http://localhost:4200](http://localhost:4200) och uppdateras automatiskt när du sparar filer.
 
+---
+
 ## Test info
+Lite information gällande testning i projektet.
 
 ### Backend
 Backend-testerna sker genom Springboots egna testramverk. Det finns en fil i test-mappen som heter TemplateTests som har ett exempel test och all boilerplate som behövs. Du kan också alltid referera till en annan gjord testfil för inspiration till hur ett test kan skrivas. Coverage genereras genom JaCoCo. Sträva efter 100% coverage för filer där de är relevant, kör gärna med coverage en gång och kolla läget innan du puchar så allt ser bra ut.
