@@ -22,7 +22,7 @@ import jakarta.persistence.Index;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "children", indexes = @Index(name = "idx_child_name", columnList = "grupp_id"))
+@Table(name = "children", indexes = @Index(name = "idx_child_group_id", columnList = "grupp_id"))
 public class Child {
 
     @Id
