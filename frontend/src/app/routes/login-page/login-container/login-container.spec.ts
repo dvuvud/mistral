@@ -10,7 +10,7 @@ describe('LoginContainer', () => {
     await TestBed.configureTestingModule({
       imports: [LoginContainer]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(LoginContainer);
     component = fixture.componentInstance;

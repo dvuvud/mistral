@@ -22,31 +22,31 @@ interface AuthResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-	private readonly baseUrl = 'http://localhost:8080/api/auth';
+  private readonly baseUrl = 'http://localhost:8080/api/auth';
 
-	private http = inject(HttpClient);
+  private http = inject(HttpClient);
 
-	login(email: string, password: string): Observable<AuthResponse> {
-		const data: LoginRequest = {
-			email,
-			password,
-		};
+  login(email: string, password: string): Observable<AuthResponse> {
+    const data: LoginRequest = {
+      email,
+      password,
+    };
 
-		return this.http
-			.post<AuthResponse>(`${this.baseUrl}/login`, data)
-			.pipe(tap((response) => localStorage.setItem('token', response.token)));
-	}
+    return this.http
+      .post<AuthResponse>(`${this.baseUrl}/login`, data)
+      .pipe(tap((response) => localStorage.setItem('token', response.token)));
+  }
 
-	register(name: string, email: string, password: string): Observable<AuthResponse> {
-		const data: RegisterRequest = {
-			name,
-			email,
-			password,
-		};
+  register(name: string, email: string, password: string): Observable<AuthResponse> {
+    const data: RegisterRequest = {
+      name,
+      email,
+      password,
+    };
 
-		return this.http
-			.post<AuthResponse>(`${this.baseUrl}/register`, data)
-			.pipe(tap((response) => localStorage.setItem('token', response.token)));
+    return this.http
+      .post<AuthResponse>(`${this.baseUrl}/register`, data)
+      .pipe(tap((response) => localStorage.setItem('token', response.token)));
   }
 
   async isAuthorized() {

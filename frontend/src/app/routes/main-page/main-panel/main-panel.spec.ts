@@ -10,7 +10,7 @@ describe('MainPanel', () => {
     await TestBed.configureTestingModule({
       imports: [MainPanel]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(MainPanel);
     component = fixture.componentInstance;

@@ -10,7 +10,7 @@ describe('ChildDisplay', () => {
     await TestBed.configureTestingModule({
       imports: [ChildDisplay]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ChildDisplay);
     component = fixture.componentInstance;

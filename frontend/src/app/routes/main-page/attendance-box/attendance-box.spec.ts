@@ -10,7 +10,7 @@ describe('AttendanceBox', () => {
     await TestBed.configureTestingModule({
       imports: [AttendanceBox]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(AttendanceBox);
     component = fixture.componentInstance;

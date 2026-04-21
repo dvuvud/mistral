@@ -10,7 +10,7 @@ describe('MainLiveJournal', () => {
     await TestBed.configureTestingModule({
       imports: [MainLiveJournal]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(MainLiveJournal);
     component = fixture.componentInstance;
