@@ -59,6 +59,12 @@ Därefter är följande tillgängligt:
 | Backend | http://localhost:8080 |
 | pgAdmin | http://localhost:5050 |
 
+Ytterligare finns det även ett admin konto inlaggd i databasen med följande uppgifter:
+
+| Namn | Email | Password |
+|---|---|---|
+| admin | admin@mistral.com | ADMIN |
+
 ---
 
 ## 1. Förutsättningar
