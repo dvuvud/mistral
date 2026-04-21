@@ -18,11 +18,9 @@ import java.util.List;
 @SpringBootTest
 @Transactional
 public class ChildTests {
-    private final ChildService childService;
 
-    public ChildTests(@Autowired ChildService childService) {
-        this.childService = childService;
-    }
+    @Autowired
+    private ChildService childService;
 
     @Test
     void createChildShouldReturnCorrectResponseTest() {

@@ -1,6 +1,7 @@
 package se.mistral.backend;
 
 import jakarta.transaction.Transactional;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,11 +12,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Transactional
 public class AttendanceTests {
-    private final AttendanceService attendanceService;
 
-    public AttendanceTests(@Autowired AttendanceService attendanceService) {
-        this.attendanceService = attendanceService;
-    }
+    @Autowired
+    private AttendanceService attendanceService;
 
     @Test
     void test() {

@@ -11,11 +11,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Transactional
 public class AuthTests {
-    private final AuthService authService;
 
-    public AuthTests(@Autowired AuthService authService) {
-        this.authService = authService;
-    }
+    @Autowired
+    private AuthService authService;
 
     @Test
     void test() {
