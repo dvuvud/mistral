@@ -29,9 +29,9 @@ public class AdminController {
         return ResponseEntity.ok(adminService.createChild(request));
     }
 
-    @PutMapping("/teacher/{id}")
-    public ResponseEntity<UserResponse> updateTeachers(@PathVariable Long id) {
-        return ResponseEntity.ok(adminService.updateTeachers(id));
+    @PutMapping("/user/{id}")
+    public ResponseEntity<UserResponse> setUserActive(@PathVariable Long id) {
+        return ResponseEntity.ok(adminService.setUserActive(id));
     }
 
     @PostMapping("/group")
