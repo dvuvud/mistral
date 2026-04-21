@@ -1,8 +1,8 @@
-package se.mistral.backend.grupp.dto;
+package se.mistral.backend.group.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record CreateGruppRequest(
+public record CreateGroupRequest(
     @NotBlank
     String name
 ) {
