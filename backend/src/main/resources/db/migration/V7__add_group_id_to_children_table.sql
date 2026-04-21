@@ -6,5 +6,5 @@ ALTER TABLE children
         FOREIGN KEY (group_id)
             REFERENCES groups(id);
 
-CREATE INDEX idx_child_group_id
+CREATE INDEX index_child_group_id
     ON children (group_id);
