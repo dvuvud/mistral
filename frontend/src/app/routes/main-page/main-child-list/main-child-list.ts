@@ -4,7 +4,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
 import { Child, ChildService } from '../../../core/child/child.service';
 import { AttendanceBox } from '../attendance-box/attendance-box';
-import { MatCheckbox } from '@angular/material/checkbox';
 import { AttendanceService } from '../../../core/child/attendance.service';
 
 @Component({
