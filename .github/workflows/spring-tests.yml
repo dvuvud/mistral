@@ -23,14 +23,6 @@ jobs:
           java-version: 25
           cache: maven
 
-      - name: Cache Maven packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: | # if key doesn't exist, uses the closest key
-            ${{ runner.os }}-maven-
-
       - name: Run backend tests
         working-directory: backend
         run: mvn clean test
