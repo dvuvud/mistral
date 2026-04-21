@@ -15,6 +15,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RequiredArgsConstructor
@@ -34,5 +35,10 @@ public class ChildController {
     @GetMapping("/attendance")
     public ResponseEntity<List<AttendanceResponse>> getAllChildrenWithAttendanceIfExists(@RequestParam(required = false) LocalDate date) {
         return ResponseEntity.ok(childService.getAllChildrenWithAttendanceIfExists(date != null ? date : LocalDate.now()));
+    }
+
+    @GetMapping("/grupp/{gruppId}")
+    public ResponseEntity<List<ChildResponse>> getChildrenByGrupp(@PathVariable Long gruppId) {
+        return ResponseEntity.ok(childService.getChildrenByGrupp(gruppId));
     }
 }
