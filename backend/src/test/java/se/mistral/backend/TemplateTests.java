@@ -11,11 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class TemplateTests {
     // if testing a service generate one using @Autowired as shown below
     // You can comment them out and replace Template with the relevant Service
-    //    private final TemplateService templateService;
-    //
-    //    public TemplateTests(@Autowired TemplateService templateService) {
-    //        this.TemplateService = TemplateService;
-    //    }
+    //    @Autowired
+    //    private TemplateService templateService;
     @Test
     void test() {
         //assertThat(templateService).isNotNull();
