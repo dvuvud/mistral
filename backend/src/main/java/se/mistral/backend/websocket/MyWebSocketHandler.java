@@ -40,7 +40,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         switch (type) {
             case "subscribe"   -> subscribe(session, room);
             case "unsubscribe" -> unsubscribe(session, room);
-            default            -> broadcastToRoom(room, message);
+            default            -> broadcastToRoom(session, room, message);
         }
     }
 
@@ -75,7 +75,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     }
 
 
-    public void broadcastToRoom(String room, TextMessage message) {
+    public void broadcastToRoom(WebSocketSession sender, String room, TextMessage message) {
         Set<WebSocketSession> roomSessions = rooms.get(room); // null means no room, not a fake empty set
         if (roomSessions == null) {
             return;
@@ -84,7 +84,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         for (WebSocketSession s : roomSessions) {
             try {
                 synchronized (s) {
-                    if (s.isOpen()) { // check to make sure session wasn't closed before acquiring the lock
+                    if (s.isOpen() && s != sender) { // check to make sure session wasn't closed before acquiring the lock
                         s.sendMessage(message);
                     }
                 }
