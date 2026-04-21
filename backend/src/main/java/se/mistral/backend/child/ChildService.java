@@ -23,4 +23,8 @@ public class ChildService {
     public List<AttendanceResponse> getAllChildrenWithAttendanceIfExists(LocalDate date) {
         return childRepository.findAllChildrenWithAttendanceIfExists(date);
     }
+
+    public List<ChildResponse> findAllByGroupId(Long gruppId) {
+        return childRepository.findAllByGruppId(gruppId);
+    }
 }

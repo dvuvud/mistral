@@ -19,5 +19,7 @@ public interface ChildRepository extends JpaRepository<Child, Long> {
     List<AttendanceResponse> findAllChildrenWithAttendanceIfExists(@Param("date") LocalDate date);
     @Query("SELECT new se.mistral.backend.child.dto.ChildResponse(c.id, c.name) FROM Child c")
     List<ChildResponse> findAllIdsAndNames();
+
+    List<ChildResponse> findAllByGruppId(Long gruppId);
 }
 
