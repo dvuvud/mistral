@@ -15,6 +15,8 @@ module.exports = defineConfig([
     ],
     processor: angular.processInlineTemplates,
     rules: {
+      "indent": ["error", 2, { "SwitchCase": 1 }],
+
       "@angular-eslint/directive-selector": [
         "error",
         {
