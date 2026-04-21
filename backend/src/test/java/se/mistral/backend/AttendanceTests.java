@@ -11,11 +11,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Transactional
 public class AttendanceTests {
-    @Autowired
-    private AttendanceService attendanceService;
+    private final AttendanceService attendanceService;
+
+    public AttendanceTests(@Autowired AttendanceService attendanceService) {
+        this.attendanceService = attendanceService;
+    }
 
     @Test
     void test() {
-        assertThat(1 + 1).isEqualTo(2);
+        assertThat(attendanceService).isNotNull();
     }
 }
