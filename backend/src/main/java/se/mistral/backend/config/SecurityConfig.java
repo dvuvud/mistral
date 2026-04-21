@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/children/**").hasRole("TEACHER")
                 .requestMatchers("/api/attendance/**").hasRole("TEACHER")
                 .requestMatchers("/ws").permitAll() // authentication happens inside handler
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .authenticationProvider(authenticationProvider)
