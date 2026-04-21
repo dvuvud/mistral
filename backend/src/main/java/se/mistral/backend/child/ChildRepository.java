@@ -20,7 +20,7 @@ public interface ChildRepository extends JpaRepository<Child, Long> {
 
     @Query("SELECT new se.mistral.backend.child.dto.AttendanceResponse(c.id, c.name, a.date, a.present) " +
             "FROM Child c LEFT JOIN Attendance a ON a.child.id = c.id AND a.date = :date WHERE c.group.id = :groupId")
-    List<AttendanceResponse> findAllChildrenWithAttendanceIfExistsInGroup(@Param("date") LocalDate date, @Param("group") Long groupId);
+    List<AttendanceResponse> findAllChildrenWithAttendanceIfExistsInGroup(@Param("date") LocalDate date, @Param("groupId") Long groupId);
 
     @Query("SELECT new se.mistral.backend.child.dto.ChildResponse(c.id, c.name) FROM Child c")
     List<ChildResponse> findAllIdsAndNames();
