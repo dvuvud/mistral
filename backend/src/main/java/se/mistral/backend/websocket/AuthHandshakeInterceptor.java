@@ -18,7 +18,7 @@ public class AuthHandshakeInterceptor implements HandshakeInterceptor {
 
         List<String> auth = request.getHeaders().get("Authorization");
         if (auth != null && !auth.isEmpty()) {
-            attributes.put("token", auth.get(0).substring(7)); // strip "Bearer " and put in attributes for later use
+            attributes.put("token", auth.get(0).substring("Bearer ".length())); // strip "Bearer " and put in attributes for later use
         }
         return true; // always let it through, we'll close in the handler if invalid
     }
