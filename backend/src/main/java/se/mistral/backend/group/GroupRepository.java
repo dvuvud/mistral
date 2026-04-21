@@ -1,9 +1,9 @@
-package se.mistral.backend.grupp;
+package se.mistral.backend.group;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GruppRepository extends JpaRepository<Grupp, Long> {
+public interface GroupRepository extends JpaRepository<Group, Long> {
 
 }

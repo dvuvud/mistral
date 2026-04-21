@@ -15,14 +15,14 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import java.util.List;
 import se.mistral.backend.attendance.Attendance;
-import se.mistral.backend.grupp.Grupp;
+import se.mistral.backend.group.Group;
 import jakarta.persistence.Index;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "children", indexes = @Index(name = "idx_child_group_id", columnList = "grupp_id"))
+@Table(name = "children", indexes = @Index(name = "index_child_group_id", columnList = "group_id"))
 public class Child {
 
     @Id
@@ -33,8 +33,8 @@ public class Child {
     private List<Attendance> attendances;
 
     @ManyToOne
-    @JoinColumn(name = "grupp_id")
-    private Grupp grupp;
+    @JoinColumn(name = "group_id")
+    private Group group;
 
     @NotBlank
     private String name;

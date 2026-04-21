@@ -12,9 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.mistral.backend.user.dto.UserResponse;
-import se.mistral.backend.grupp.GruppService;
-import se.mistral.backend.grupp.dto.GruppResponse;
-import se.mistral.backend.grupp.dto.CreateGruppRequest;
+import se.mistral.backend.group.GroupService;
+import se.mistral.backend.group.dto.GroupResponse;
+import se.mistral.backend.group.dto.CreateGroupRequest;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/admin")
@@ -22,7 +22,7 @@ import se.mistral.backend.grupp.dto.CreateGruppRequest;
 public class AdminController {
     
     private final AdminService adminService;
-    private final GruppService groupService;
+    private final GroupService groupService;
 
     @PostMapping()
     public ResponseEntity<ChildResponse> createChild(@RequestBody CreateChildRequest request) {
@@ -34,13 +34,14 @@ public class AdminController {
         return ResponseEntity.ok(adminService.updateTeachers(id));
     }
 
-    @PostMapping("/grupp")
-    public ResponseEntity<GruppResponse> createGrupp(@RequestBody CreateGruppRequest request) {
-        return ResponseEntity.ok(groupService.createGrupp(request));
+    @PostMapping("/group")
+    public ResponseEntity<GroupResponse> createGroup(@RequestBody CreateGroupRequest request) {
+        return ResponseEntity.ok(groupService.createGroup(request));
     }
 
-    @PutMapping("/grupp/{gruppId}/barn/{childId}")
-    public ResponseEntity<GruppResponse> assignChildToGrupp(@PathVariable Long gruppId, @PathVariable Long childId) {
-        return ResponseEntity.ok(groupService.assignChildToGrupp(childId, gruppId));
+    @PutMapping("/group/{groupId}/barn/{childId}")
+    public ResponseEntity<GroupResponse> assignChildToGroup(@PathVariable Long groupId, @PathVariable Long childId) {
+        return ResponseEntity.ok(groupService.assignChildToGroup(childId, groupId));
     }
+
 }
