@@ -7,8 +7,10 @@
   overflow-y: scroll;
 }
 
-.container {
+.admin-container {
   width: 85%;
   height: 80%;
-  background-color: --var(mat-sys-surface-container)
+  background-color: --var(mat-sys-surface-container);
+  gap: 24px;
+
 }
