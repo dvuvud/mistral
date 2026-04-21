@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequestMapping("/api/children")
 @RestController
 public class ChildController {
-    
+
     private final ChildService childService;
 
-    
+
 
     @GetMapping()
     public ResponseEntity<List<ChildResponse>> getAllChildren() {
@@ -34,8 +34,13 @@ public class ChildController {
         return ResponseEntity.ok(childService.getAllChildrenWithAttendanceIfExists(date != null ? date : LocalDate.now()));
     }
 
-    @GetMapping("/grupp/{gruppId}")
-    public ResponseEntity<List<ChildResponse>> getChildrenByGrupp(@PathVariable Long gruppId) {
-        return ResponseEntity.ok(childService.getChildrenByGrupp(gruppId));
+    @GetMapping("/attendance/group")
+    public ResponseEntity<List<AttendanceResponse>> getAllChildrenWithAttendanceIfExistsInGroup(@RequestParam(required = false) LocalDate date, @RequestParam Long groupId) {
+        return ResponseEntity.ok(childService.getAllChildrenWithAttendanceIfExistsInGroup(date != null ? date : LocalDate.now(), groupId));
+    }
+
+    @GetMapping("/group/{groupId}")
+    public ResponseEntity<List<ChildResponse>> getChildrenByGroup(@PathVariable Long groupId) {
+        return ResponseEntity.ok(childService.getChildrenByGroup(groupId));
     }
 }
