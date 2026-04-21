@@ -45,43 +45,43 @@ export class AttendanceBox {
     });
   }
 
-    async onCheckBox(event: MatCheckboxChange) {
+  async onCheckBox(event: MatCheckboxChange) {
 
-      const newStatus = event.checked;
+    const newStatus = event.checked;
 
-      if (newStatus === false) {
-        const confirmedCheckOut = await this.confirmation();
+    if (newStatus === false) {
+      const confirmedCheckOut = await this.confirmation();
 
-        if(!confirmedCheckOut) {
-          event.source.checked = true;
+      if(!confirmedCheckOut) {
+        event.source.checked = true;
 
-          const sig = this.attendanceService.getSignal(this.childSignal().id, this.dateStr);
-          sig.set(true);
-          return;
-        }
+        const sig = this.attendanceService.getSignal(this.childSignal().id, this.dateStr);
+        sig.set(true);
+        return;
       }
+    }
 
-      const sig = this.attendanceService.getSignal(this.childSignal().id, this.dateStr);
-      sig.set(newStatus);
+    const sig = this.attendanceService.getSignal(this.childSignal().id, this.dateStr);
+    sig.set(newStatus);
 
-      this.attendanceService.setAttendance(this.childSignal().id, this.dateStr, newStatus).subscribe({
-        next: (data) => sig.set(data.present),
-        error: (err) => {
-          console.error('Kunde inte spara', err);
-          sig.set(!newStatus);
-          event.source.checked = !newStatus;
-          this.errorMessage = 'Misslyckades att spara till databasen.';
-          setTimeout(() => this.errorMessage = '', 2000);
-        },
-      });
+    this.attendanceService.setAttendance(this.childSignal().id, this.dateStr, newStatus).subscribe({
+      next: (data) => sig.set(data.present),
+      error: (err) => {
+        console.error('Kunde inte spara', err);
+        sig.set(!newStatus);
+        event.source.checked = !newStatus;
+        this.errorMessage = 'Misslyckades att spara till databasen.';
+        setTimeout(() => this.errorMessage = '', 2000);
+      },
+    });
   }
 
   async confirmation() {
-      const dialogRef = this.dialog.open(ConfirmationDialog, {
-        height: '120px',
-        width: '500px',
-      });
-      const result = await firstValueFrom(dialogRef.afterClosed());
-      return result;
+    const dialogRef = this.dialog.open(ConfirmationDialog, {
+      height: '120px',
+      width: '500px',
+    });
+    const result = await firstValueFrom(dialogRef.afterClosed());
+    return result;
   }
 }
