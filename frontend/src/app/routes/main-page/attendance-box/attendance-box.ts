@@ -1,5 +1,5 @@
-import { Component, input, effect, inject, model } from '@angular/core';
-import { MatCheckboxModule, MatCheckboxChange} from '@angular/material/checkbox';
+import { Component, input, effect, inject, model, EventEmitter, Output } from '@angular/core';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { Child } from '../../../core/child/child.service';
 import { AttendanceService } from '../../../core/child/attendance.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -72,6 +72,13 @@ export class AttendanceBox {
         setTimeout(() => this.errorMessage = '', 2000);
       },
     });
+
+    this.wsUpdateAttendance(event.checked)
+  }
+
+  @Output() attendanceChangeEvent = new EventEmitter();
+  wsUpdateAttendance(checked: boolean) {
+    this.attendanceChangeEvent.emit({childId: this.childSignal().id, present: checked});
   }
 
   async confirmation() {

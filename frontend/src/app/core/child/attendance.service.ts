@@ -45,4 +45,5 @@ export class AttendanceService {
 
     return this.http.put<AttendanceSetInfo>(this.url, data);
   }
+
 }

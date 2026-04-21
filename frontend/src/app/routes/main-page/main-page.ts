@@ -6,8 +6,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
-import { AttendanceService } from '../../core/child/attendance.service';
-import { WebsocketService } from '../../core/websocket/websocket.service';
+import { WebsocketService, WsMessageType } from '../../core/websocket/websocket.service';
+
 
 @Component({
   selector: 'main-page',
@@ -25,15 +25,14 @@ import { WebsocketService } from '../../core/websocket/websocket.service';
   styleUrl: './main-page.scss'
 })
 export class MainPage implements OnInit, OnDestroy {
-  
+
   childSignal = signal<Child>({ name: '', id: 0, date: "", present: false });
   private router = inject(Router);
   private socketService = inject(WebsocketService);
   mainPanel = viewChild.required(MainPanel);
 
-  testMessage = '{"childID": 1, "present": "true"}';
-
   ngOnInit() {
+    this.socketService.connect("ws://localhost:8080/ws", "attendance");
     this.socketService.getMessages().subscribe((message) => {
       this.handleWebsocketMessage(message);
     });
@@ -43,8 +42,14 @@ export class MainPage implements OnInit, OnDestroy {
     this.socketService.disconnect();
   }
 
-  handleWebsocketMessage(message: string) {
-    this.mainPanel().handleWebsocketMessage(message);
+  handleWebsocketMessage(message: WsMessageType) {
+    if ("childId" in message) {
+      this.mainPanel().handleWebsocketMessage(message);
+    }
+  }
+
+  wsUpdateAttendance(msg: WsMessageType) {
+    this.socketService.sendMessage(msg);
   }
 
   logout() {

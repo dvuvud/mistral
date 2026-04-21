@@ -6,10 +6,7 @@
       </mat-card-header>
       @if (childSignal().name !== ''){
       <div class="childDisplay">
-        <child-display [(childSignal)]="childSignal"></child-display>
-        <div class="spacer"></div>
-        <h3>Närvaro för {{childSignal().name}}:</h3>
-        <attendance-box [childSignal]="childSignal()"></attendance-box>
+        <child-display (attendanceChangeEvent)="wsUpdateAttendance($event)" [(childSignal)]="childSignal"></child-display>
       </div>
       <main-live-journal></main-live-journal>
       }

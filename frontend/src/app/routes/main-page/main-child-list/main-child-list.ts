@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { Child, ChildService } from '../../../core/child/child.service';
 import { AttendanceBox } from '../attendance-box/attendance-box';
 import { AttendanceService } from '../../../core/child/attendance.service';
+import { WsAttendanceMessage } from '../../../core/websocket/websocket.service';
 
 @Component({
   selector: 'main-child-list',
@@ -46,10 +47,9 @@ export class ChildList implements OnInit {
     });
   }
 
-  handleWebsocketMessage(message: string) {
-    const messageAsJSON: { childID: number; present: boolean } = JSON.parse(message);
+  handleWebsocketMessage(message: WsAttendanceMessage) {
     const targetChild: Child | undefined = this.children().find((child: Child) => {
-      return child.id === messageAsJSON.childID;
+      return child.id === message.childId;
     });
 
     if (!targetChild) {
@@ -58,7 +58,6 @@ export class ChildList implements OnInit {
     }
 
     const sig = this.attendanceService.getSignal(targetChild.id, this.dateStr);
-    console.log(sig());
-    sig.set(messageAsJSON.present);
+    sig.set(message.present);
   }
 }
