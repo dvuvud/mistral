@@ -24,12 +24,12 @@ public class AdminController {
     private final AdminService adminService;
     private final GroupService groupService;
 
-    @PostMapping()
+    @PostMapping("/child")
     public ResponseEntity<ChildResponse> createChild(@RequestBody CreateChildRequest request) {
         return ResponseEntity.ok(adminService.createChild(request));
     }
 
-    @PutMapping("/lärare/{id}")
+    @PutMapping("/teacher/{id}")
     public ResponseEntity<UserResponse> updateTeachers(@PathVariable Long id) {
         return ResponseEntity.ok(adminService.updateTeachers(id));
     }
@@ -39,7 +39,7 @@ public class AdminController {
         return ResponseEntity.ok(groupService.createGroup(request));
     }
 
-    @PutMapping("/group/{groupId}/barn/{childId}")
+    @PutMapping("/group/{groupId}/child/{childId}")
     public ResponseEntity<GroupResponse> assignChildToGroup(@PathVariable Long groupId, @PathVariable Long childId) {
         return ResponseEntity.ok(groupService.assignChildToGroup(groupId, childId));
     }
