@@ -27,6 +27,7 @@ public class AdminService {
     public UserResponse updateTeachers(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         user.setRole(Role.TEACHER);
+        user.setActive(true);
         User saved = userRepository.save(user);
         return new UserResponse(saved.getId(), saved.getName(), saved.getRole(), saved.getEmail());
     }
