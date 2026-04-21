@@ -1,14 +1,11 @@
 package se.mistral.backend.child;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import se.mistral.backend.child.dto.ChildResponse;
 import se.mistral.backend.child.dto.AttendanceResponse;
-import se.mistral.backend.child.dto.CreateChildRequest;
 
 import java.time.LocalDate;
 import java.util.List;

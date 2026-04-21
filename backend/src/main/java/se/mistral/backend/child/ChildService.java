@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import se.mistral.backend.child.dto.AttendanceResponse;
 import se.mistral.backend.child.dto.ChildResponse;
-import se.mistral.backend.child.dto.CreateChildRequest;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,7 +23,7 @@ public class ChildService {
         return childRepository.findAllChildrenWithAttendanceIfExists(date);
     }
 
-    public List<ChildResponse> findAllByGroupId(Long gruppId) {
+    public List<ChildResponse> getChildrenByGrupp(Long gruppId) {
         return childRepository.findAllByGruppId(gruppId);
     }
 }
