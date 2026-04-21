@@ -89,12 +89,4 @@ export class AttendanceBox {
     const result = await firstValueFrom(dialogRef.afterClosed());
     return result;
   }
-<<<<<<< HEAD
-=======
-
-  @Output() attendanceChangeEvent = new EventEmitter();
-  wsUpdateAttendance(checked: boolean) {
-    this.attendanceChangeEvent.emit({ childId: this.childSignal().id, present: checked });
-  }
->>>>>>> e15eee9 (Fixade linting errors)
 }
