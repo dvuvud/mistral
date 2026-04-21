@@ -50,13 +50,11 @@ export class AttendanceBox {
     const newStatus = event.checked;
 
     if (newStatus === false) {
-      const confirmedCheckOut = await this.confirmation();
+      event.source.checked = true;
 
-      if(!confirmedCheckOut) {
-        event.source.checked = true;
+      const confirmed = await this.confirmation();
 
-        const sig = this.attendanceService.getSignal(this.childSignal().id, this.dateStr);
-        sig.set(true);
+      if(!confirmed) { // early return
         return;
       }
     }
