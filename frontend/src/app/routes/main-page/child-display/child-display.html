@@ -1,1 +1,4 @@
 <h3>Elev: {{childSignal().name}}</h3>
+<div class="spacer"></div>
+<h3>Närvaro:</h3>
+<attendance-box (attendanceChangeEvent)="wsUpdateAttendance($event)" [childSignal]="childSignal()"></attendance-box>
