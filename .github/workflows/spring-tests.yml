@@ -23,6 +23,11 @@ jobs:
           --health-timeout=5s
           --health-retries=5
 
+    env:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/mistral
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: secret
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
