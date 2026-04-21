@@ -41,7 +41,6 @@ public class AdminController {
 
     @PutMapping("/group/{groupId}/barn/{childId}")
     public ResponseEntity<GroupResponse> assignChildToGroup(@PathVariable Long groupId, @PathVariable Long childId) {
-        return ResponseEntity.ok(groupService.assignChildToGroup(childId, groupId));
+        return ResponseEntity.ok(groupService.assignChildToGroup(groupId, childId));
     }
-
 }
