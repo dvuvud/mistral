@@ -62,7 +62,7 @@ Därefter är följande tillgängligt:
 Ytterligare finns det även ett admin konto inlaggd i databasen med följande uppgifter:
 
 | Namn | Email | Password |
-|---|---|---|
+|:-:|:-:|:-:|
 | admin | admin@mistral.com | ADMIN |
 
 ---
