@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.mistral.backend.user.dto.UserResponse;
+import se.mistral.backend.grupp.GruppService;
+import se.mistral.backend.grupp.dto.GruppResponse;
+import se.mistral.backend.grupp.dto.CreateGruppRequest;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/admin")
@@ -19,6 +22,7 @@ import se.mistral.backend.user.dto.UserResponse;
 public class AdminController {
     
     private final AdminService adminService;
+    private final GruppService groupService;
 
     @PostMapping()
     public ResponseEntity<ChildResponse> createChild(@RequestBody CreateChildRequest request) {
@@ -30,8 +34,13 @@ public class AdminController {
         return ResponseEntity.ok(adminService.updateTeachers(id));
     }
 
-    @PutMapping("/grupp")
-    public ResponseEntity<String> swapGroup() {
-        return ResponseEntity.ok("Not implemented yet");
+    @PostMapping("/grupp")
+    public ResponseEntity<GruppResponse> createGrupp(@RequestBody CreateGruppRequest request) {
+        return ResponseEntity.ok(groupService.createGrupp(request));
+    }
+
+    @PutMapping("/grupp/{gruppId}/barn/{childId}")
+    public ResponseEntity<GruppResponse> assignChildToGrupp(@PathVariable Long gruppId, @PathVariable Long childId) {
+        return ResponseEntity.ok(groupService.assignChildToGrupp(childId, gruppId));
     }
 }
