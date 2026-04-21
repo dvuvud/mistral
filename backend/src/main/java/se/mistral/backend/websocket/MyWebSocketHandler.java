@@ -51,35 +51,65 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             closeQuietly(session);
             return;
         }
-        sessionRooms.put(session, ConcurrentHashMap.newKeySet());
+        sessionRooms.putIfAbsent(session, ConcurrentHashMap.newKeySet());
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         Set<String> joined = sessionRooms.remove(session);
-        if (joined != null) {
-            joined.forEach(room -> rooms.getOrDefault(room, ConcurrentHashMap.newKeySet()).remove(session));
+        if (joined == null) {
+            return;
+        }
+
+        for (String room : joined) {
+            removeSessionFromRoom(room, session);
         }
     }
 
-    public void broadcastToRoom(String room, TextMessage message) throws IOException {
-        Set<WebSocketSession> roomSessions = rooms.getOrDefault(room, ConcurrentHashMap.newKeySet());
+    private void removeSessionFromRoom(String room, WebSocketSession session) {
+        rooms.computeIfPresent(room, (k, sessions) -> {
+            sessions.remove(session);
+            // returning null from computeIfPresent atomically removes the key along with its value.
+            return sessions.isEmpty() ? null : sessions;
+        });
+    }
+
+
+    public void broadcastToRoom(String room, TextMessage message) {
+        Set<WebSocketSession> roomSessions = rooms.get(room); // null means no room, not a fake empty set
+        if (roomSessions == null) {
+            return;
+        }
+
         for (WebSocketSession s : roomSessions) {
-            synchronized (s) {
-                s.sendMessage(message);
-            }
+            try {
+                synchronized (s) {
+                    if (s.isOpen()) { // check to make sure session wasn't closed before acquiring the lock
+                        s.sendMessage(message);
+                    }
+                }
+            } catch (IOException e) { }
         }
     }
 
     private void subscribe(WebSocketSession session, String room) {
+        Set<String> myRooms = sessionRooms.get(session);
+        if (myRooms == null) {
+            return;
+        }
+        myRooms.add(room);
         rooms.computeIfAbsent(room, k -> ConcurrentHashMap.newKeySet()).add(session);
-        sessionRooms.get(session).add(room);
     }
 
+
     private void unsubscribe(WebSocketSession session, String room) {
-        rooms.getOrDefault(room, ConcurrentHashMap.newKeySet()).remove(session);
-        sessionRooms.getOrDefault(session, ConcurrentHashMap.newKeySet()).remove(room);
+        removeSessionFromRoom(room, session);
+        Set<String> myRooms = sessionRooms.get(session);
+        if (myRooms != null) {
+            myRooms.remove(room);
+        }
     }
+
 
     private String extractToken(WebSocketSession session) {
         Object token = session.getAttributes().get("token");
