@@ -10,7 +10,7 @@ describe('ChildList', () => {
     await TestBed.configureTestingModule({
       imports: [ChildList]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ChildList);
     component = fixture.componentInstance;

@@ -10,7 +10,7 @@ describe('ConfirmationDialog', () => {
     await TestBed.configureTestingModule({
       imports: [ConfirmationDialog]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ConfirmationDialog);
     component = fixture.componentInstance;

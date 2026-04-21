@@ -10,7 +10,7 @@ describe('AdminPage', () => {
     await TestBed.configureTestingModule({
       imports: [AdminPage]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(AdminPage);
     component = fixture.componentInstance;
