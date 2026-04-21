@@ -3,6 +3,7 @@
   <br/>
   <a href="https://github.com/dvuvud/mistral/actions/workflows/linter.yml">
     <img src="https://img.shields.io/github/actions/workflow/status/dvuvud/mistral/linter.yml?style=for-the-badge&logo=github&label=Lint" alt="Lint" />
+    <img src="https://img.shields.io/github/actions/workflow/status/dvuvud/mistral/spring-tests.yml?style=for-the-badge&logo=github&label=Spring Tests" alt="Spring Tests" />
   </a>
   <br/>
   <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="Spring Boot" />
