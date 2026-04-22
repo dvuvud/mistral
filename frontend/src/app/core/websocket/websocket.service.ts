@@ -28,7 +28,7 @@ export interface WsJournalMessage {
 export class WebsocketService {
   private socket: WebSocket | null = null;
   private messages = new Subject<WsMessageType>();
-  private roomName = '';
+  roomName = '';
 
   connect(url: string, roomName: string): void {
     const token = localStorage.getItem("token");
@@ -73,6 +73,12 @@ export class WebsocketService {
       this.socket.close();
       this.socket = null;
     }
+  }
+
+  changeRoom(newRoom: string): void {
+    this.socket?.send(JSON.stringify({ type: 'unsubscribe', room: this.roomName}));
+    this.socket?.send(JSON.stringify({ type: 'subscribe', room: newRoom}));
+    this.roomName = newRoom;
   }
 
   sendMessage(message: WsMessageType): void {
