@@ -8,11 +8,11 @@ import { Group } from './group/group';
 @Component({
   selector: 'admin-page',
   imports: [
-    MatCard, 
-    MatCardHeader, 
+    MatCard,
+    MatCardHeader,
     MatCardContent,
-    MatCardModule, 
-    AddChildForm, 
+    MatCardModule,
+    AddChildForm,
     ChildAdminList,
     Group,
     CommonModule
@@ -21,5 +21,4 @@ import { Group } from './group/group';
   styleUrl: './admin-page.scss',
 })
 export class AdminPage {
-
 }

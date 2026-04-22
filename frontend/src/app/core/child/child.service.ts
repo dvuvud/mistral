@@ -17,6 +17,9 @@ export class ChildService {
   private url = `${environment.apiUrl}/api/children/attendance`;
   private urlPerGroup = `${environment.apiUrl}/api/children/attendance/group`;
 
+  private childUrl = "http://localhost:8080/api/children";
+  private adminUrl = "http://localhost:8080/api/admin";
+
   private http = inject(HttpClient);
 
   getChildren(): Observable<Child[]> {
