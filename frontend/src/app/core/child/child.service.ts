@@ -20,6 +20,9 @@ export class ChildService {
 
   private childUrl = "http://localhost:8080/api/children/attendance";
 
+  private childUrl = "http://localhost:8080/api/children";
+  private adminUrl = "http://localhost:8080/api/admin";
+
   private http = inject(HttpClient);
 
   getChildren(): Observable<Child[]> {
@@ -33,4 +36,24 @@ export class ChildService {
     }
     return this.http.get<Child[]>(this.urlPerGroup, { params });
   }
+
+  getAll(): Observable<Child[]> {
+    return this.http.get<Child[]>(this.childUrl);
+  }
+
+  createChild(name: string): Observable<any> {
+    return this.http.post(`${this.adminUrl}/child`, { name });
+  }
+
+  createGroup(name: string): Observable<any> {
+    return this.http.post(`${this.adminUrl}/group`, { name });
+  }
+
+
+  //TODO
+  assignChildToGroup(groupId: string, childId: string) { }
+
+  //TODO
+  activateUser() { }
+
 }
