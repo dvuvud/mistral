@@ -1,9 +1,10 @@
-import { Component, effect, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { FormsModule } from '@angular/forms';
 import { WebsocketService } from '../../../core/websocket/websocket.service';
+import { Child } from '../../../core/child/child.service';
 import { textDiff } from './textDiff';
 
 @Component({
@@ -12,7 +13,9 @@ import { textDiff } from './textDiff';
   templateUrl: './main-live-journal.html',
   styleUrl: './main-live-journal.scss',
 })
-export class MainLiveJournal {
+export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
+  @Input() child!: Child;
+  
   private journalSocket = new WebsocketService;
   private differ = new textDiff();
 
@@ -20,7 +23,24 @@ export class MainLiveJournal {
   prevText = '';
 
   ngOnInit() {
-    this.journalSocket.connect("ws://localhost:8080/ws", "journal");
+    this.initializeJournal();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
+    if (changes['child'] && !changes['child'].firstChange) {
+      // Reconnect when child changes (but not on first init)
+      this.journalSocket.disconnect();
+      this.text.set('');
+      this.prevText = '';
+      this.initializeJournal();
+    }
+  }
+
+  private initializeJournal() {
+    // Connect to child-specific journal room
+    const journalRoom = this.child ? `journal-${this.child.id}` : "journal";
+    this.journalSocket.connect("ws://localhost:8080/ws", journalRoom);
     this.journalSocket.getMessages().subscribe((message) => {
       // TODO
     });
@@ -33,8 +53,6 @@ export class MainLiveJournal {
   onInput(event: Event) {
     const newValue = (event.target as HTMLTextAreaElement).value;
     this.prevText = this.text(); // capture before update
-    console.log("previous text: " + this.prevText);
-    console.log("new text: " + newValue);
     console.log(this.differ.getDiff(this.prevText, newValue));
     this.text.set(newValue);
   }
