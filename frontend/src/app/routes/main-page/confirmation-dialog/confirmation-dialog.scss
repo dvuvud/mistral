@@ -1,53 +1,31 @@
 :host {
   display: block;
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   text-align: center;
-  color: #202124;
-  padding: 16px 0; // Gives a little breathing room top and bottom
+  padding: 8px
 }
 
-p {
-  font-size: 16px;
-  font-weight: 500;
-  margin-top: 0;
-  margin-bottom: 24px;
+.top-text {
+  font: var(--mat-sys-title-medium);
 }
 
-// This handles the layout of the buttons
 .button-group {
   display: flex;
   justify-content: center;
-  gap: 24px; // This guarantees the space between the buttons
+  gap: 32px;
 }
 
-button {
+.button {
   padding: 8px 32px;
-  font-size: 14px;
-  font-weight: 500;
+  font: var(--mat-sys-label-small);
+  font-weight: bold;
   cursor: pointer;
   border-radius: 4px;
   transition: all 0.2s ease-in-out;
+  background-color: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  border: 1px solid;
+}
 
-  // Styling for the "Ja" button
-  &:first-child {
-    background-color: #b300b3;
-    color: #ffffff;
-    border: 1px solid #b300b3;
-
-    &:hover {
-      background-color: #8e008e;
-      border-color: #8e008e;
-    }
-  }
-
-  // Styling for the "Nej" button
-  &:last-child {
-    background-color: #ffffff;
-    color: #333333;
-    border: 1px solid #dcdcdc;
-
-    &:hover {
-      background-color: #f5f5f5;
-    }
-  }
+button:hover {
+  background-color: var(--mat-sys-primary-fixed-dim);
 }
