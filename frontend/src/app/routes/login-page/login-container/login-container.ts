@@ -24,6 +24,7 @@ export class LoginContainer {
   name = model.required<string>();
   lastName = model.required<string>();
   errorMessage = model.required<string>();
+  successMessage = model.required<string>();
 
   /*
   Detta är lite data för password-fältet
@@ -36,6 +37,7 @@ export class LoginContainer {
 
   clearError() {
     this.errorMessage.set('');
+    this.successMessage.set('');
   }
 
   /*

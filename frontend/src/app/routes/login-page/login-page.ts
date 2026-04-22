@@ -15,6 +15,7 @@ export class LoginPage {
   name = signal('');
   lastName = signal('');
   errorMessage = signal('');
+  successMessage = signal('');
 
   private router = inject(Router);
   private authService = inject(AuthService);
@@ -38,10 +39,12 @@ export class LoginPage {
 
     this.authService.register(name, email, password).subscribe({
       error: (err) => {
+        this.successMessage.set('');
         this.errorMessage.set(err.error.error);
       },
-      next: (message) => {
-        this.errorMessage.set(message);
+      next: (response) => {
+        this.errorMessage.set('');
+        this.successMessage.set(response.message);
       }
     });
   }
