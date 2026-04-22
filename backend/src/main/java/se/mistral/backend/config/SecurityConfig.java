@@ -39,6 +39,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll() // TODO: give different roles different endpoint perms
                 .requestMatchers("/api/children/**").hasRole("TEACHER")
                 .requestMatchers("/api/attendance/**").hasRole("TEACHER")
+                .requestMatchers("/api/journal/**").hasRole("TEACHER")
                 .requestMatchers("/ws").permitAll() // authentication happens inside handler
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
