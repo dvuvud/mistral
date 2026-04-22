@@ -8,11 +8,8 @@
       <div class="childDisplay">
         <child-display (attendanceChangeEvent)="wsUpdateAttendance($event)" [(childSignal)]="childSignal"></child-display>
       </div>
-      <main-live-journal></main-live-journal>
       }
-      @else {
-        <main-live-journal></main-live-journal>
-      }
+      <main-live-journal [child]="childSignal()"></main-live-journal>
     </div>
     <div class="main-card-right">
       <main-child-list [(childSignal)]="childSignal"></main-child-list>
