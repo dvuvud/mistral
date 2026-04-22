@@ -1,12 +1,12 @@
 <p align="center">
   <img width="2116" height="496" alt="kindguard-logo" src="https://github.com/user-attachments/assets/a170cbca-3e75-482b-9a4d-a11cba0aa616" />
   <br/>
-  <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="Spring Boot" />
-  <img src="https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white" alt="Angular" />
-  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/-Spring_Boot-2D3436?style=flat&logo=springboot&logoColor=6DB33F" />
+  <img src="https://img.shields.io/badge/-Angular-2D3436?style=flat&logo=angular&logoColor=DD0031" />
+  <img src="https://img.shields.io/badge/-PostgreSQL-2D3436?style=flat&logo=postgresql&logoColor=4169E1" />
   <br/>
-  <a href="https://github.com/dvuvud/mistral/actions/workflows/spring-tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/dvuvud/mistral/spring-tests.yml?style=for-the-badge&logo=github&label=Spring%20Boot%20Tests" alt="Spring Boot Tests" /></a>
-  <a href="https://github.com/dvuvud/mistral/actions/workflows/linter.yml"><img src="https://img.shields.io/github/actions/workflow/status/dvuvud/mistral/linter.yml?style=for-the-badge&logo=github&label=Lint" alt="Lint" /></a>
+  <a href="https://github.com/dvuvud/mistral/actions/workflows/spring-tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/dvuvud/mistral/spring-tests.yml?style=flat&logo=github&label=Backend&labelColor=2D3436&color=6366f1" /></a>
+  <a href="https://github.com/dvuvud/mistral/actions/workflows/linter.yml"><img src="https://img.shields.io/github/actions/workflow/status/dvuvud/mistral/linter.yml?style=flat&logo=github&label=Lint&labelColor=2D3436&color=a855f7" /></a>
 </p>
 
 # Mistral – Utvecklarguide
