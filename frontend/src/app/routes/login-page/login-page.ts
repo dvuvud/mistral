@@ -32,7 +32,7 @@ export class LoginPage {
   }
 
   onRegisterSubmit() {
-    const name = this.name() + this.lastName();
+    const name = this.name() + ' ' + this.lastName();
     const email = this.email().trim();
     const password = this.password();
 
@@ -40,8 +40,8 @@ export class LoginPage {
       error: (err) => {
         this.errorMessage.set(err.error.error);
       },
-      next: () => {
-        this.router.navigate(['/app']);
+      next: (message) => {
+        this.errorMessage.set(message);
       }
     });
   }
