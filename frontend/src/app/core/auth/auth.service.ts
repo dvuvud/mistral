@@ -3,21 +3,21 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
 interface LoginRequest {
-	email: string;
-	password: string;
+  email: string;
+  password: string;
 }
 
 interface RegisterRequest {
-    name: string;
-	email: string;
-	password: string;
+  name: string;
+  email: string;
+  password: string;
 }
 
 interface AuthResponse {
-	token: string;
-	email: string;
-	name: string;
-	role: string;
+  token: string;
+  email: string;
+  name: string;
+  role: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -37,16 +37,14 @@ export class AuthService {
       .pipe(tap((response) => localStorage.setItem('token', response.token)));
   }
 
-  register(name: string, email: string, password: string): Observable<AuthResponse> {
+  register(name: string, email: string, password: string): Observable<string> {
     const data: RegisterRequest = {
       name,
       email,
       password,
     };
 
-    return this.http
-      .post<AuthResponse>(`${this.baseUrl}/register`, data)
-      .pipe(tap((response) => localStorage.setItem('token', response.token)));
+    return this.http.post(`${this.baseUrl}/register`, data, { responseType: 'text' });
   }
 
   async isAuthorized() {
