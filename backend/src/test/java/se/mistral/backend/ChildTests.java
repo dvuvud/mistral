@@ -66,11 +66,11 @@ public class ChildTests {
     @Test
     void getAllChildrenWithAttendanceIfExistsNullResultTest() {
         CreateChildRequest request = new CreateChildRequest("test");
-        childService.createChild(request);
+        ChildResponse childResponse = childService.createChild(request);
         List<AttendanceResponse> childList = childService.getAllChildrenWithAttendanceIfExists(LocalDate.parse("2026-04-01"));
 
-        assertThat(childList.getFirst().name()).isEqualTo("test");
-        assertThat(childList.getFirst().id()).isEqualTo(1);
+        assertThat(childList.getFirst().name()).isEqualTo(childResponse.name());
+        assertThat(childList.getFirst().id()).isEqualTo(childResponse.id());
         assertThat(childList.getFirst().date()).isNull();
         assertThat(childList.getFirst().present()).isNull();
 
