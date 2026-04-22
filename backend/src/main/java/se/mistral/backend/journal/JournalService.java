@@ -36,7 +36,7 @@ public class JournalService {
 
     public BroadcastMessage applyOperation(Long childId, LocalDate date,
                                            int clientRevision, Operation incoming,
-                                           Long userId) {
+                                           Long userId, Integer seq) {
         // get the journal id outside the lock
         Journal journal = findOrCreate(childId, date);
         Object lock = journalLocks.computeIfAbsent(journal.getId(), k -> new Object());
@@ -68,7 +68,7 @@ public class JournalService {
                     .appliedAt(Instant.now())
                     .build());
 
-            return new BroadcastMessage("DOC_OPERATION", transformed, journal.getVersion());
+            return new BroadcastMessage("DOC_OPERATION", transformed, journal.getVersion(), userId, seq);
         }
     }
 
