@@ -15,6 +15,6 @@ public class Operation {
 
     private Type type;
     private int position;
-    private String text;    // populated for INSERT, null for DELETE
-    private int length;     // populated for DELETE, 0 for INSERT
+    private String text;     // nullable for DELETE
+    private Integer length;  // nullable for INSERT
 }
