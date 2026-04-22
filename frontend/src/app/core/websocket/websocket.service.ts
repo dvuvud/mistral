@@ -64,12 +64,12 @@ export class WebsocketService {
 
     this.socket.onclose = (event) => {
       console.log("Disconnected", event.code, event.reason);
-      this.socket?.send(JSON.stringify({ type: 'unsubscribe', room: this.roomName}));
     };
   }
 
   disconnect(): void {
     if (this.socket) {
+      this.socket?.send(JSON.stringify({ type: 'unsubscribe', room: this.roomName}));
       this.socket.close();
       this.socket = null;
     }
