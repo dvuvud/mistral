@@ -3,22 +3,41 @@ import { Observable, Subject } from 'rxjs';
 
 type WsType = 'subscribe' | 'unsubscribe' | 'message';
 
-export type WsMessageType = WsAttendanceMessage | WsJournalMessage;
-
-interface WsPayload {
-  type: WsType;
-  room: string;
-  body: WsMessageType;
-}
+export type WsMessageType = WsAttendanceMessage | WsJournalMessage | WsJournalResponse;
 
 export interface WsAttendanceMessage {
   childId: number,
   present: boolean
 }
 
+export type operation = InsertOperation | DeleteOperation;
+
+export interface InsertOperation {
+  type: 'DELETE',
+  position: number,
+  text: string
+}
+
+export interface DeleteOperation {
+  type: 'DELETE',
+  position: number,
+  length: number
+}
+
 export interface WsJournalMessage {
-  journalId: number,
-  present: boolean
+  type: "DOC_OPERATION",
+  room: string,
+  clientRevision: number,
+  operation: operation,
+  sequence: number
+}
+
+export interface WsJournalResponse {
+  type: "DOC_OPERATION",
+  operation: operation,
+  serverRevision: number,
+  userId: number,
+  sequence: number
 }
 
 @Injectable({
@@ -41,26 +60,10 @@ export class WebsocketService {
     };
 
     this.socket.onmessage = (event) => {
-      // Parse outer JSON object
       const rawJSON = JSON.parse(event.data);
-      if (rawJSON.body == undefined) {
-        console.error("WebSocket message contains no body!");
-        return;
-      }
-
-      // Parse inner JSON object (nested body property)
-      rawJSON.body = JSON.parse(rawJSON.body);
-      const payload: WsPayload = rawJSON;
-      if (payload.room != this.roomName) {
-        console.error(`WebSocket message room mismatch! ([Service] = ${this.roomName} vs [Message] = ${payload.room})`);
-        return;
-      }
-
-      // Broadcast the parsed JSON object
-      console.log(`Received from WebSocket (room = ${this.roomName}):`);
-      console.log(payload.body);
-      this.messages.next(payload.body);
+      this.messages.next(rawJSON);
     };
+    
 
     this.socket.onclose = (event) => {
       console.log("Disconnected", event.code, event.reason);
@@ -83,6 +86,12 @@ export class WebsocketService {
 
   sendMessage(message: WsMessageType): void {
     const msgAsString = JSON.stringify({ type: 'message', room: this.roomName, body: JSON.stringify(message) });
+    console.log("Sending off ", msgAsString)
+    this.socket?.send(msgAsString);
+  }
+
+  sendMessageJournal(message: WsMessageType): void {
+    const msgAsString = JSON.stringify(message);
     console.log("Sending off ", msgAsString)
     this.socket?.send(msgAsString);
   }
