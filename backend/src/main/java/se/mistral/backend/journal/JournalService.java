@@ -3,6 +3,8 @@ package se.mistral.backend.journal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
+import se.mistral.backend.exception.NotFoundException;
 import se.mistral.backend.journal.dto.BroadcastMessage;
 import se.mistral.backend.journal.dto.JournalDto;
 import se.mistral.backend.journal.ot.Operation;
@@ -36,13 +38,13 @@ public class JournalService {
 
     public BroadcastMessage applyOperation(Long childId, LocalDate date,
                                            int clientRevision, Operation incoming,
-                                           Long userId, Integer seq) {
+                                           Long userId, Integer sequence) {
         // get the journal id outside the lock
         Journal journal = findOrCreate(childId, date);
         Object lock = journalLocks.computeIfAbsent(journal.getId(), k -> new Object());
 
         synchronized (lock) {
-            journal = journalRepository.findById(journal.getId()).orElseThrow();
+            journal = journalRepository.findById(journal.getId()).orElseThrow(() -> new NotFoundException("Journal could not be found"));
 
             List<OperationLog> missed = operationLogRepository
                     .findByJournalIdAndRevisionGreaterThanOrderByRevisionAsc(
@@ -68,7 +70,7 @@ public class JournalService {
                     .appliedAt(Instant.now())
                     .build());
 
-            return new BroadcastMessage("DOC_OPERATION", transformed, journal.getVersion(), userId, seq);
+            return new BroadcastMessage("DOC_OPERATION", transformed, journal.getVersion(), userId, sequence);
         }
     }
 
@@ -84,7 +86,8 @@ public class JournalService {
                                         .content("")
                                         .build());
                     } catch (DataIntegrityViolationException e) {
-                        return journalRepository.findByChildIdAndDate(childId, date).orElseThrow();
+                        return journalRepository.findByChildIdAndDate(childId, date)
+                            .orElseThrow(() -> new NotFoundException("Journal could not be found")); // this will never be thrown
                     }
                 });
     }
