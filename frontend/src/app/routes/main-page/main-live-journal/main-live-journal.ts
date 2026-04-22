@@ -22,28 +22,19 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
   text = signal('');
   prevText = '';
 
+
+
   ngOnInit() {
-    this.initializeJournal();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes);
     if (changes['child'] && !changes['child'].firstChange) {
       // Reconnect when child changes (but not on first init)
-      this.journalSocket.disconnect();
+      this.journalSocket.changeRoom(this.journalSocket.roomName)
       this.text.set('');
       this.prevText = '';
-      this.initializeJournal();
     }
-  }
-
-  private initializeJournal() {
-    // Connect to child-specific journal room
-    const journalRoom = this.child ? `journal-${this.child.id}` : "journal";
-    this.journalSocket.connect("ws://localhost:8080/ws", journalRoom);
-    this.journalSocket.getMessages().subscribe((message) => {
-      // TODO
-    });
   }
 
   ngOnDestroy() {
