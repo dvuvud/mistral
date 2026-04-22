@@ -98,12 +98,15 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             return;
         }
 
+        Integer clientSeq = json.has("seq") ? json.get("seq").asInt() : null;
+
         BroadcastMessage broadcast = journalService.applyOperation(
             childId,
             date,
             clientRevision,
             incoming,
-            userId
+            userId,
+            clientSeq
         );
 
         // null sender so the originator also receives the message
