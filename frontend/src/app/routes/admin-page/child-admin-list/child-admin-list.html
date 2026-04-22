@@ -1,1 +1,11 @@
-<p>child-admin-list works!</p>
+<mat-list>
+    @for (child of children; track child.id) { <!--håller koll på id-->
+    <mat-list-item>
+        <span matListItemTitle>
+            {{child.name}}
+        </span>
+    </mat-list-item>
+    }
+
+
+</mat-list>
