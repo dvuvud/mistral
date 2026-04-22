@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import se.mistral.backend.auth.dto.AuthResponse;
 import se.mistral.backend.auth.dto.RegisterRequest;
+import se.mistral.backend.auth.dto.RegisterResponse;
 import se.mistral.backend.auth.dto.LoginRequest;
 
 @RestController
@@ -20,7 +21,7 @@ public class AuthController {
     private final AuthService authService;      // set by lombok
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
 
