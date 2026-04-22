@@ -1,0 +1,12 @@
+.columnise {
+    font: var(--mat-sys-label-large);
+    display: flex;
+    flex-direction: column;
+    padding-left: 16px;
+}
+
+.rowise {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}
