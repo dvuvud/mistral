@@ -7,5 +7,5 @@ public record BroadcastMessage(
     Operation operation,  // the transformed op
     int serverRevision,   // clients update their local revision to this value
     Long userId,          // required to decide whether to check in-flight buff locally
-    Integer seq           // used by client to keep track of change locally
+    Integer sequence      // used by client to keep track of change locally
 ) { }

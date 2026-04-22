@@ -54,21 +54,21 @@ public class OperationTransformer {
                 }
             }
             case DELETE -> {
-                int cPos = concurrent.getPosition();
-                int cLen = concurrent.getLength();
+                int concurrentPos = concurrent.getPosition();
+                int concurrentLen = concurrent.getLength();
 
-                if (cPos + cLen <= pos) {
+                if (concurrentPos + concurrentLen <= pos) {
                     // concurrent delete is entirely before us: shift left
-                    pos -= cLen;
-                } else if (cPos >= pos + len) {
+                    pos -= concurrentLen;
+                } else if (concurrentPos >= pos + len) {
                     // concurrent delete is entirely after us: no change needed
                 } else {
                     // ranges overlap: shrink our delete by the overlapping characters
                     // that the concurrent op already removed
-                    int overlapStart = Math.max(pos, cPos);
-                    int overlapEnd   = Math.min(pos + len, cPos + cLen);
+                    int overlapStart = Math.max(pos, concurrentPos);
+                    int overlapEnd   = Math.min(pos + len, concurrentPos + concurrentLen);
                     len -= (overlapEnd - overlapStart);
-                    pos  = Math.min(pos, cPos);
+                    pos  = Math.min(pos, concurrentPos);
                 }
             }
         }
