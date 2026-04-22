@@ -15,6 +15,7 @@ export class LoginPage {
   name = signal('');
   lastName = signal('');
   errorMessage = signal('');
+  successMessage = signal('');
 
   private router = inject(Router);
   private authService = inject(AuthService);
@@ -32,16 +33,18 @@ export class LoginPage {
   }
 
   onRegisterSubmit() {
-    const name = this.name() + this.lastName();
+    const name = this.name() + ' ' + this.lastName();
     const email = this.email().trim();
     const password = this.password();
 
     this.authService.register(name, email, password).subscribe({
       error: (err) => {
+        this.successMessage.set('');
         this.errorMessage.set(err.error.error);
       },
-      next: () => {
-        this.router.navigate(['/app']);
+      next: (response) => {
+        this.errorMessage.set('');
+        this.successMessage.set(response.message);
       }
     });
   }

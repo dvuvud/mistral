@@ -6,6 +6,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import se.mistral.backend.auth.dto.RegisterRequest;
+import se.mistral.backend.auth.dto.RegisterResponse;
+import se.mistral.backend.exception.NotFoundException;
 import se.mistral.backend.auth.dto.AuthResponse;
 import se.mistral.backend.auth.dto.LoginRequest;
 import se.mistral.backend.user.Role;
@@ -22,7 +24,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthResponse register(RegisterRequest request) {
+    public RegisterResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.email())) {
             throw new IllegalArgumentException("Email already in use: " + request.email());
         }
@@ -34,14 +36,14 @@ public class AuthService {
             .role(Role.TEACHER)
             .build();
         userRepository.save(user);
-        return new AuthResponse(jwtService.generateToken(user), user.getEmail(), user.getName(), user.getRole().name());
+        
+        return new RegisterResponse("Registration successful, your account is pending activation by an admin");
     }
 
     public AuthResponse login(LoginRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.email(), request.password()));
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.password()));
         User user = userRepository.findByEmail(request.email())
-            .orElseThrow();
+            .orElseThrow(() -> new NotFoundException("User not found"));
         return new AuthResponse(jwtService.generateToken(user), user.getEmail(), user.getName(), user.getRole().name());
     }
 }
