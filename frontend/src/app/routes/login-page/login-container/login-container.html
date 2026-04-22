@@ -84,6 +84,11 @@
               <mat-error>{{errorMessage()}}</mat-error>
             </div>
           }
+          @if(successMessage() !== "") {
+            <div class="login-container-success">
+              <p>{{successMessage()}}</p>
+            </div>
+          }
           <div class="login-container-buttons">
             <button class="login-container-button" matButton="elevated" (click)="submitRegister()">
               Registrera
