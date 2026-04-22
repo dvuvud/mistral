@@ -84,7 +84,7 @@ export class AttendanceBox {
   async confirmation() {
     const dialogRef = this.dialog.open(ConfirmationDialog, {
       height: '120px',
-      width: '500px',
+      width: '400px',
     });
     const result = await firstValueFrom(dialogRef.afterClosed());
     return result;
