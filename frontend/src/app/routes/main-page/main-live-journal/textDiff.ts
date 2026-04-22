@@ -1,21 +1,19 @@
-import { operation } from "../../../core/websocket/websocket.service";
-
 export type Diff = {
-    operation: 'INSERT' | 'DELETE';
+    operation: 'Ins' | 'Del';
     idx: number;
     value: string;
 }
 
 export class textDiff {
     getDiff(prevText: string, newText: string): Diff {
-        const operation = prevText.length < newText.length ? 'INSERT' : 'DELETE';
+        const operation = prevText.length < newText.length ? 'Ins' : 'Del';
         let diff: Diff = {operation: operation, idx: 0, value: ''}
         switch (operation) {
-            case 'DELETE':
+            case 'Del':
                 diff.idx = this.getDiffIdx(prevText, newText);
                 diff.value = prevText.charAt(diff.idx);
                 break;
-            case 'INSERT':
+            case 'Ins':
                 diff.idx = this.getDiffIdx(prevText, newText);
                 diff.value = newText.charAt(diff.idx);
                 break;
