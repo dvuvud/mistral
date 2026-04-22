@@ -20,6 +20,10 @@ interface AuthResponse {
   role: string;
 }
 
+interface RegisterResponse {
+  message: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly baseUrl = 'http://localhost:8080/api/auth';
@@ -37,14 +41,14 @@ export class AuthService {
       .pipe(tap((response) => localStorage.setItem('token', response.token)));
   }
 
-  register(name: string, email: string, password: string): Observable<string> {
+  register(name: string, email: string, password: string): Observable<RegisterResponse> {
     const data: RegisterRequest = {
       name,
       email,
       password,
     };
 
-    return this.http.post(`${this.baseUrl}/register`, data, { responseType: 'text' });
+    return this.http.post<RegisterResponse>(`${this.baseUrl}/register`, data);
   }
 
   async isAuthorized() {

@@ -6,6 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import se.mistral.backend.auth.dto.RegisterRequest;
+import se.mistral.backend.auth.dto.RegisterResponse;
 import se.mistral.backend.exception.NotFoundException;
 import se.mistral.backend.auth.dto.AuthResponse;
 import se.mistral.backend.auth.dto.LoginRequest;
@@ -23,7 +24,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public String register(RegisterRequest request) {
+    public RegisterResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.email())) {
             throw new IllegalArgumentException("Email already in use: " + request.email());
         }
@@ -36,7 +37,7 @@ public class AuthService {
             .build();
         userRepository.save(user);
         
-        return "Registration successful, your account is pending activation by an admin";
+        return new RegisterResponse("Registration successful, your account is pending activation by an admin");
     }
 
     public AuthResponse login(LoginRequest request) {
