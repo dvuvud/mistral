@@ -1,6 +1,7 @@
 package se.mistral.backend.websocket;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,6 +16,9 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import lombok.RequiredArgsConstructor;
 import se.mistral.backend.auth.JwtService;
+import se.mistral.backend.journal.JournalService;
+import se.mistral.backend.journal.dto.BroadcastMessage;
+import se.mistral.backend.journal.ot.Operation;
 import se.mistral.backend.user.Role;
 import se.mistral.backend.user.User;
 import tools.jackson.databind.JsonNode;
@@ -26,6 +30,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final JournalService journalService;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final Map<String, Set<WebSocketSession>> rooms = new ConcurrentHashMap<>(); // all sessions in a given room
@@ -38,9 +44,10 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         String room = json.get("room").asText();
 
         switch (type) {
-            case "subscribe"   -> subscribe(session, room);
-            case "unsubscribe" -> unsubscribe(session, room);
-            default            -> broadcastToRoom(session, room, message);
+            case "subscribe"      -> subscribe(session, room);
+            case "unsubscribe"    -> unsubscribe(session, room);
+            case "DOC_OPERATION"  -> handleDocOperation(session, room, json);
+            default               -> broadcastToRoom(session, room, message);
         }
     }
 
@@ -51,6 +58,11 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             closeQuietly(session);
             return;
         }
+
+        // store userId to not have to send it for each message
+        Long userId = extractUserId(token);
+        session.getAttributes().put("userId", userId);
+
         sessionRooms.putIfAbsent(session, ConcurrentHashMap.newKeySet());
     }
 
@@ -63,6 +75,43 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
         for (String room : joined) {
             removeSessionFromRoom(room, session);
+        }
+    }
+
+    private void handleDocOperation(WebSocketSession session, String room, JsonNode json) {
+        // room format: "journal:{childId}:{date}"  e.g. "journal:42:2025-04-22"
+        String[] parts = room.split(":");
+        if (parts.length != 3 || !parts[0].equals("journal")) {
+            closeQuietly(session);
+            return;
+        }
+
+        Long childId = Long.parseLong(parts[1]);
+        LocalDate date = LocalDate.parse(parts[2]);
+        int clientRevision = json.get("clientRevision").asInt();
+        Long userId = (Long) session.getAttributes().get("userId");
+
+        Operation incoming;
+        try {
+            incoming = objectMapper.treeToValue(json.get("operation"), Operation.class);
+        } catch (Exception e) {
+            return;
+        }
+
+        BroadcastMessage broadcast = journalService.applyOperation(
+            childId,
+            date,
+            clientRevision,
+            incoming,
+            userId
+        );
+
+        // null sender so the originator also receives the message
+        try {
+            TextMessage outbound = new TextMessage(objectMapper.writeValueAsString(broadcast));
+            broadcastToRoom(null, room, outbound);
+        } catch (Exception e) {
+            // serialization failure shouldn't crash the handler
         }
     }
 
@@ -128,6 +177,16 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             return appUser.getRole() == Role.TEACHER;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    private Long extractUserId(String token) {
+        try {
+            String email = jwtService.extractUsername(token);
+            User user = (User) userDetailsService.loadUserByUsername(email);
+            return user.getId();
+        } catch (Exception e) {
+            return null;
         }
     }
 
