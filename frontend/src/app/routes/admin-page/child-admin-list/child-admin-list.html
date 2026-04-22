@@ -1,11 +1,14 @@
-<mat-list>
-    @for (child of children; track child.id) { <!--håller koll på id-->
-    <mat-list-item>
-        <span matListItemTitle>
-            {{child.name}}
-        </span>
-    </mat-list-item>
-    }
+<p>Antal barn: {{children.length}}</p>
+<div class="child-admin-list-container">
+    <mat-list>
+        @for (child of children; track child.id) { <!--håller koll på id-->
+        <mat-list-item>
+            <span matListItemTitle>
+                {{child.name}}
+            </span>
+        </mat-list-item>
+        }
 
+    </mat-list>
 
-</mat-list>
+</div>
