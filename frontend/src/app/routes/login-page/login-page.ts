@@ -26,7 +26,8 @@ export class LoginPage {
       error: (err) => {
         this.errorMessage.set(err.error.error);
       },
-      next: () => {
+      next: (data) => {
+        console.log(data);
         this.router.navigate(['/app']);
       }
     });
