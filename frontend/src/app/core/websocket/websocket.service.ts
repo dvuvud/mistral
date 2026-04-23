@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
-type WsType = 'subscribe' | 'unsubscribe' | 'message';
-
 export type WsMessageType = WsAttendanceMessage | WsJournalMessage | WsJournalResponse;
 
 export interface WsAttendanceMessage {
@@ -13,7 +11,7 @@ export interface WsAttendanceMessage {
 export type operation = InsertOperation | DeleteOperation;
 
 export interface InsertOperation {
-  type: 'DELETE',
+  type: 'INSERT',
   position: number,
   text: string
 }
