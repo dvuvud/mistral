@@ -1,1 +1,10 @@
-<p>add-child-form works!</p>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+        <mat-label>Namn: </mat-label>
+        <input matInput formControllerName="name">
+    </mat-form-field>
+
+    <button mat-raised-button color="mat-sys-primary" type="submit"> <!--[disabled]="form.invalid"-->
+        Lägg till barn
+    </button>
+</form>
