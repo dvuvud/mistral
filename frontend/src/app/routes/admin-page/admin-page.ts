@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { Component, inject, ViewChild } from '@angular/core';
-=======
-import { Component, inject } from '@angular/core';
->>>>>>> 405e50e (fix child-list not loading to admin page)
 import { MatCard, MatCardHeader, MatCardContent, MatCardModule } from "@angular/material/card";
 import { AddChildForm } from './add-child-form/add-child-form';
 import { ChildAdminList } from './child-admin-list/child-admin-list';
