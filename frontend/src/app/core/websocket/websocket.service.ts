@@ -45,7 +45,7 @@ export interface WsJournalResponse {
 export class WebsocketService {
   private socket: WebSocket | null = null;
   private messages = new Subject<WsMessageType>();
-  roomName = '';
+  private roomName = '';
 
   connect(url: string, roomName: string): void {
     const token = localStorage.getItem("token");

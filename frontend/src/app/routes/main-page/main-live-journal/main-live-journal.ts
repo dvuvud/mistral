@@ -30,7 +30,7 @@ export class MainLiveJournal {
   inFlight: operation[] = [];
 
   ngOnInit() {
-    let roomDest = 'journal:' + this.child.id + ':' + new Date().toISOString().split('T')[0];
+    const roomDest = 'journal:' + this.child.id + ':' + new Date().toISOString().split('T')[0];
     this.journalSocket.connect("ws://localhost:8080/ws", roomDest);
 
     this.journalSocket.getMessages().subscribe(data => {
@@ -55,7 +55,7 @@ export class MainLiveJournal {
   }
 
   applyToLocalContent(incoming: operation): void {
-    let text: string = this.text();
+    const text: string = this.text();
     const pos: number = incoming.position;
     switch(incoming.type) {
       case 'INSERT':
@@ -79,7 +79,7 @@ export class MainLiveJournal {
         }
       });
 
-      let roomDest = 'journal:' + this.child.id + ':' + new Date().toISOString().split('T')[0];
+      const roomDest = 'journal:' + this.child.id + ':' + new Date().toISOString().split('T')[0];
       console.log(roomDest);
       this.journalSocket.changeRoom(roomDest);
       this.prevText = '';
@@ -95,7 +95,7 @@ export class MainLiveJournal {
 
     const newValue = (event.target as HTMLTextAreaElement).value;
     this.prevText = this.text();
-    let diff: Diff = this.differ.getDiff(this.prevText, newValue);
+    const diff: Diff = this.differ.getDiff(this.prevText, newValue);
     this.text.set(newValue);
     let operation;
     switch (diff.operation) {
