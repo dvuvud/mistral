@@ -57,7 +57,16 @@ export class MainLiveJournal {
   }
 
   applyToLocalContent(incoming: operation): void {
-
+    let text: string = this.text();
+    const pos: number = incoming.position;
+    switch(incoming.type) {
+      case 'INSERT':
+        this.text.set(text.slice(0, pos) + incoming.text + text.slice(pos, text.length));
+        break;
+      case 'DELETE':
+        this.text.set(text.slice(0, pos) + text.slice(pos + 1, text.length));
+        break;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {  
