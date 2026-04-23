@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { MatCard, MatCardHeader, MatCardContent, MatCardModule } from "@angular/material/card";
 import { AddChildForm } from './add-child-form/add-child-form';
 import { ChildAdminList } from './child-admin-list/child-admin-list';
@@ -25,7 +25,15 @@ import { Router } from '@angular/router';
   styleUrl: './admin-page.scss',
 })
 export class AdminPage {
-  
+
+  //kunna uppdatera efter insättning
+  @ViewChild('childList') childList!: ChildAdminList
+
+  onChildAdded(): void {
+    //uppdaterade listan
+    this.childList.loadChildren();
+  }
+
   private router = inject(Router);
   logout() {
     document.cookie = 'jwtToken=""';
