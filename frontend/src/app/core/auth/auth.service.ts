@@ -15,9 +15,7 @@ interface RegisterRequest {
 
 interface AuthResponse {
   token: string;
-  email: string;
-  name: string;
-  role: string;
+  id: number;
 }
 
 interface RegisterResponse {
@@ -38,7 +36,10 @@ export class AuthService {
 
     return this.http
       .post<AuthResponse>(`${this.baseUrl}/login`, data)
-      .pipe(tap((response) => localStorage.setItem('token', response.token)));
+      .pipe(tap((response) => {
+        localStorage.setItem('token', response.token); 
+        localStorage.setItem('UserId', response.id.toString());
+      }));
   }
 
   register(name: string, email: string, password: string): Observable<RegisterResponse> {

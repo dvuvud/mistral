@@ -51,9 +51,7 @@ export class MainLiveJournal {
   }
 
   isMyOwnAck(msg: WsJournalResponse): boolean {
-    // TODO: myId ännu inte implementerat
-    return true;
-    //return msg.userId === myID && this.inFlight.length > 0;
+    return msg.userId.toString() === localStorage.getItem('UserId') && this.inFlight.length > 0;
   }
 
   applyToLocalContent(incoming: operation): void {
