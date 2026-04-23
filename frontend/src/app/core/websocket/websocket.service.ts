@@ -1,14 +1,28 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
-export type WsMessageType = WsAttendanceMessage | WsJournalMessage | WsJournalResponse;
+export type WsMessageContent = WsAttendanceMessage | WsJournalMessage | WsJournalResponse;
+export type WsJournalWriteOperation = InsertOperation | DeleteOperation;
+type WsMessageType = "ATTENDANCE" | "DOC_OPERATION";
 
 export interface WsAttendanceMessage {
   childId: number,
   present: boolean
 }
 
-export type operation = InsertOperation | DeleteOperation;
+export interface WsJournalMessage {
+  clientRevision: number,
+  operation: WsJournalWriteOperation,
+  sequence: number
+}
+
+export interface WsJournalResponse {
+  type: "DOC_OPERATION",
+  operation: WsJournalWriteOperation,
+  serverRevision: number,
+  userId: number,
+  sequence: number
+}
 
 export interface InsertOperation {
   type: 'INSERT',
@@ -22,29 +36,13 @@ export interface DeleteOperation {
   length: number
 }
 
-export interface WsJournalMessage {
-  type: "DOC_OPERATION",
-  room: string,
-  clientRevision: number,
-  operation: operation,
-  sequence: number
-}
-
-export interface WsJournalResponse {
-  type: "DOC_OPERATION",
-  operation: operation,
-  serverRevision: number,
-  userId: number,
-  sequence: number
-}
-
 @Injectable({
   providedIn: 'root',
 })
 
 export class WebsocketService {
   private socket: WebSocket | null = null;
-  private messages = new Subject<WsMessageType>();
+  private messages = new Subject<WsMessageContent>();
   private roomName = '';
 
   connect(url: string, roomName: string): void {
@@ -53,18 +51,18 @@ export class WebsocketService {
     this.roomName = roomName;
 
     this.socket.onopen = () => {
-      console.log("Connected");
       this.socket?.send(JSON.stringify({ type: 'subscribe', room: this.roomName}));
+      console.log("[Websocket] - Connected");
     };
 
     this.socket.onmessage = (event) => {
       const rawJSON = JSON.parse(event.data);
+      console.log("[Websocket] - Received:", rawJSON);
       this.messages.next(rawJSON);
     };
-    
 
     this.socket.onclose = (event) => {
-      console.log("Disconnected", event.code, event.reason);
+      console.log("[Websocket] - Disconnected", event.code, event.reason);
     };
   }
 
@@ -82,19 +80,21 @@ export class WebsocketService {
     this.roomName = newRoom;
   }
 
-  sendMessage(message: WsMessageType): void {
-    const msgAsString = JSON.stringify({ type: 'message', room: this.roomName, body: JSON.stringify(message) });
+  sendMessage(type: WsMessageType, message: WsMessageContent): void {
+    const msgAsString = JSON.stringify({ type: type, room: this.roomName, ...message });
     console.log("Sending off ", msgAsString)
     this.socket?.send(msgAsString);
   }
 
-  sendMessageJournal(message: WsMessageType): void {
-    const msgAsString = JSON.stringify(message);
-    console.log("Sending off ", msgAsString)
-    this.socket?.send(msgAsString);
+  sendAttendanceUpdate(message: WsAttendanceMessage): void {
+    this.sendMessage("ATTENDANCE", message);
   }
 
-  getMessages(): Observable<WsMessageType> {
+  sendJournalUpdate(message: WsJournalMessage): void {
+    this.sendMessage("DOC_OPERATION", message);
+  }
+
+  getMessages(): Observable<WsMessageContent> {
     return this.messages.asObservable();
   }
 }

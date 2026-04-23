@@ -1,7 +1,7 @@
 import { Component, EventEmitter, model, Output } from '@angular/core';
 import { Child } from '../../../core/child/child.service';
 import { AttendanceBox } from "../attendance-box/attendance-box";
-import { WsMessageType } from '../../../core/websocket/websocket.service';
+import { WsAttendanceMessage } from '../../../core/websocket/websocket.service';
 
 @Component({
   selector: 'child-display',
@@ -13,7 +13,7 @@ export class ChildDisplay {
   childSignal = model.required<Child>();
 
   @Output() attendanceChangeEvent = new EventEmitter();
-  wsUpdateAttendance(msg: WsMessageType) {
+  wsUpdateAttendance(msg: WsAttendanceMessage) {
     this.attendanceChangeEvent.emit(msg);
   }
 }
