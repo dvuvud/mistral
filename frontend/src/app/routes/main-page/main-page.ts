@@ -6,7 +6,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
-import { WebsocketService, WsMessageType } from '../../core/websocket/websocket.service';
+import { WebsocketService, WsAttendanceMessage } from '../../core/websocket/websocket.service';
 
 
 @Component({
@@ -32,9 +32,14 @@ export class MainPage implements OnInit, OnDestroy {
   mainPanel = viewChild.required(MainPanel);
 
   ngOnInit() {
-    this.socketService.connect("ws://localhost:8080/ws", "attendance");
+    this.socketService.connect("ws://localhost:8080/ws", "group=Nyckelpigorna");
     this.socketService.getMessages().subscribe((message) => {
-      this.handleWebsocketMessage(message);
+      if (!("childId" in message)) {
+        console.error("Attendance message with incorrect body!");
+        return;
+      }
+      const msg: WsAttendanceMessage = message;
+      this.handleWebsocketMessage(msg);
     });
   }
 
@@ -42,14 +47,12 @@ export class MainPage implements OnInit, OnDestroy {
     this.socketService.disconnect();
   }
 
-  handleWebsocketMessage(message: WsMessageType) {
-    if ("childId" in message) {
-      this.mainPanel().handleWebsocketMessage(message);
-    }
+  handleWebsocketMessage(message: WsAttendanceMessage) {
+    this.mainPanel().handleWebsocketMessage(message);
   }
 
-  wsUpdateAttendance(msg: WsMessageType) {
-    this.socketService.sendMessage(msg);
+  wsUpdateAttendance(msg: WsAttendanceMessage) {
+    this.socketService.sendAttendanceUpdate(msg);
   }
 
   logout() {

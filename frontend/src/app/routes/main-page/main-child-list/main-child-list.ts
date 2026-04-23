@@ -42,7 +42,7 @@ export class ChildList implements OnInit {
     this.childService.getChildren().subscribe({
       next: (data) => {
         this.children.set(data);
-        console.log('children:', this.children);
+        console.log('children:', this.children());
       }
     });
   }

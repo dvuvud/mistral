@@ -5,6 +5,7 @@ import { AttendanceService } from '../../../core/child/attendance.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialog } from '../confirmation-dialog/confirmation-dialog';
 import { firstValueFrom } from 'rxjs';
+import { WsAttendanceMessage } from '../../../core/websocket/websocket.service';
 
 
 @Component({
@@ -78,7 +79,11 @@ export class AttendanceBox {
 
   @Output() attendanceChangeEvent = new EventEmitter();
   wsUpdateAttendance(checked: boolean) {
-    this.attendanceChangeEvent.emit({childId: this.childSignal().id, present: checked});
+    const msg: WsAttendanceMessage = {
+      childId: this.childSignal().id,
+      present: checked
+    }
+    this.attendanceChangeEvent.emit(msg);
   }
 
   async confirmation() {

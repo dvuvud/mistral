@@ -3,10 +3,10 @@ import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { FormsModule } from '@angular/forms';
-import { operation, WebsocketService, WsJournalMessage, WsJournalResponse } from '../../../core/websocket/websocket.service';
+import { WsJournalWriteOperation, WebsocketService, WsJournalMessage, WsJournalResponse } from '../../../core/websocket/websocket.service';
 import { Child } from '../../../core/child/child.service';
-import { textDiff, Diff } from './textDiff';
-import { operationalTransformation } from './operationalTransformation';
+import { textDiff, Diff } from './text-diff';
+import { operationalTransformation } from './operational-transformation';
 import { JournalService } from '../../../core/journal/journal.service';
 
 @Component({
@@ -15,7 +15,9 @@ import { JournalService } from '../../../core/journal/journal.service';
   templateUrl: './main-live-journal.html',
   styleUrl: './main-live-journal.scss',
 })
-export class MainLiveJournal {
+export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
+  @Input() child!: Child;
+
   private journalSocket = new WebsocketService;
   private differ = new textDiff();
   private operationalTransformer = new operationalTransformation();
@@ -27,7 +29,7 @@ export class MainLiveJournal {
   serverRevision = 0;
   sequence = 0;
 
-  inFlight: operation[] = [];
+  inFlight: WsJournalWriteOperation[] = [];
 
   ngOnInit() {
     const roomDest = 'journal:' + this.child.id + ':' + new Date().toISOString().split('T')[0];
@@ -54,7 +56,7 @@ export class MainLiveJournal {
     return msg.userId.toString() === localStorage.getItem('UserId') && this.inFlight.length > 0;
   }
 
-  applyToLocalContent(incoming: operation): void {
+  applyToLocalContent(incoming: WsJournalWriteOperation): void {
     const text: string = this.text();
     const pos: number = incoming.position;
     switch(incoming.type) {
@@ -67,7 +69,7 @@ export class MainLiveJournal {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {  
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes['child'] && !changes['child'].firstChange) {
       this.journalService.getJournal(this.child.id).subscribe({
         next: (data) => {
@@ -97,7 +99,7 @@ export class MainLiveJournal {
     this.prevText = this.text();
     const diff: Diff = this.differ.getDiff(this.prevText, newValue);
     this.text.set(newValue);
-    let operation;
+    let operation: WsJournalWriteOperation;
     switch (diff.operation) {
       case 'DELETE':
         operation = {
@@ -115,16 +117,14 @@ export class MainLiveJournal {
         break;
     }
 
-    const message = {
-      type: "DOC_OPERATION",
-      room: 'journal:' + this.child.id + ':' + new Date().toISOString().split('T')[0],
+    const message: WsJournalMessage = {
       clientRevision: this.serverRevision,
       operation: operation,
       sequence: this.sequence
     }
 
-    this.inFlight.push(operation as operation);
+    this.inFlight.push(operation);
 
-    this.journalSocket.sendMessageJournal(message as WsJournalMessage);
+    this.journalSocket.sendJournalUpdate(message);
   }
 }

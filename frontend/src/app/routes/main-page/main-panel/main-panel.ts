@@ -5,7 +5,7 @@ import { Child } from '../../../core/child/child.service';
 import { MatCard, MatCardHeader, MatCardContent } from '@angular/material/card';
 import { ChildList } from '../main-child-list/main-child-list';
 import { MainLiveJournal } from '../main-live-journal/main-live-journal';
-import { WsAttendanceMessage, WsMessageType } from '../../../core/websocket/websocket.service';
+import { WsAttendanceMessage, WsMessageContent } from '../../../core/websocket/websocket.service';
 
 @Component({
   selector: 'main-panel',
@@ -30,7 +30,7 @@ export class MainPanel {
   }
 
   @Output() attendanceChangeEvent = new EventEmitter();
-  wsUpdateAttendance(msg: WsMessageType) {
+  wsUpdateAttendance(msg: WsMessageContent) {
     this.attendanceChangeEvent.emit(msg);
   }
 
