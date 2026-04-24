@@ -37,8 +37,8 @@ export class AddChildForm {
     if (this.form.valid) {
       this.childService.createChild(this.form.value.name!).subscribe({
         next: () => {
-          this.childAdded.emit;
-          this.form.reset;
+          this.childAdded.emit();
+          this.form.reset();
         },
 
         error: (err) => console.error(err)
