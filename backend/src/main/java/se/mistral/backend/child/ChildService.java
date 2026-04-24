@@ -43,7 +43,7 @@ public class ChildService {
     }
 
     public List<ChildWithGroupResponse> getAllChildrenWithGroup() {
-        List<Child> allChildren = childRepository.findAll();
+        List<Child> allChildren = childRepository.findAllWithGroup();
 
         return allChildren.stream().map(child -> {
             GroupResponse group = child.getGroup() == null
