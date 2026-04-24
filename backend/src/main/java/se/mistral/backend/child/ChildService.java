@@ -5,7 +5,10 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import se.mistral.backend.child.dto.AttendanceResponse;
 import se.mistral.backend.child.dto.ChildResponse;
+import se.mistral.backend.child.dto.ChildWithGroupResponse;
 import se.mistral.backend.child.dto.CreateChildRequest;
+import se.mistral.backend.group.dto.GroupResponse;
+import se.mistral.backend.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,5 +40,23 @@ public class ChildService {
 
     public List<ChildResponse> getChildrenByGroup(Long groupId) {
         return childRepository.findAllByGroupId(groupId);
+    }
+
+    public List<ChildWithGroupResponse> getAllChildrenWithGroup() {
+        List<Child> allChildren = childRepository.findAll();
+
+        return allChildren.stream().map(child-> {
+            GroupResponse group = child.getGroup() == null
+                ? null
+                : new GroupResponse(child.getGroup().getId(),child.getGroup().getName());
+            return new ChildWithGroupResponse(child.getId(), child.getName(), group);
+        }).toList();
+    }
+
+    public void deleteChild(Long id) {
+        if (!childRepository.existsById(id)) {
+            throw new NotFoundException("Child not found");
+        }
+        childRepository.deleteById(id);
     }
 }
