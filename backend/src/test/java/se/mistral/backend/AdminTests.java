@@ -64,6 +64,7 @@ public class AdminTests {
         authService.register(new RegisterRequest("Test User", "test@test.com", "password"));
         Long userId = userRepository.findByEmail("test@test.com").orElseThrow().getId();
         adminService.setUserActive(userId);
+        assertThat(userRepository.findById(userId).orElseThrow().isActive()).isTrue();
         adminService.setUserActive(userId);
         assertThat(userRepository.findById(userId).orElseThrow().isActive()).isTrue();
     }
@@ -86,6 +87,9 @@ public class AdminTests {
     void deleteChildAlreadyDeletedShouldThrowTest() {
         ChildResponse child = adminService.createChild(new CreateChildRequest("test"));
         adminService.deleteChild(child.id());
+        assertThat(child.id()).isNotNull();
+        assertThat(child.name()).isEqualTo("test");
+        assertThat(childService.getAllChildren()).hasSize(1);
         assertThatThrownBy(() -> adminService.deleteChild(child.id()))
             .isInstanceOf(NotFoundException.class);
     }
