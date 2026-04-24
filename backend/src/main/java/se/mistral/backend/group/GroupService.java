@@ -7,6 +7,7 @@ import se.mistral.backend.group.dto.CreateGroupRequest;
 import se.mistral.backend.group.dto.GroupResponse;
 import lombok.RequiredArgsConstructor;
 import se.mistral.backend.exception.NotFoundException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +21,12 @@ public class GroupService {
         group.setName(request.name());
         group = groupRepository.save(group);
         return new GroupResponse(group.getId(), group.getName());
+    }
+
+    public List<GroupResponse> getAllGroups() {
+        return groupRepository.findAll().stream()
+            .map(group -> new GroupResponse(group.getId(), group.getName()))
+            .toList();
     }
 
     public GroupResponse assignChildToGroup(Long groupId, Long childId) {
