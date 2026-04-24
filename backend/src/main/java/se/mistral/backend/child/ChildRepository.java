@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import se.mistral.backend.child.dto.AttendanceResponse;
 import se.mistral.backend.child.dto.ChildResponse;
+import se.mistral.backend.child.dto.ChildWithGroupResponse;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,8 +26,10 @@ public interface ChildRepository extends JpaRepository<Child, Long> {
     @Query("SELECT new se.mistral.backend.child.dto.ChildResponse(c.id, c.name) FROM Child c")
     List<ChildResponse> findAllIdsAndNames();
 
-    @Query("SELECT c FROM Child c LEFT JOIN FETCH c.group")
-    List<Child> findAllWithGroup();
+    @Query("SELECT new se.mistral.backend.child.dto.ChildWithGroupResponse(c.id, c.name, " +
+           "new se.mistral.backend.group.dto.GroupResponse(g.id, g.name)) " +
+           "FROM Child c LEFT JOIN c.group g")
+    List<ChildWithGroupResponse> findAllWithGroup();
 
     List<ChildResponse> findAllByGroupId(Long groupId);
 }

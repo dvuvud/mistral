@@ -7,7 +7,6 @@ import se.mistral.backend.child.dto.AttendanceResponse;
 import se.mistral.backend.child.dto.ChildResponse;
 import se.mistral.backend.child.dto.ChildWithGroupResponse;
 import se.mistral.backend.child.dto.CreateChildRequest;
-import se.mistral.backend.group.dto.GroupResponse;
 import se.mistral.backend.exception.NotFoundException;
 
 import java.time.LocalDate;
@@ -43,14 +42,7 @@ public class ChildService {
     }
 
     public List<ChildWithGroupResponse> getAllChildrenWithGroup() {
-        List<Child> allChildren = childRepository.findAllWithGroup();
-
-        return allChildren.stream().map(child -> {
-            GroupResponse group = child.getGroup() == null
-                ? null
-                : new GroupResponse(child.getGroup().getId(),child.getGroup().getName());
-            return new ChildWithGroupResponse(child.getId(), child.getName(), group);
-        }).toList();
+        return childRepository.findAllWithGroup();
     }
 
     public void deleteChild(Long id) {
