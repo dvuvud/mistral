@@ -25,6 +25,9 @@ public interface ChildRepository extends JpaRepository<Child, Long> {
     @Query("SELECT new se.mistral.backend.child.dto.ChildResponse(c.id, c.name) FROM Child c")
     List<ChildResponse> findAllIdsAndNames();
 
+    @Query("SELECT c FROM Child c LEFT JOIN FETCH c.group")
+    List<Child> findAllWithGroup();
+
     List<ChildResponse> findAllByGroupId(Long groupId);
 }
 

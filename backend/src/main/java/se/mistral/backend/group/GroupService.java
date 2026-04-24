@@ -24,9 +24,7 @@ public class GroupService {
     }
 
     public List<GroupResponse> getAllGroups() {
-        return groupRepository.findAll().stream()
-            .map(group -> new GroupResponse(group.getId(), group.getName()))
-            .toList();
+        return groupRepository.findAllGroups();
     }
 
     public GroupResponse assignChildToGroup(Long groupId, Long childId) {
