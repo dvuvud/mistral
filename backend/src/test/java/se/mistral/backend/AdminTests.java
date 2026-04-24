@@ -86,10 +86,10 @@ public class AdminTests {
     @Test
     void deleteChildAlreadyDeletedShouldThrowTest() {
         ChildResponse child = adminService.createChild(new CreateChildRequest("test"));
-        adminService.deleteChild(child.id());
         assertThat(child.id()).isNotNull();
         assertThat(child.name()).isEqualTo("test");
         assertThat(childService.getAllChildren()).hasSize(1);
+        adminService.deleteChild(child.id());
         assertThatThrownBy(() -> adminService.deleteChild(child.id()))
             .isInstanceOf(NotFoundException.class);
     }
