@@ -3,6 +3,7 @@ package se.mistral.backend.admin;
 
 import se.mistral.backend.child.ChildService;
 import se.mistral.backend.child.dto.ChildResponse;
+import se.mistral.backend.child.dto.ChildWithGroupResponse;
 import se.mistral.backend.child.dto.CreateChildRequest;
 import lombok.RequiredArgsConstructor;
 import se.mistral.backend.exception.NotFoundException;
@@ -10,6 +11,7 @@ import se.mistral.backend.user.User;
 import org.springframework.stereotype.Service;
 import se.mistral.backend.user.UserRepository;
 import se.mistral.backend.user.dto.UserResponse;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -26,5 +28,13 @@ public class AdminService {
         user.setActive(true);
         User saved = userRepository.save(user);
         return new UserResponse(saved.getId(), saved.getName(), saved.getRole(), saved.getEmail());
+    }
+
+    public List<ChildWithGroupResponse> getAllChildrenWithGroup() {
+        return childService.getAllChildrenWithGroup();
+    }
+
+    public void deleteChild(Long id) {
+        childService.deleteChild(id);
     }
 }
