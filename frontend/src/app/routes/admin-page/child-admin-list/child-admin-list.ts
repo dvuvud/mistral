@@ -31,7 +31,7 @@ export class ChildAdminList implements OnInit {
 
   loadChildren(): void {
     this.childService.getAll().subscribe({
-      next: (children) => this.children = children,
+      next: (children) => this.children = [...children],
       error: (err) => console.log("Error", err)
     });
   }
