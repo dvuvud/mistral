@@ -14,7 +14,8 @@ export class AuthInterceptor implements HttpInterceptor {
 
     const authReq = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        'ngrok-skip-browser-warning': 'true'
       }
     });
 
