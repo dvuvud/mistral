@@ -7,6 +7,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { WebsocketService, WsAttendanceMessage } from '../../core/websocket/websocket.service';
+import { environment } from '../../../environments/environment';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class MainPage implements OnInit, OnDestroy {
   mainPanel = viewChild.required(MainPanel);
 
   ngOnInit() {
-    this.socketService.connect("ws://localhost:8080/ws", "group=Nyckelpigorna");
+    this.socketService.connect(`${environment.wsUrl}/ws`, "group=Nyckelpigorna");
     this.socketService.getMessages().subscribe((message) => {
       if (!("childId" in message)) {
         console.error("Attendance message with incorrect body!");

@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Child {
   id: number;
@@ -12,7 +13,7 @@ export interface Child {
 @Injectable({ providedIn: 'root' })
 export class ChildService {
 
-  private url = "http://localhost:8080/api/children/attendance";
+  private url = `${environment.apiUrl}/api/children/attendance`;
 
   private http = inject(HttpClient);
 
