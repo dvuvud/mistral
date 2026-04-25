@@ -37,7 +37,6 @@ export class AuthService {
 
     return this.http
       .post<AuthResponse>(`${this.baseUrl}/login`, data)
-<<<<<<< Updated upstream
       .pipe(tap((response) => {
         localStorage.setItem('token', response.token);
         localStorage.setItem('UserId', response.id.toString());
@@ -45,25 +44,13 @@ export class AuthService {
   }
 
   register(name: string, email: string, password: string): Observable<RegisterResponse> {
-=======
-      .pipe(tap((response) => localStorage.setItem('token', response.token)));
-  }
-
-  register(name: string, email: string, password: string): Observable<AuthResponse> {
->>>>>>> Stashed changes
     const data: RegisterRequest = {
       name,
       email,
       password,
     };
 
-<<<<<<< Updated upstream
     return this.http.post<RegisterResponse>(`${this.baseUrl}/register`, data);
-=======
-    return this.http
-      .post<AuthResponse>(`${this.baseUrl}/register`, data)
-      .pipe(tap((response) => localStorage.setItem('token', response.token)));
->>>>>>> Stashed changes
   }
 
   async isAuthorized() {
