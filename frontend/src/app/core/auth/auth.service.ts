@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 interface LoginRequest {
   email: string;
@@ -24,7 +25,7 @@ interface RegisterResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly baseUrl = 'http://localhost:8080/api/auth';
+  private readonly baseUrl = `${environment.apiUrl}/api/auth`;
 
   private http = inject(HttpClient);
 
@@ -37,7 +38,7 @@ export class AuthService {
     return this.http
       .post<AuthResponse>(`${this.baseUrl}/login`, data)
       .pipe(tap((response) => {
-        localStorage.setItem('token', response.token); 
+        localStorage.setItem('token', response.token);
         localStorage.setItem('UserId', response.id.toString());
       }));
   }

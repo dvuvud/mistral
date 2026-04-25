@@ -8,6 +8,7 @@ import { Child } from '../../../core/child/child.service';
 import { textDiff, Diff } from './text-diff';
 import { operationalTransformation } from './operational-transformation';
 import { JournalService } from '../../../core/journal/journal.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'main-live-journal',
@@ -33,7 +34,7 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     const roomDest = 'journal:' + this.child.id + ':' + new Date().toISOString().split('T')[0];
-    this.journalSocket.connect("ws://localhost:8080/ws", roomDest);
+    this.journalSocket.connect(`${environment.wsUrl}/ws`, roomDest);
 
     this.journalSocket.getMessages().subscribe(data => {
       console.log(this.inFlight);

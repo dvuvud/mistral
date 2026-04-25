@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface JournalResponse {
   content: string;
@@ -9,7 +10,7 @@ export interface JournalResponse {
 
 @Injectable({ providedIn: 'root' })
 export class JournalService {
-  private baseUrl = "http://localhost:8080/api/journal";
+  private baseUrl = `${environment.wsUrl}/api/journal`;
 
   private http = inject(HttpClient);
 

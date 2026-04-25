@@ -1,6 +1,7 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface AttendanceSetInfo {
   id: number;
@@ -22,7 +23,7 @@ interface SetAttendanceRequest {
 @Injectable({ providedIn: 'root' })
 export class AttendanceService {
 
-  private url = "http://localhost:8080/api/attendance";
+  private url = `${environment.apiUrl}/api/attendance`;
   private attendanceSignals = new Map<string, ReturnType<typeof signal<boolean | null>>>();
 
   private http = inject(HttpClient);
