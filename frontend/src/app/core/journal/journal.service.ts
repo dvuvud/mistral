@@ -10,7 +10,7 @@ export interface JournalResponse {
 
 @Injectable({ providedIn: 'root' })
 export class JournalService {
-  private baseUrl = `${environment.wsUrl}/api/journal`;
+  private baseUrl = `${environment.apiUrl}/api/journal`;
 
   private http = inject(HttpClient);
 
