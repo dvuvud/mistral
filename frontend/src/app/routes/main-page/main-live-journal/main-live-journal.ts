@@ -8,7 +8,7 @@ import { Child } from '../../../core/child/child.service';
 import { textDiff, Diff } from './text-diff';
 import { operationalTransformation } from './operational-transformation';
 import { JournalService } from '../../../core/journal/journal.service';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'main-live-journal',
