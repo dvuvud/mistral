@@ -7,7 +7,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { WebsocketService, WsAttendanceMessage } from '../../core/websocket/websocket.service';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 
 @Component({
