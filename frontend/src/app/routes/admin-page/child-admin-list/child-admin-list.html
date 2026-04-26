@@ -4,8 +4,12 @@
         @for (child of children; track child.id; let last = $last) { <!--håller koll på id-->
         <mat-list-item>
             <span matListItemTitle>
-                {{child.name}}
+                {{child.name}} - {{child.group?.name ?? 'Ingen grupp'}} <!--safe -> ? ??-->
             </span>
+            <button matListItemMeta mat-icon-button color="warn" (click)="onDelete(child)">
+                <mat-icon>cancel</mat-icon>
+            </button>
+
         </mat-list-item>
         @if (!last) {
         <mat-divider></mat-divider>

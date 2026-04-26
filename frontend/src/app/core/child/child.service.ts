@@ -9,6 +9,16 @@ export interface Child {
   name: string;
   date: string | null;
   status: AttendanceStatus | null;
+  present: boolean | null;
+  group?: {
+    id: number;
+    name: string;
+  } | null;
+}
+
+export interface GroupData {
+  id: number;
+  name: string;
 }
 
 @Injectable({ providedIn: 'root' })

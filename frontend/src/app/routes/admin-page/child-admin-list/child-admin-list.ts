@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
+import { ChildActivationEnd } from '@angular/router';
 
 @Component({
   selector: 'child-admin-list',
@@ -34,6 +35,15 @@ export class ChildAdminList implements OnInit {
       next: (children) => this.children = [...children],
       error: (err) => console.log("Error", err)
     });
+  }
+
+  onDelete(child: Child): void {
+    this.childService.deleteChild(child.id).subscribe({
+      next: () => this.children = this.children.filter(x => x.id !== child.id),
+      error: (err) => console.error(err)
+
+    });
+
   }
 
 }

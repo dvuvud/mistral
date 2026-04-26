@@ -1,7 +1,21 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<form [formGroup]="form" class="form-container" (ngSubmit)="onSubmit()">
     <mat-form-field>
-        <mat-label>Namn: </mat-label>
-        <input matInput formControlName="name">
+        <mat-label>Namn</mat-label>
+        <input matInput formControlName="firstName">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Efternamn</mat-label>
+        <input matInput formControlName="lastName">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Grupp</mat-label>
+        <mat-select formControlName="groupId">
+            @for (group of groups; track group.id) {
+            <mat-option [value]="group.id">{{group.name}}</mat-option>
+            }
+        </mat-select>
     </mat-form-field>
 
     <button mat-raised-button color="mat-sys-primary" type="submit" [disabled]="form.invalid">
