@@ -3,10 +3,8 @@ name: Spring Boot Tests
 on:
   push:
     branches: [ "main" ]
-    paths: [ "**/*.java", "**/*.xml", "**/resources/**" ]
   pull_request:
     branches: [ "main" ]
-    paths: [ "**/*.java", "**/*.xml", "**/resources/**" ]
 
 jobs:
   test:
