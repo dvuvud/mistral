@@ -3,10 +3,7 @@ package se.mistral.backend.chat;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import se.mistral.backend.chat.dto.ChatMessage;
 import se.mistral.backend.chat.dto.RetrieveHistoryRequest;
 
@@ -24,7 +21,7 @@ public class ChatController {
         return ResponseEntity.ok(chatService.saveMessage(chatMessage));
     }
 
-    @PostMapping("/history")
+    @GetMapping("/history")
     public ResponseEntity<List<ChatMessage>> retrieveHistory(@Valid @RequestBody RetrieveHistoryRequest retrieveHistoryRequest) {
         return ResponseEntity.ok(chatService.retrieveHistory(retrieveHistoryRequest));
     }
