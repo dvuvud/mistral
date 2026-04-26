@@ -34,7 +34,7 @@ mat-card {
   overflow-y: hidden;
   display: flex;
   flex-direction: column;
-  flex: 3;
+  flex: 1.5;
 }
 
 .main-card-right {
@@ -45,6 +45,7 @@ mat-card {
   overflow-x: clip;
   display: flex;
   flex: 1;
+  min-width: 30%;
 }
 
 mat-card-header {
@@ -70,6 +71,7 @@ main-live-journal {
   flex: 1 1 auto;
 }
 
+// Döljer en liten truddelutt som paddar ut form fields på botten
 ::ng-deep .mat-mdc-form-field-subscript-wrapper {
   display: none;
 }
