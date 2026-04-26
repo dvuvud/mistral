@@ -1,4 +1,4 @@
-import { Component, model, signal, OnInit, inject } from '@angular/core';
+import { Component, model, signal, OnInit, inject, computed } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
@@ -21,9 +21,19 @@ import { MatIconModule } from '@angular/material/icon';
 export class ChildList implements OnInit {
   children = signal<Child[]>([]);
   childSignal = model.required<Child>();
+  searchQuery = signal<string>('');
+
+  searchedChildren = computed(() => {
+    const sq = this.searchQuery();
+    return this.children().filter(x => x.name.includes(sq));
+  });
 
   private attendanceService = inject(AttendanceService);
   private childService = inject(ChildService);
+
+  onSearchUpdated(sq: string) {
+    this.searchQuery.set(sq);
+  }
 
   get dateStr() {
     return new Date().toISOString().split('T')[0];
