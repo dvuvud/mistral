@@ -1,6 +1,6 @@
 package se.mistral.backend;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -226,14 +226,14 @@ public class ChatTests {
         assertThat(!history2.isEmpty());
         assertThat(history2.size()).isEqualTo(2);
 
-        assertThat(history2.getFirst().senderId()).isEqualTo(2);
-        assertThat(history2.getFirst().recipientId()).isEqualTo(1);
-        assertThat(history2.getFirst().chatMessage()).isEqualTo("test2");
+        assertThat(history2.getFirst().senderId()).isEqualTo(1);
+        assertThat(history2.getFirst().recipientId()).isEqualTo(2);
+        assertThat(history2.getFirst().chatMessage()).isEqualTo("test");
         assertThat(history2.getFirst().timestamp()).isEqualTo(testTime);
 
-        assertThat(history2.getLast().senderId()).isEqualTo(1);
-        assertThat(history2.getLast().recipientId()).isEqualTo(2);
-        assertThat(history2.getLast().chatMessage()).isEqualTo("test");
+        assertThat(history2.getLast().senderId()).isEqualTo(2);
+        assertThat(history2.getLast().recipientId()).isEqualTo(1);
+        assertThat(history2.getLast().chatMessage()).isEqualTo("test2");
         assertThat(history2.getLast().timestamp()).isEqualTo(testTime);
     }
 
