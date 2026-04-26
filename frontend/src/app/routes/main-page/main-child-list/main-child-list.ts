@@ -6,10 +6,13 @@ import { Child, ChildService } from '../../../core/child/child.service';
 import { AttendanceBox } from '../attendance-box/attendance-box';
 import { AttendanceService } from '../../../core/child/attendance.service';
 import { WsAttendanceMessage } from '../../../core/websocket/websocket.service';
+import { MatFormFieldModule } from '@angular/material/form-field'; 
+import { MatInputModule } from '@angular/material/input'; 
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'main-child-list',
-  imports: [MatListModule, RouterModule, MatDividerModule, AttendanceBox],
+  imports: [MatListModule, RouterModule, MatDividerModule, AttendanceBox, MatFormFieldModule, MatInputModule, MatIconModule],
   templateUrl: './main-child-list.html',
   styleUrl: './main-child-list.scss',
 })
