@@ -6,8 +6,8 @@ import { Child, ChildService } from '../../../core/child/child.service';
 import { AttendanceBox } from '../attendance-box/attendance-box';
 import { AttendanceService } from '../../../core/child/attendance.service';
 import { WsAttendanceMessage } from '../../../core/websocket/websocket.service';
-import { MatFormFieldModule } from '@angular/material/form-field'; 
-import { MatInputModule } from '@angular/material/input'; 
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -25,7 +25,7 @@ export class ChildList implements OnInit {
 
   searchedChildren = computed(() => {
     const sq = this.searchQuery();
-    return this.children().filter(x => x.name.includes(sq));
+    return this.children().filter(x => x.name.includes(sq)); //TODO: ska gå att säka med små och stora bokstäver
   });
 
   private attendanceService = inject(AttendanceService);
@@ -55,7 +55,6 @@ export class ChildList implements OnInit {
     this.childService.getChildren().subscribe({
       next: (data) => {
         this.children.set(data);
-        console.log('children:', this.children());
       }
     });
   }
