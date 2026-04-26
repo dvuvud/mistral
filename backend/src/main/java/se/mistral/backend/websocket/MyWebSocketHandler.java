@@ -16,6 +16,8 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import lombok.RequiredArgsConstructor;
 import se.mistral.backend.auth.JwtService;
+import se.mistral.backend.chat.ChatService;
+import se.mistral.backend.chat.dto.ChatMessage;
 import se.mistral.backend.journal.JournalService;
 import se.mistral.backend.journal.dto.BroadcastMessage;
 import se.mistral.backend.journal.ot.Operation;
@@ -31,6 +33,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final JournalService journalService;
+    private final ChatService chatService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -47,6 +50,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             case "subscribe"      -> subscribe(session, room);
             case "unsubscribe"    -> unsubscribe(session, room);
             case "DOC_OPERATION"  -> handleDocOperation(session, room, json);
+            case "CHAT_MESSAGE"   -> handleChatMessage(session, room, json);
             default               -> broadcastToRoom(session, room, message);
         }
     }
@@ -78,6 +82,53 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    private void handleChatMessage(WebSocketSession session, String room, JsonNode json) {
+        // room format: "chat:{user1_id}:{user2_id}"
+        String[] parts = room.split(":");
+
+        Long userId = (Long) session.getAttributes().get("userId");
+        Long senderId = 0L;
+        Long recipientId = 0L;
+
+        if (parts.length == 3 && parts[0].equals("chat")) { // if type is chat: check if user is member of chat
+            try {
+                Long userOneId = (Long) Long.parseLong(parts[1]);
+                Long userTwoId = (Long) Long.parseLong(parts[2]);
+
+                if (userTwoId < userOneId) {
+                    room = "chat:" + userTwoId + ":" + userOneId;
+                }
+
+                if (userId == userOneId) {
+                    senderId = userOneId;
+                    recipientId = userTwoId;
+                } else if (userId == userTwoId) {
+                    senderId = userTwoId;
+                    recipientId = userOneId;
+                } else {
+                    closeQuietly(session);
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                closeQuietly(session);
+                return;
+            }
+        }
+
+        ChatMessage message = objectMapper.treeToValue(json.get("message"), ChatMessage.class);
+
+        if (senderId != message.senderId() || recipientId != message.recipientId()) {
+            closeQuietly(session);
+            return;
+        }
+
+        chatService.saveMessage(message);
+
+        try {
+            TextMessage outbound = new TextMessage(objectMapper.writeValueAsString(message));
+            broadcastToRoom(session, room, outbound);
+        } catch (Exception ignored) { }
+    }
     private void handleDocOperation(WebSocketSession session, String room, JsonNode json) {
         // room format: "journal:{childId}:{date}"  e.g. "journal:42:2025-04-22"
         String[] parts = room.split(":");
@@ -94,7 +145,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         Operation incoming;
         try {
             incoming = objectMapper.treeToValue(json.get("operation"), Operation.class);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             return;
         }
 
@@ -113,7 +164,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         try {
             TextMessage outbound = new TextMessage(objectMapper.writeValueAsString(broadcast));
             broadcastToRoom(null, room, outbound);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             // serialization failure shouldn't crash the handler
         }
     }
@@ -145,6 +196,28 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     }
 
     private void subscribe(WebSocketSession session, String room) {
+        String[] parts = room.split(":");
+        Long userId = (Long) session.getAttributes().get("userId");
+
+        if (parts.length == 3 && parts[0].equals("chat")) { // if type is chat: check if user is member of chat
+            try {
+                Long userOneId = (Long) Long.parseLong(parts[1]);
+                Long userTwoId = (Long) Long.parseLong(parts[2]);
+
+                if (userId != userOneId && userId != userTwoId) {
+                    closeQuietly(session);
+                    return;
+                }
+
+                if (userTwoId < userOneId) {
+                    room = "chat:" + userTwoId + ":" + userOneId;
+                }
+            } catch (NumberFormatException e) {
+                closeQuietly(session);
+                return;
+            }
+        }
+
         Set<String> myRooms = sessionRooms.get(session);
         if (myRooms == null) {
             return;
