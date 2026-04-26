@@ -1,4 +1,8 @@
 <div class="child-list-container">
+  <mat-form-field>
+    <input matInput type="search">
+  </mat-form-field>
+
   <mat-action-list>
     @for (Child of children(); track Child.id; let last = $last) {
       <li>
