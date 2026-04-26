@@ -2,10 +2,11 @@
  background-color: var(--mat-sys-primary-fixed);
  width: 100%;
  border: 1px solid var(--mat-sys-outline-variant);
- flex: 1; 
+ flex: 1;
  display: flex;
  flex-direction: column;
  min-height: 0;
+ height: 100%;
 }
 
 .mat-mdc-action-list {
@@ -22,6 +23,4 @@
 
 .list-class {
   overflow-y: scroll;
-  max-height: 450px; //FIXA DET HÄR ÄR NONSENS CSS
 }
-
