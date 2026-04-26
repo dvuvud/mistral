@@ -6,7 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.mistral.backend.chat.ChatService;
 import se.mistral.backend.chat.dto.ChatMessage;
-import se.mistral.backend.chat.dto.RetrieveHistoryRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,8 +42,7 @@ public class ChatTests {
 
     @Test
     void retrieveHistoryEmptyTest() {
-        RetrieveHistoryRequest retrieveHistoryRequest = new RetrieveHistoryRequest(1L, 2L);
-        assertThat(chatService.retrieveHistory(retrieveHistoryRequest).isEmpty());
+        assertThat(chatService.retrieveHistory(1L, 2L).isEmpty());
     }
 
     @Test
@@ -53,8 +51,7 @@ public class ChatTests {
         ChatMessage result = chatService.saveMessage(chatMessage);
         assertThat(result).isNotNull();
 
-        RetrieveHistoryRequest retrieveHistoryRequest = new RetrieveHistoryRequest(1L, 2L);
-        List<ChatMessage> history = chatService.retrieveHistory(retrieveHistoryRequest);
+        List<ChatMessage> history = chatService.retrieveHistory(1L, 2L);
 
         assertThat(!history.isEmpty());
         assertThat(history.size()).isEqualTo(1);
@@ -76,8 +73,7 @@ public class ChatTests {
         assertThat(result).isNotNull();
         assertThat(result2).isNotNull();
 
-        RetrieveHistoryRequest retrieveHistoryRequest = new RetrieveHistoryRequest(1L, 2L);
-        List<ChatMessage> history = chatService.retrieveHistory(retrieveHistoryRequest);
+        List<ChatMessage> history = chatService.retrieveHistory(1L, 2L);
 
         assertThat(!history.isEmpty());
         assertThat(history.size()).isEqualTo(2);
@@ -104,8 +100,7 @@ public class ChatTests {
         assertThat(result).isNotNull();
         assertThat(result2).isNotNull();
 
-        RetrieveHistoryRequest retrieveHistoryRequest = new RetrieveHistoryRequest(1L, 2L);
-        List<ChatMessage> history = chatService.retrieveHistory(retrieveHistoryRequest);
+        List<ChatMessage> history = chatService.retrieveHistory(1L, 2L);
 
         assertThat(!history.isEmpty());
         assertThat(history.size()).isEqualTo(2);
@@ -132,8 +127,7 @@ public class ChatTests {
         assertThat(result).isNotNull();
         assertThat(result2).isNotNull();
 
-        RetrieveHistoryRequest retrieveHistoryRequest = new RetrieveHistoryRequest(1L, 2L);
-        List<ChatMessage> history = chatService.retrieveHistory(retrieveHistoryRequest);
+        List<ChatMessage> history = chatService.retrieveHistory(1L, 2L);
 
         assertThat(!history.isEmpty());
         assertThat(history.size()).isEqualTo(2);
@@ -148,8 +142,7 @@ public class ChatTests {
         assertThat(history.getLast().chatMessage()).isEqualTo("test2");
         assertThat(history.getLast().timestamp()).isEqualTo(testTime2);
 
-        RetrieveHistoryRequest retrieveHistoryRequest2 = new RetrieveHistoryRequest(2L, 1L);
-        List<ChatMessage> history2 = chatService.retrieveHistory(retrieveHistoryRequest2);
+        List<ChatMessage> history2 = chatService.retrieveHistory(2L, 1L);
 
         assertThat(!history2.isEmpty());
         assertThat(history2.size()).isEqualTo(2);
@@ -176,8 +169,7 @@ public class ChatTests {
         assertThat(result).isNotNull();
         assertThat(result2).isNotNull();
 
-        RetrieveHistoryRequest retrieveHistoryRequest = new RetrieveHistoryRequest(1L, 2L);
-        List<ChatMessage> history = chatService.retrieveHistory(retrieveHistoryRequest);
+        List<ChatMessage> history = chatService.retrieveHistory(1L, 2L);
 
         assertThat(!history.isEmpty());
         assertThat(history.size()).isEqualTo(2);
@@ -204,8 +196,7 @@ public class ChatTests {
         assertThat(result).isNotNull();
         assertThat(result2).isNotNull();
 
-        RetrieveHistoryRequest retrieveHistoryRequest = new RetrieveHistoryRequest(1L, 2L);
-        List<ChatMessage> history = chatService.retrieveHistory(retrieveHistoryRequest);
+        List<ChatMessage> history = chatService.retrieveHistory(1L, 2L);
 
         assertThat(!history.isEmpty());
         assertThat(history.size()).isEqualTo(2);
@@ -220,8 +211,7 @@ public class ChatTests {
         assertThat(history.getLast().chatMessage()).isEqualTo("test2");
         assertThat(history.getLast().timestamp()).isEqualTo(testTime);
 
-        RetrieveHistoryRequest retrieveHistoryRequest2 = new RetrieveHistoryRequest(2L, 1L);
-        List<ChatMessage> history2 = chatService.retrieveHistory(retrieveHistoryRequest2);
+        List<ChatMessage> history2 = chatService.retrieveHistory(2L, 1L);
 
         assertThat(!history2.isEmpty());
         assertThat(history2.size()).isEqualTo(2);
@@ -273,8 +263,7 @@ public class ChatTests {
         assertThat(result9).isNotNull();
         assertThat(result10).isNotNull();
 
-        RetrieveHistoryRequest retrieveHistoryRequest = new RetrieveHistoryRequest(1L, 2L);
-        List<ChatMessage> history = chatService.retrieveHistory(retrieveHistoryRequest);
+        List<ChatMessage> history = chatService.retrieveHistory(1L, 2L);
 
         assertThat(!history.isEmpty());
         assertThat(history.size()).isEqualTo(10);
@@ -307,8 +296,7 @@ public class ChatTests {
         assertThat(result3).isNotNull();
         assertThat(result4).isNotNull();
 
-        RetrieveHistoryRequest retrieveHistoryRequest = new RetrieveHistoryRequest(1L, 2L);
-        List<ChatMessage> history = chatService.retrieveHistory(retrieveHistoryRequest);
+        List<ChatMessage> history = chatService.retrieveHistory(1L, 2L);
 
         assertThat(!history.isEmpty());
         assertThat(history.size()).isEqualTo(2);
@@ -323,8 +311,7 @@ public class ChatTests {
         assertThat(history.getLast().chatMessage()).isEqualTo("test2");
         assertThat(history.getLast().timestamp()).isEqualTo(testTime2);
 
-        RetrieveHistoryRequest retrieveHistoryRequest2 = new RetrieveHistoryRequest(1L, 3L);
-        List<ChatMessage> history2 = chatService.retrieveHistory(retrieveHistoryRequest2);
+        List<ChatMessage> history2 = chatService.retrieveHistory(1L, 3L);
 
         assertThat(!history2.isEmpty());
         assertThat(history2.size()).isEqualTo(2);
@@ -357,8 +344,7 @@ public class ChatTests {
         assertThat(result3).isNotNull();
         assertThat(result4).isNotNull();
 
-        RetrieveHistoryRequest retrieveHistoryRequest = new RetrieveHistoryRequest(1L, 2L);
-        List<ChatMessage> history = chatService.retrieveHistory(retrieveHistoryRequest);
+        List<ChatMessage> history = chatService.retrieveHistory(1L, 2L);
 
         assertThat(!history.isEmpty());
         assertThat(history.size()).isEqualTo(2);
@@ -373,8 +359,7 @@ public class ChatTests {
         assertThat(history.getLast().chatMessage()).isEqualTo("test2");
         assertThat(history.getLast().timestamp()).isEqualTo(testTime2);
 
-        RetrieveHistoryRequest retrieveHistoryRequest2 = new RetrieveHistoryRequest(4L, 3L);
-        List<ChatMessage> history2 = chatService.retrieveHistory(retrieveHistoryRequest2);
+        List<ChatMessage> history2 = chatService.retrieveHistory(4L, 3L);
 
         assertThat(!history2.isEmpty());
         assertThat(history2.size()).isEqualTo(2);

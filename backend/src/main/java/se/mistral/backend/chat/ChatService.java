@@ -3,7 +3,6 @@ package se.mistral.backend.chat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.mistral.backend.chat.dto.ChatMessage;
-import se.mistral.backend.chat.dto.RetrieveHistoryRequest;
 
 import java.util.List;
 
@@ -23,10 +22,10 @@ public class ChatService {
         return chatMessage;
     }
 
-    public List<ChatMessage> retrieveHistory(RetrieveHistoryRequest retrieveHistoryRequest) {
+    public List<ChatMessage> retrieveHistory(long senderId, long recipientId) {
         return chatRepository.findConversationHistory(
-                retrieveHistoryRequest.senderId(),
-                retrieveHistoryRequest.recipientId()
+                senderId,
+                recipientId
         );
     }
 
