@@ -19,10 +19,6 @@ public class UserService {
     }
 
     public List<BasicUserInformation> retrieveAllTeachers() {
-        List<User> userList = userRepository.findUserByRole_Teacher();
-
-        return userList.stream()
-                .map(user -> new BasicUserInformation(user.getId(), user.getName()))
-                .toList();
+        return userRepository.findUserByRole_Teacher();
     }
 }
