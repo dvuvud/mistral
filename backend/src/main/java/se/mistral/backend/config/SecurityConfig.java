@@ -36,14 +36,13 @@ public class SecurityConfig {
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/validate").authenticated()
-                .requestMatchers("/api/auth/**").permitAll() // TODO: give different roles different endpoint perms
+                .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/children/**").hasRole("TEACHER")
                 .requestMatchers("/api/attendance/**").hasRole("TEACHER")
                 .requestMatchers("/api/journal/**").hasRole("TEACHER")
                 .requestMatchers("/ws").permitAll() // authentication happens inside handler
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            )
+                .anyRequest().authenticated())
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
