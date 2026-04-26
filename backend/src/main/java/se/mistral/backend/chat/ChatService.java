@@ -18,20 +18,20 @@ public class ChatService {
 
     public ChatMessage saveMessage(ChatMessage chatMessage) {
         Chat chat = new Chat();
-        chat.setMessage(chatMessage.message());
-        chat.setSender(chatMessage.senderId());
-        chat.setRecipient(chatMessage.recipientId());
+        chat.setChatMessage(chatMessage.chatMessage());
+        chat.setSenderId(chatMessage.senderId());
+        chat.setRecipientId(chatMessage.recipientId());
         chat.setTimestamp(chatMessage.timestamp());
         chatRepository.save(chat);
         return chatMessage;
     }
 
     public List<ChatMessage> retrieveHistory(RetrieveHistoryRequest retrieveHistoryRequest) {
-        List<ChatMessage> sentHistory = chatRepository.findAllMessageWithSenderIdAndRecipientId(
+        List<ChatMessage> sentHistory = chatRepository.findBySenderAndRecipient(
                 retrieveHistoryRequest.senderId(),
                 retrieveHistoryRequest.recipientId());
 
-        List<ChatMessage> receivedHistory = chatRepository.findAllMessageWithSenderIdAndRecipientId(
+        List<ChatMessage> receivedHistory = chatRepository.findBySenderAndRecipient(
                 retrieveHistoryRequest.recipientId(),
                 retrieveHistoryRequest.senderId());
 
