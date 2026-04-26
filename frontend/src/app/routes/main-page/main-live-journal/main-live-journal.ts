@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, signal, Input, OnChanges, SimpleChanges, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, Input, OnChanges, SimpleChanges, inject, viewChild, ElementRef } from '@angular/core';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
@@ -23,6 +23,7 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
   private differ = new textDiff();
   private operationalTransformer = new operationalTransformation();
   private journalService = inject(JournalService);
+  private textArea = viewChild.required<ElementRef<HTMLTextAreaElement>>("journalContent");
 
   text = signal('');
   prevText = '';
@@ -58,14 +59,16 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
   }
 
   applyToLocalContent(incoming: WsJournalWriteOperation): void {
-    const text: string = this.text();
+    //const text: string = this.text();
     const pos: number = incoming.position;
     switch(incoming.type) {
       case 'INSERT':
-        this.text.set(text.slice(0, pos) + incoming.text + text.slice(pos, text.length));
+        //this.text.set(text.slice(0, pos) + incoming.text + text.slice(pos, text.length));
+        this.textArea().nativeElement.setRangeText(incoming.text, pos, pos, "preserve");
         break;
       case 'DELETE':
-        this.text.set(text.slice(0, pos) + text.slice(pos + 1, text.length));
+        //this.text.set(text.slice(0, pos) + text.slice(pos + 1, text.length));
+        this.textArea().nativeElement.setRangeText("", pos, pos + 1, "preserve");
         break;
     }
   }
