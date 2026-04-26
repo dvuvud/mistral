@@ -340,4 +340,54 @@ public class ChatTests {
         assertThat(history2.getLast().timestamp()).isEqualTo(testTime4);
     }
 
+    @Test
+    void retrieveHistoryFourUniqueUsersTwoMessageHistoriesTest() {
+        ChatMessage chatMessage = new ChatMessage(1L, 2L, "test", testTime);
+        ChatMessage chatMessage2 = new ChatMessage(2L, 1L, "test2", testTime2);
+        ChatMessage chatMessage3 = new ChatMessage(4L, 3L, "Hi 3", testTime);
+        ChatMessage chatMessage4 = new ChatMessage(3L, 4L, "Hi 4", testTime2);
+
+        ChatMessage result1 = chatService.saveMessage(chatMessage);
+        ChatMessage result2 = chatService.saveMessage(chatMessage2);
+        ChatMessage result3 = chatService.saveMessage(chatMessage3);
+        ChatMessage result4 = chatService.saveMessage(chatMessage4);
+
+        assertThat(result1).isNotNull();
+        assertThat(result2).isNotNull();
+        assertThat(result3).isNotNull();
+        assertThat(result4).isNotNull();
+
+        RetrieveHistoryRequest retrieveHistoryRequest = new RetrieveHistoryRequest(1L, 2L);
+        List<ChatMessage> history = chatService.retrieveHistory(retrieveHistoryRequest);
+
+        assertThat(!history.isEmpty());
+        assertThat(history.size()).isEqualTo(2);
+
+        assertThat(history.getFirst().senderId()).isEqualTo(1);
+        assertThat(history.getFirst().recipientId()).isEqualTo(2);
+        assertThat(history.getFirst().chatMessage()).isEqualTo("test");
+        assertThat(history.getFirst().timestamp()).isEqualTo(testTime);
+
+        assertThat(history.getLast().senderId()).isEqualTo(2);
+        assertThat(history.getLast().recipientId()).isEqualTo(1);
+        assertThat(history.getLast().chatMessage()).isEqualTo("test2");
+        assertThat(history.getLast().timestamp()).isEqualTo(testTime2);
+
+        RetrieveHistoryRequest retrieveHistoryRequest2 = new RetrieveHistoryRequest(4L, 3L);
+        List<ChatMessage> history2 = chatService.retrieveHistory(retrieveHistoryRequest2);
+
+        assertThat(!history2.isEmpty());
+        assertThat(history2.size()).isEqualTo(2);
+
+        assertThat(history2.getFirst().senderId()).isEqualTo(4);
+        assertThat(history2.getFirst().recipientId()).isEqualTo(3);
+        assertThat(history2.getFirst().chatMessage()).isEqualTo("Hi 3");
+        assertThat(history2.getFirst().timestamp()).isEqualTo(testTime);
+
+        assertThat(history2.getLast().senderId()).isEqualTo(3);
+        assertThat(history2.getLast().recipientId()).isEqualTo(4);
+        assertThat(history2.getLast().chatMessage()).isEqualTo("Hi 4");
+        assertThat(history2.getLast().timestamp()).isEqualTo(testTime2);
+    }
+
 }
