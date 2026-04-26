@@ -26,15 +26,15 @@ public class Chat {
     private Long id;
 
     @Column(nullable = false)
-    private Long sender;
+    private Long senderId;
 
     @Column(nullable = false)
-    private Long recipient;
+    private Long recipientId;
 
     @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp;
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    private String message;
+    private String chatMessage;
 
 }

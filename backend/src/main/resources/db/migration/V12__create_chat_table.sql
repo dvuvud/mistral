@@ -1,8 +1,8 @@
 CREATE TABLE chat
 (
     id BIGSERIAL PRIMARY KEY,
-    sender BIGINT NOT NULL,
-    recipient BIGINT NOT NULL,
-    chatMessage TEXT NOT NULL DEFAULT '',
+    sender_id BIGINT NOT NULL,
+    recipient_id BIGINT NOT NULL,
+    chat_message TEXT NOT NULL DEFAULT '',
     timestamp TIMESTAMP NOT NULL
 );

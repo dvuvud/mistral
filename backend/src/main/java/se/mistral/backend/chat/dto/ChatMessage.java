@@ -8,6 +8,6 @@ public record ChatMessage(
         Long senderId,
         Long recipientId,
         @NotBlank
-        String message,
+        String chatMessage,
         LocalDateTime timestamp
 ) { }
