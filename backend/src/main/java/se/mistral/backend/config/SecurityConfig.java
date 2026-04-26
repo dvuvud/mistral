@@ -31,21 +31,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/validate").authenticated()
-                        .requestMatchers("/api/auth/**").permitAll() // TODO: give different roles different endpoint
-                                                                     // perms
-                        .requestMatchers("/api/children/**").hasAnyRole("TEACHER", "ADMIN")
-                        .requestMatchers("/api/attendance/**").hasRole("TEACHER")
-                        .requestMatchers("/api/journal/**").hasRole("TEACHER")
-                        .requestMatchers("/ws").permitAll() // authentication happens inside handler
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated())
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+            .csrf(AbstractHttpConfigurer::disable)
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/auth/validate").authenticated()
+                .requestMatchers("/api/auth/**").permitAll() // TODO: give different roles different endpoint perms
+                .requestMatchers("/api/children/**").hasRole("TEACHER")
+                .requestMatchers("/api/attendance/**").hasRole("TEACHER")
+                .requestMatchers("/api/journal/**").hasRole("TEACHER")
+                .requestMatchers("/ws").permitAll() // authentication happens inside handler
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
+            )
+            .authenticationProvider(authenticationProvider)
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -63,3 +63,4 @@ public class SecurityConfig {
         return source;
     }
 }
+
