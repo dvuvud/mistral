@@ -25,7 +25,7 @@ export class ChildList implements OnInit {
 
   searchedChildren = computed(() => {
     const sq = this.searchQuery();
-    return this.children().filter(x => x.name.includes(sq)); //TODO: ska gå att säka med små och stora bokstäver
+    return this.children().filter(x => x.name.toLowerCase().includes(sq)); //TODO: ska gå att säka med små och stora bokstäver
   });
 
   private attendanceService = inject(AttendanceService);

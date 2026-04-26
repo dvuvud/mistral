@@ -1,9 +1,8 @@
 <div class="child-list-container">
-  <mat-form-field>
-    <mat-label>Sök</mat-label>
-    <input matInput #searchQuery type="search" (input)="onSearchUpdated(searchQuery.value)">
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label><mat-icon>search</mat-icon>Sök</mat-label>
+    <input matInput #searchQuery type="search" (input)="onSearchUpdated(searchQuery.value.toLowerCase())">
   </mat-form-field>
-
   <mat-action-list class="list-class">
     @for (Child of searchedChildren(); track Child.id; let last = $last) {
       <li>
