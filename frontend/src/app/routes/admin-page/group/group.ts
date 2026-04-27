@@ -34,18 +34,18 @@ export class Group implements OnInit {
   children: ChildWithGroupResponse[] = [];
 
   ngOnInit(): void {
-    this.adminService.getAllGroups().subscribe({
+    this.adminService.getGroups().subscribe({
       next: (GroupResponse) => this.groups = GroupResponse,
       error: (err: any) => console.error(err)
     });
 
     //hämta alla barn för att räkna antal barn/grupp
-    this.adminService.getAllChildren().subscribe({
+    this.adminService.getChildren().subscribe({
       next: (children: ChildWithGroupResponse[]) => this.children = children
     });
 
     interval(1000).subscribe(() => {
-      this.adminService.getAllChildren().subscribe({
+      this.adminService.getChildren().subscribe({
         next: (children: ChildWithGroupResponse[]) => this.children = children
       });
     })
@@ -60,7 +60,7 @@ export class Group implements OnInit {
     if (this.form.valid) {
       this.adminService.createGroup(this.form.value.groupName!).subscribe({
         next: () => {
-          this.adminService.getAllGroups().subscribe({
+          this.adminService.getGroups().subscribe({
             next: (GroupResponse) => this.groups = GroupResponse,
             error: (err: any) => console.error(err)
           });
