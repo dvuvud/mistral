@@ -35,5 +35,5 @@ VALUES
     ('Wilma Hellström',  (SELECT id FROM groups WHERE name = 'Lejonen')),
     ('Lucas Öberg',      (SELECT id FROM groups WHERE name = 'Lejonen')),
     ('Freja Jakobsson',  (SELECT id FROM groups WHERE name = 'Lejonen'))
-ON CONFLICT DO NOTHING;  --- Eftersom namn inte är unika kan den här migrationen köras om och om igen och skapa duplicates
+ON CONFLICT DO NOTHING;
 
