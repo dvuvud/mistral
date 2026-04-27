@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { WebsocketService, WsAttendanceMessage } from '../../core/websocket/websocket.service';
 import { environment } from '../../../environments/environment';
+import { groupResponse, groupService } from '../../core/groups/group.service';
 
 
 @Component({
@@ -26,14 +27,18 @@ import { environment } from '../../../environments/environment';
   styleUrl: './main-page.scss'
 })
 export class MainPage implements OnInit, OnDestroy {
-
+  
+  groupNameSignal = signal<string>('');
+  allGroups = signal<groupResponse[]>([]);
   childSignal = signal<Child>({ name: '', id: 0, date: "", present: false });
   private router = inject(Router);
   private socketService = inject(WebsocketService);
+  private groupService = inject(groupService);
   mainPanel = viewChild.required(MainPanel);
 
   ngOnInit() {
     this.socketService.connect(`${environment.wsUrl}/ws`, "group=Nyckelpigorna");
+    this.loadGroups();
     this.socketService.getMessages().subscribe((message) => {
       if (!("childId" in message)) {
         console.error("Attendance message with incorrect body!");
@@ -46,6 +51,14 @@ export class MainPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.socketService.disconnect();
+  }
+
+  loadGroups() {
+    this.groupService.getGroups().subscribe({
+      next: (data) => {
+        this.allGroups.set(data);
+      }
+    });
   }
 
   handleWebsocketMessage(message: WsAttendanceMessage) {
