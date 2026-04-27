@@ -57,9 +57,12 @@ export class ChildAdminList implements OnInit {
 
   }
 
-  onMove(child: ChildWithGroupResponse, groupId: number): void {
+  onMove(child: ChildWithGroupResponse, groupId: number, select: any): void {
     this.adminService.assignChildToGroup(groupId, child.id).subscribe({
-      next: () => this.loadChildren(),
+      next: () => {
+        select.value = null;
+        this.loadChildren();
+      },
       error: (err: any) => console.error(err)
     });
 
