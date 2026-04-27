@@ -38,6 +38,11 @@ public class AdminController {
         return ResponseEntity.ok(adminService.setUserActive(id));
     }
 
+    @PutMapping("/user/{id}/inactive")
+    public ResponseEntity<UserResponse> setUserInactive(@PathVariable Long id) {
+        return ResponseEntity.ok(adminService.setUserInactive(id));
+    }
+
     @PostMapping("/group")
     public ResponseEntity<GroupResponse> createGroup(@RequestBody CreateGroupRequest request) {
         return ResponseEntity.ok(groupService.createGroup(request));
