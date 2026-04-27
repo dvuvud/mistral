@@ -3,7 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
-import { ChildService, GroupData } from '../../../core/child/child.service';
+import { AdminService, GroupResponse } from '../../../core/admin/admin.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
@@ -22,7 +22,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 })
 export class Group implements OnInit {
 
-  private childService = inject(ChildService);
+  private adminService: AdminService = inject(AdminService);
 
   private fb = inject(FormBuilder)
 
@@ -30,28 +30,27 @@ export class Group implements OnInit {
     groupName: ["", Validators.required]
   });
 
-  groups: GroupData[] = [];
+  groups: GroupResponse[] = [];
 
   ngOnInit(): void {
-
-    this.childService.getGroups().subscribe({
-      next: (groups) => this.groups = groups,
-      error: (err) => console.error(err)
+    this.adminService.getAllGroups().subscribe({
+      next: (GroupResponse) => this.groups = GroupResponse,
+      error: (err: any) => console.error(err)
     });
 
   }
 
   onCreateGroup(): void {
     if (this.form.valid) {
-      this.childService.createGroup(this.form.value.groupName!).subscribe({
+      this.adminService.createGroup(this.form.value.groupName!).subscribe({
         next: () => {
-          this.childService.getGroups().subscribe({
-            next: (groups) => this.groups = groups,
-            error: (err) => console.error(err)
+          this.adminService.getAllGroups().subscribe({
+            next: (GroupResponse) => this.groups = GroupResponse,
+            error: (err: any) => console.error(err)
           });
           this.form.reset();
         },
-        error: (err) => console.error(err)
+        error: (err: any) => console.error(err)
       });
     }
   }
