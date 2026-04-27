@@ -20,6 +20,7 @@ import { localDateToday } from '../../../core/utils/date-utils';
 
 
 export class ChildList implements OnInit {
+
   children = signal<Child[]>([]);
   childSignal = model.required<Child>();
   searchQuery = signal<string>('');
