@@ -19,6 +19,7 @@ import se.mistral.backend.auth.JwtService;
 import se.mistral.backend.chat.ChatService;
 import se.mistral.backend.chat.dto.ChatMessage;
 import se.mistral.backend.journal.JournalService;
+import se.mistral.backend.journal.JournalTarget;
 import se.mistral.backend.journal.dto.BroadcastMessage;
 import se.mistral.backend.journal.ot.Operation;
 import se.mistral.backend.user.Role;
@@ -130,15 +131,39 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         } catch (Exception ignored) { }
     }
     private void handleDocOperation(WebSocketSession session, String room, JsonNode json) {
-        // room format: "journal:{childId}:{date}"  e.g. "journal:42:2025-04-22"
+        // room format: "journal:child:{childId}:{date}"  e.g. "journal:child:42:2026-04-22"
+        //           or "journal:group:{groupId}:{date}"  e.g. "journal:group:7:2026-04-27"
         String[] parts = room.split(":");
-        if (parts.length != 3 || !parts[0].equals("journal")) {
+        if (parts.length != 4 || !parts[0].equals("journal")) {
             closeQuietly(session);
             return;
         }
 
-        Long childId = Long.parseLong(parts[1]);
-        LocalDate date = LocalDate.parse(parts[2]);
+        JournalTarget target;
+        try {
+            target = switch (parts[1]) {
+                case "child" -> new JournalTarget.Child(Long.parseLong(parts[2]));
+                case "group" -> new JournalTarget.Group(Long.parseLong(parts[2]));
+                default -> null;
+            };
+        } catch (NumberFormatException e) {
+            closeQuietly(session);
+            return;
+        }
+
+        if (target == null) {
+            closeQuietly(session);
+            return;
+        }
+
+        LocalDate date;
+        try {
+            date = LocalDate.parse(parts[3]);
+        } catch (Exception e) {
+            closeQuietly(session);
+            return;
+        }
+
         int clientRevision = json.get("clientRevision").asInt();
         Long userId = (Long) session.getAttributes().get("userId");
 
@@ -152,7 +177,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         Integer clientSequence = json.has("sequence") ? json.get("sequence").asInt() : null;
 
         BroadcastMessage broadcast = journalService.applyOperation(
-            childId,
+            target,
             date,
             clientRevision,
             incoming,
@@ -213,6 +238,18 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
                     room = "chat:" + userTwoId + ":" + userOneId;
                 }
             } catch (NumberFormatException e) {
+                closeQuietly(session);
+                return;
+            }
+        } else if (parts.length == 4 && parts[0].equals("journal")) {
+            if (!parts[1].equals("child") && !parts[1].equals("group")) {
+                closeQuietly(session);
+                return;
+            }
+            try {
+                Long.parseLong(parts[2]);
+                LocalDate.parse(parts[3]);
+            } catch (Exception e) {
                 closeQuietly(session);
                 return;
             }
