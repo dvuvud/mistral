@@ -40,8 +40,8 @@ export class AdminService {
     return this.http.get<GroupResponse[]>(`${this.adminUrl}/groups`);
   }
 
-  createChild(name: string): Observable<ChildWithGroupResponse> {
-    return this.http.post<ChildWithGroupResponse>(`${this.adminUrl}/child`, { name });
+  createChild(name: string): Observable<ChildResponse> {
+    return this.http.post<ChildResponse>(`${this.adminUrl}/child`, { name });
   }
 
   createGroup(name: string): Observable<GroupResponse> {
@@ -52,12 +52,11 @@ export class AdminService {
     return this.http.delete<void>(`${this.adminUrl}/child/${childId}`);
   }
 
-
-  //TODO
-  assignChildToGroup(groupId: string, childId: string) {
-
+  assignChildToGroup(groupId: number, childId: number): Observable<GroupResponse> {
+    return this.http.put<GroupResponse>(`${this.adminUrl}/group/${groupId}/child/${childId}`, {});
    }
 
-  //TODO
-  activateUser() { }
+  activateUser(userId: number): Observable<UserResponse> {
+    return this.http.put<UserResponse>(`${this.adminUrl}/user/${userId}`, {});
+  }
 }
