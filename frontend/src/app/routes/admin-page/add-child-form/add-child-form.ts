@@ -3,10 +3,8 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { AdminService, ChildWithGroupResponse, GroupResponse } from '../../../core/admin/admin.service';
-import { MatOptionModule } from '@angular/material/core';
-import { MatSelectModule } from '@angular/material/select';
-import { interval } from 'rxjs';
+import { AdminService } from '../../../core/admin/admin.service';
+
 @Component({
   selector: 'add-child-form',
   imports: [
@@ -24,7 +22,7 @@ import { interval } from 'rxjs';
 export class AddChildForm implements OnInit {
   private fb = inject(FormBuilder);
 
-  private adminService: AdminService = inject(AdminService);
+  private adminService = inject(AdminService);
 
   groups: GroupResponse[] = [];
   children: ChildWithGroupResponse[] = [];
@@ -56,23 +54,10 @@ export class AddChildForm implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
-      const fullName = `${this.form.value.firstName} ${this.form.value.lastName}`;
-      this.adminService.createChild(fullName).subscribe({
-        next: (child) => {
-          if (this.form.value.groupId) {
-            this.adminService.assignChildToGroup(this.form.value.groupId, child.id).subscribe({
-              next: () => {
-                this.childAdded.emit();
-                this.form.reset();
-
-                //error msg?
-              }
-            })
-          }
-          else {
-            this.childAdded.emit();
-            this.form.reset();
-          }
+      this.adminService.createChild(this.form.value.name!).subscribe({
+        next: () => {
+          this.childAdded.emit();
+          this.form.reset();
         },
 
         error: (err) => console.error(err)
