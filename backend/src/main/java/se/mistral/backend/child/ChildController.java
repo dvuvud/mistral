@@ -22,7 +22,7 @@ public class ChildController {
 
     private final ChildService childService;
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<ChildResponse>> getAllChildren() {
         return ResponseEntity.ok(childService.getAllChildren());
     }
