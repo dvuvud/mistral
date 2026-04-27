@@ -48,7 +48,11 @@ export class ChildList implements OnInit {
   }
 
   onSelectChild(child: Child) {
-    this.childSignal.set(child);
+    if (this.childSignal().id == child.id) {
+      this.childSignal.set({ name: '', id: 0, date: "", present: false });
+    } else {
+      this.childSignal.set(child);
+    }
   }
 
   loadChildren() {
