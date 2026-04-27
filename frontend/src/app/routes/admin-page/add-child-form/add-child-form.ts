@@ -3,7 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ChildService, GroupData } from '../../../core/child/child.service';
+import { AdminService, GroupResponse } from '../../../core/admin/admin.service';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 @Component({
@@ -23,9 +23,9 @@ import { MatSelectModule } from '@angular/material/select';
 export class AddChildForm implements OnInit {
   private fb = inject(FormBuilder);
 
-  private childService = inject(ChildService);
+  private adminService: AdminService = inject(AdminService);
 
-  groups: GroupData[] = [];
+  groups: GroupResponse[] = [];
 
   //output?
 
@@ -41,18 +41,18 @@ export class AddChildForm implements OnInit {
   @Output() childAdded = new EventEmitter<void>();
 
   ngOnInit(): void {
-    this.childService.getGroups().subscribe({
-      next: (GroupData) => this.groups = GroupData
+    this.adminService.getAllGroups().subscribe({
+      next: (GroupResponse) => this.groups = GroupResponse
     })
   }
 
   onSubmit(): void {
     if (this.form.valid) {
       const fullName = `${this.form.value.firstName} ${this.form.value.lastName}`;
-      this.childService.createChild(fullName).subscribe({
+      this.adminService.createChild(fullName).subscribe({
         next: (child) => {
           if (this.form.value.groupId) {
-            this.childService.assignChildToGroup(this.form.value.groupId, child.id).subscribe({
+            this.adminService.assignChildToGroup(this.form.value.groupId, child.id).subscribe({
               next: () => {
                 this.childAdded.emit();
                 this.form.reset();

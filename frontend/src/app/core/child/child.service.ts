@@ -15,52 +15,40 @@ export interface Child {
   } | null;
 }
 
-export interface GroupData {
-  id: number;
-  name: string;
+export interface GroupResponse {
+    id: number;
+    name: string;
+}
+
+export interface ChildResponse {
+    id: number;
+    name: string;
+}
+
+export interface ChildWithGroupResponse {
+    id: number;
+    name: string;
+    group: GroupResponse | null;
+}
+
+export interface UserResponse {
+    id: number;
+    name: string;
+    role: string;
+    email: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class ChildService {
 
-  private url = `${environment.apiUrl}/api/children/attendance`;
+  //private url = `${environment.apiUrl}/api/children/attendance`;
 
-  private childUrl = "http://localhost:8080/api/children";
-  private adminUrl = "http://localhost:8080/api/admin";
+  private childUrl = "http://localhost:8080/api/children/attendance";
 
   private http = inject(HttpClient);
 
   getChildren(): Observable<Child[]> {
-    return this.http.get<Child[]>(this.url);
+    return this.http.get<Child[]>(this.childUrl);
   }
-
-  getAll(): Observable<Child[]> {
-    return this.http.get<Child[]>(`${this.adminUrl}/children`);
-  }
-
-  createChild(name: string): Observable<Child> {
-    return this.http.post<Child>(`${this.adminUrl}/child`, { name });
-  }
-
-  createGroup(name: string): Observable<any> {
-    return this.http.post(`${this.adminUrl}/group`, { name });
-  }
-
-  deleteChild(id: number): Observable<any> {
-    return this.http.delete(`${this.adminUrl}/child/${id}`);
-  }
-
-  getGroups(): Observable<GroupData[]> {
-    return this.http.get<GroupData[]>(`${this.adminUrl}/groups`);
-  }
-
-
-  //TODO
-  assignChildToGroup(groupId: number, childId: number): Observable<any> {
-    return this.http.put(`${this.adminUrl}/group/${groupId}/child/${childId}`, {});
-  }
-
-  //TODO
-  activateUser() { }
 
 }
