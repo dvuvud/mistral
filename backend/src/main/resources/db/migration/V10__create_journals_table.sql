@@ -4,5 +4,5 @@ CREATE TABLE journals (
     date DATE NOT NULL,
     content TEXT NOT NULL DEFAULT '',
     version INT NOT NULL DEFAULT 0,
-    UNIQUE (child_id, date)
+    CONSTRAINT journals_child_id_date_unique UNIQUE (child_id, date)
 );
