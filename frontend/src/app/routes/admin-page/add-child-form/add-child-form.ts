@@ -3,10 +3,10 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { AdminService } from '../../../core/admin/admin.service';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { AdminService, ChildWithGroupResponse, GroupResponse } from '../../../core/admin/admin.service';
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'add-child-form',
@@ -43,12 +43,12 @@ export class AddChildForm implements OnInit {
   @Output() childAdded = new EventEmitter<void>();
 
   ngOnInit(): void {
-    this.adminService.getAllGroups().subscribe({
+    this.adminService.getGroups().subscribe({
       next: (GroupResponse) => this.groups = GroupResponse
     })
 
     interval(1000).subscribe(() => {
-      this.adminService.getAllChildren().subscribe({
+      this.adminService.getChildren().subscribe({
         next: (children: ChildWithGroupResponse[]) => this.children = children
       });
     })
@@ -56,7 +56,7 @@ export class AddChildForm implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
-      this.adminService.createChild(this.form.value.name!).subscribe({
+      this.adminService.createChild(this.form.value.firstName + " " + this.form.value.lastName).subscribe({
         next: () => {
           this.childAdded.emit();
           this.form.reset();

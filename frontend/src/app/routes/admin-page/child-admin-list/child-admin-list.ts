@@ -31,7 +31,7 @@ export class ChildAdminList implements OnInit {
 
   ngOnInit(): void {
     this.loadChildren();
-    this.adminService.getAllGroups().subscribe({
+    this.adminService.getGroups().subscribe({
       next: (groups: GroupResponse[]) => this.groups = groups,
       error: (err: any) => console.error(err)
     });
@@ -39,7 +39,7 @@ export class ChildAdminList implements OnInit {
   }
 
   loadChildren(): void {
-    this.adminService.getAllChildren().subscribe({
+    this.adminService.getChildren().subscribe({
       next: (children: ChildWithGroupResponse[]) => this.children = [...children],
       error: (err: any) => console.log("Error", err)
     });
