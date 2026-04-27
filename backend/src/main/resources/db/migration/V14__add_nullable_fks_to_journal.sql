@@ -1,8 +1,6 @@
-ALTER TABLE journals
-    DROP COLUMN child_id;
+ALTER TABLE journals ALTER COLUMN child_id DROP NOT NULL;
 
 ALTER TABLE journals
-    ADD COLUMN child_id BIGINT REFERENCES children(id) ON DELETE CASCADE,
     ADD COLUMN group_id BIGINT REFERENCES groups(id) ON DELETE CASCADE,
     ADD CONSTRAINT journals_target_xor
         CHECK (
