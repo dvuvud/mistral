@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialog } from '../confirmation-dialog/confirmation-dialog';
 import { firstValueFrom } from 'rxjs';
 import { WsAttendanceMessage } from '../../../core/websocket/websocket.service';
-
+import { localDateToday } from '../../../core/utils/date-utils';
 
 @Component({
   selector: 'attendance-box',
@@ -20,12 +20,8 @@ export class AttendanceBox {
   errorMessage = '';
   dialog = inject(MatDialog);
 
-  get dateStr() {
-    return new Date().toISOString().split('T')[0];
-  }
-
   get isChecked(): boolean {
-    return this.attendanceService.getSignal(this.childSignal().id, this.dateStr)() ?? false;
+    return this.attendanceService.getSignal(this.childSignal().id, localDateToday())() ?? false;
   }
 
   private attendanceService = inject(AttendanceService);
@@ -35,7 +31,7 @@ export class AttendanceBox {
       const child = this.childSignal();
       if (!child) return;
 
-      const sig = this.attendanceService.getSignal(child.id, this.dateStr);
+      const sig = this.attendanceService.getSignal(child.id, localDateToday());
       if (sig() === null) {
         if (child.present === null) {
           sig.set(false);
@@ -60,10 +56,10 @@ export class AttendanceBox {
       }
     }
 
-    const sig = this.attendanceService.getSignal(this.childSignal().id, this.dateStr);
+    const sig = this.attendanceService.getSignal(this.childSignal().id, localDateToday());
     sig.set(newStatus);
 
-    this.attendanceService.setAttendance(this.childSignal().id, this.dateStr, newStatus).subscribe({
+    this.attendanceService.setAttendance(this.childSignal().id, localDateToday(), newStatus).subscribe({
       next: (data) => sig.set(data.present),
       error: (err) => {
         console.error('Kunde inte spara', err);

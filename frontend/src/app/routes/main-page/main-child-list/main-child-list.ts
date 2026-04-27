@@ -9,6 +9,7 @@ import { WsAttendanceMessage } from '../../../core/websocket/websocket.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { localDateToday } from '../../../core/utils/date-utils';
 
 @Component({
   selector: 'main-child-list',
@@ -35,12 +36,8 @@ export class ChildList implements OnInit {
     this.searchQuery.set(sq);
   }
 
-  get dateStr() {
-    return new Date().toISOString().split('T')[0];
-  }
-
   get isChecked(): boolean {
-    return this.attendanceService.getSignal(this.childSignal().id, this.dateStr)() ?? false;
+    return this.attendanceService.getSignal(this.childSignal().id, localDateToday())() ?? false;
   }
 
   ngOnInit() {
@@ -73,7 +70,7 @@ export class ChildList implements OnInit {
       return;
     }
 
-    const sig = this.attendanceService.getSignal(targetChild.id, this.dateStr);
+    const sig = this.attendanceService.getSignal(targetChild.id, localDateToday());
     sig.set(message.present);
   }
 }

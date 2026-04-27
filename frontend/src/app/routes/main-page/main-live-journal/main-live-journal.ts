@@ -9,6 +9,7 @@ import { textDiff, Diff } from './text-diff';
 import { operationalTransformation } from './operational-transformation';
 import { JournalService } from '../../../core/journal/journal.service';
 import { environment } from '../../../../environments/environment';
+import { localDateToday } from '../../../core/utils/date-utils';
 
 @Component({
   selector: 'main-live-journal',
@@ -58,9 +59,9 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
 
   getRoom(): string {
     if (this.child.id != 0) {
-      return 'journal:child:' + this.child.id + ':' + new Date().toISOString().split('T')[0];
+      return 'journal:child:' + this.child.id + ':' + localDateToday();
     } else {
-      return 'journal:group:' + 1 + ':' + new Date().toISOString().split('T')[0];
+      return 'journal:group:' + 1 + ':' + localDateToday();
     }
   }
 
