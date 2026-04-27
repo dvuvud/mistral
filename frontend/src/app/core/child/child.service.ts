@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { Group } from '../../routes/admin-page/group/group';
+//import { environment } from '../../../environments/environment';
+//import { Group } from '../../routes/admin-page/group/group';
 
 export interface Child {
   id: number;
@@ -16,26 +16,26 @@ export interface Child {
 }
 
 export interface GroupResponse {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 }
 
 export interface ChildResponse {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 }
 
 export interface ChildWithGroupResponse {
-    id: number;
-    name: string;
-    group: GroupResponse | null;
+  id: number;
+  name: string;
+  group: GroupResponse | null;
 }
 
 export interface UserResponse {
-    id: number;
-    name: string;
-    role: string;
-    email: string;
+  id: number;
+  name: string;
+  role: string;
+  email: string;
 }
 
 @Injectable({ providedIn: 'root' })

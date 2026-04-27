@@ -10,7 +10,7 @@ describe('ChildAdminList', () => {
     await TestBed.configureTestingModule({
       imports: [ChildAdminList]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ChildAdminList);
     component = fixture.componentInstance;
