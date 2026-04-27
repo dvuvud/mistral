@@ -6,9 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 
 import { MatSelectModule } from '@angular/material/select';
-
-
-
+import { MatSelect } from '@angular/material/select';
 @Component({
   selector: 'child-admin-list',
   imports: [
@@ -36,7 +34,7 @@ export class ChildAdminList implements OnInit {
     this.loadChildren();
     this.adminService.getGroups().subscribe({
       next: (groups: GroupResponse[]) => this.groups = groups,
-      error: (err) => console.error(err)
+      error: (err: unknown) => console.error(err)
     });
 
   }
@@ -51,19 +49,19 @@ export class ChildAdminList implements OnInit {
   onDelete(child: ChildWithGroupResponse): void {
     this.adminService.deleteChild(child.id).subscribe({
       next: () => this.children = this.children.filter(x => x.id !== child.id),
-      error: (err: any) => console.error(err)
+      error: (err: unknown) => console.error(err)
 
     });
 
   }
 
-  onMove(child: ChildWithGroupResponse, groupId: number, select: any): void {
+  onMove(child: ChildWithGroupResponse, groupId: number, select: MatSelect): void {
     this.adminService.assignChildToGroup(groupId, child.id).subscribe({
       next: () => {
         select.value = null;
         this.loadChildren();
       },
-      error: (err: any) => console.error(err)
+      error: (err: unknown) => console.error(err)
     });
 
   }

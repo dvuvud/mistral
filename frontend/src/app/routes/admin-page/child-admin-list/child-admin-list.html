@@ -7,7 +7,7 @@
                 {{child.name}} - {{child.group?.name ?? 'Ingen grupp'}} <!--safe -> ? ??-->
             </span>
             <div matListItemMeta class="move-container">
-                <mat-select #groupSelect class="move-symbol" (selectionChange)="onMove(child, $event.value, groupSelect)">
+                <mat-select #groupSelect="matSelect" class="move-symbol" (selectionChange)="onMove(child, $event.value, groupSelect)">
                     <mat-select-trigger>Flytta</mat-select-trigger>
                     @for (group of groups; track group.id) {
                     <mat-option [value]="group.id">{{group.name}}</mat-option>
