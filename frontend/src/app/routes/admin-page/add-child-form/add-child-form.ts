@@ -4,6 +4,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { AdminService } from '../../../core/admin/admin.service';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { AdminService, ChildWithGroupResponse, GroupResponse } from '../../../core/admin/admin.service';
 
 @Component({
   selector: 'add-child-form',
@@ -14,7 +17,6 @@ import { AdminService } from '../../../core/admin/admin.service';
     MatButtonModule,
     MatOptionModule,
     MatSelectModule
-
   ],
   templateUrl: './add-child-form.html',
   styleUrl: './add-child-form.scss',
