@@ -17,26 +17,26 @@ export interface Child {
 }
 
 export interface GroupResponse {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 }
 
 export interface ChildResponse {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 }
 
 export interface ChildWithGroupResponse {
-    id: number;
-    name: string;
-    group: GroupResponse | null;
+  id: number;
+  name: string;
+  group: GroupResponse | null;
 }
 
 export interface UserResponse {
-    id: number;
-    name: string;
-    role: string;
-    email: string;
+  id: number;
+  name: string;
+  role: string;
+  email: string;
 }
 
 @Injectable({ providedIn: 'root' })
