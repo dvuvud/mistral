@@ -20,7 +20,7 @@ import { groupResponse } from '../../../core/groups/group.service';
 })
 
 
-export class ChildList {
+export class ChildList implements OnInit {
 
   children = signal<Child[]>([]);
   childSignal = model.required<Child>();

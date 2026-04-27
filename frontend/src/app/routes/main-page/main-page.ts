@@ -26,13 +26,11 @@ type displayedContent = 'childview' | 'groupView' | 'teacherView' | '';
   templateUrl: './main-page.html',
   styleUrl: './main-page.scss'
 })
-
 export class MainPage implements OnInit, OnDestroy {
   
-  groupSignal = signal<groupResponse>({name: '', id: 0});
+  groupNameSignal = signal<string>('');
   allGroups = signal<groupResponse[]>([]);
-  contentSignal = signal<displayedContent>('');
-
+  childSignal = signal<Child>({ name: '', id: 0, date: "", present: false });
   private router = inject(Router);
   private socketService = inject(WebsocketService);
   private groupService = inject(groupService);
@@ -59,9 +57,6 @@ export class MainPage implements OnInit, OnDestroy {
     this.groupService.getGroups().subscribe({
       next: (data) => {
         this.allGroups.set(data);
-        if (data.length > 0) {
-          this.groupSignal.set(data[0]);
-        }
       }
     });
   }
