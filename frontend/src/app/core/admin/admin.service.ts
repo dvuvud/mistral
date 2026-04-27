@@ -32,12 +32,24 @@ export class AdminService {
   private adminUrl = `${environment.apiUrl}/api/admin`;
   private http = inject(HttpClient);
 
-  createChild(name: string): Observable<any> {
-    return this.http.post(`${this.adminUrl}/child`, { name });
+  getChildren(): Observable<ChildWithGroupResponse[]> {
+    return this.http.get<ChildWithGroupResponse[]>(`${this.adminUrl}/children`);
   }
 
-  createGroup(name: string): Observable<any> {
-    return this.http.post(`${this.adminUrl}/group`, { name });
+  getGroups(): Observable<GroupResponse[]> {
+    return this.http.get<GroupResponse[]>(`${this.adminUrl}/groups`);
+  }
+
+  createChild(name: string): Observable<ChildWithGroupResponse> {
+    return this.http.post<ChildWithGroupResponse>(`${this.adminUrl}/child`, { name });
+  }
+
+  createGroup(name: string): Observable<GroupResponse> {
+    return this.http.post<GroupResponse>(`${this.adminUrl}/group`, { name });
+  }
+
+  deleteChild(childId: number): Observable<void> {
+    return this.http.delete<void>(`${this.adminUrl}/child/${childId}`);
   }
 
 
@@ -49,4 +61,3 @@ export class AdminService {
   //TODO
   activateUser() { }
 }
-
