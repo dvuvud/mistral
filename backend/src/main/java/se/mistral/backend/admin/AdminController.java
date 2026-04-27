@@ -57,6 +57,11 @@ public class AdminController {
      * @param request the request
      * @return the created group entity
      */
+    @PutMapping("/user/{id}/inactive")
+    public ResponseEntity<UserResponse> setUserInactive(@PathVariable Long id) {
+        return ResponseEntity.ok(adminService.setUserInactive(id));
+    }
+
     @PostMapping("/group")
     public ResponseEntity<GroupResponse> createGroup(@RequestBody CreateGroupRequest request) {
         return ResponseEntity.ok(groupService.createGroup(request));
