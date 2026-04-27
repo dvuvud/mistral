@@ -9,8 +9,7 @@ describe('ChildAdminList', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ChildAdminList]
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ChildAdminList);
     component = fixture.componentInstance;
