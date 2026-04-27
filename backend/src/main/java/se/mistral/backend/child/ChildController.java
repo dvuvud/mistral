@@ -22,8 +22,6 @@ public class ChildController {
 
     private final ChildService childService;
 
-
-
     @GetMapping()
     public ResponseEntity<List<ChildResponse>> getAllChildren() {
         return ResponseEntity.ok(childService.getAllChildren());
@@ -35,7 +33,9 @@ public class ChildController {
     }
 
     @GetMapping("/attendance/group")
-    public ResponseEntity<List<AttendanceResponse>> getAllChildrenWithAttendanceIfExistsInGroup(@RequestParam(required = false) LocalDate date, @RequestParam Long groupId) {
+    public ResponseEntity<List<AttendanceResponse>> getAllChildrenWithAttendanceIfExistsInGroup(
+        @RequestParam(required = false) LocalDate date,
+        @RequestParam Long groupId) {
         return ResponseEntity.ok(childService.getAllChildrenWithAttendanceIfExistsInGroup(date != null ? date : LocalDate.now(), groupId));
     }
 
