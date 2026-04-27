@@ -76,9 +76,9 @@ public class JournalService {
 
     private Journal findOrCreate(JournalTarget target, LocalDate date) {
         return switch (target) {
-            case JournalTarget.Child child -> journalRepository.findByChildIdAndDate(c.childId(), date)
+            case JournalTarget.Child child -> journalRepository.findByChildIdAndDate(child.childId(), date)
                     .orElseGet(() -> createJournal(child.childId(), null, date));
-            case JournalTarget.Group group -> journalRepository.findByGroupIdAndDate(g.groupId(), date)
+            case JournalTarget.Group group -> journalRepository.findByGroupIdAndDate(group.groupId(), date)
                     .orElseGet(() -> createJournal(null, group.groupId(), date));
         };
     }
