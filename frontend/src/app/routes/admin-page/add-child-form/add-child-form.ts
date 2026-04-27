@@ -3,10 +3,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-<<<<<<< HEAD
-=======
-import { AdminService, GroupResponse } from '../../../core/admin/admin.service';
->>>>>>> 6612c35 (add change from childService to adminService and update components)
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { AdminService, ChildWithGroupResponse, GroupResponse } from '../../../core/admin/admin.service';
@@ -45,8 +41,14 @@ export class AddChildForm implements OnInit {
   @Output() childAdded = new EventEmitter<void>();
 
   ngOnInit(): void {
-    this.adminService.getAllGroups().subscribe({
+    this.adminService.getGroups().subscribe({
       next: (GroupResponse) => this.groups = GroupResponse
+    })
+
+    interval(1000).subscribe(() => {
+      this.adminService.getChildren().subscribe({
+        next: (children: ChildWithGroupResponse[]) => this.children = children
+      });
     })
   }
 

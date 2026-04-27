@@ -3,11 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
-<<<<<<< HEAD
 import { AdminService, ChildWithGroupResponse, GroupResponse } from '../../../core/admin/admin.service';
-=======
-import { AdminService, GroupResponse } from '../../../core/admin/admin.service';
->>>>>>> 6612c35 (add change from childService to adminService and update components)
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { interval } from 'rxjs';
 @Component({
