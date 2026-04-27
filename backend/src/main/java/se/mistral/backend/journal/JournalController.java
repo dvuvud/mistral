@@ -18,7 +18,19 @@ public class JournalController {
     private final JournalService journalService;
 
     @GetMapping
-    public ResponseEntity<JournalDto> getJournal(@RequestParam Long childId, @RequestParam(required = false) LocalDate date) {
-        return ResponseEntity.ok(journalService.getOrCreate(childId, date != null ? date : LocalDate.now()));
+    public ResponseEntity<JournalDto> getJournal(
+        @RequestParam(required = false) Long childId,
+        @RequestParam(required = false) Long groupId,
+        @RequestParam(required = false) LocalDate date) {
+
+        LocalDate resolvedDate = date != null ? date : LocalDate.now();
+
+        if (childId != null) {
+            return ResponseEntity.ok(journalService.getOrCreate(new JournalTarget.Child(childId), resolvedDate));
+        } else if (groupId != null) {
+            return ResponseEntity.ok(journalService.getOrCreate(new JournalTarget.Group(groupId), resolvedDate));
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
