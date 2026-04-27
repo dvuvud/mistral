@@ -3,9 +3,10 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { AdminService, GroupResponse } from '../../../core/admin/admin.service';
+import { AdminService, ChildWithGroupResponse, GroupResponse } from '../../../core/admin/admin.service';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { interval } from 'rxjs';
 @Component({
   selector: 'add-child-form',
   imports: [
@@ -26,6 +27,7 @@ export class AddChildForm implements OnInit {
   private adminService: AdminService = inject(AdminService);
 
   groups: GroupResponse[] = [];
+  children: ChildWithGroupResponse[] = [];
 
   //output?
 
@@ -44,6 +46,12 @@ export class AddChildForm implements OnInit {
     this.adminService.getAllGroups().subscribe({
       next: (GroupResponse) => this.groups = GroupResponse
     })
+
+    interval(1000).subscribe(() => {
+      this.adminService.getAllChildren().subscribe({
+        next: (children: ChildWithGroupResponse[]) => this.children = children
+      });
+    })
   }
 
   onSubmit(): void {
@@ -57,7 +65,7 @@ export class AddChildForm implements OnInit {
                 this.childAdded.emit();
                 this.form.reset();
 
-                //error-section
+                //error msg?
               }
             })
           }
