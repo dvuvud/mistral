@@ -12,13 +12,13 @@ export interface groupResponse {
 @Injectable( {providedIn: 'root'} )
 
 export class groupService {
-  private url = `${environment.apiUrl}/api/group`;
+    private url = `${environment.apiUrl}/api/group`;
 
-  private http = inject(HttpClient);
+    private http = inject(HttpClient);
 
-  getGroups(): Observable<groupResponse[]> {
-    return this.http.get<groupResponse[]>(this.url);
-  }
+    getGroups(): Observable<groupResponse[]> {
+        return this.http.get<groupResponse[]>(this.url);
+    }
 }
 
 
