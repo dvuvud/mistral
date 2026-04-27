@@ -51,7 +51,7 @@ export class ChildAdminList implements OnInit {
   onDelete(child: ChildWithGroupResponse): void {
     this.adminService.deleteChild(child.id).subscribe({
       next: () => this.children = this.children.filter(x => x.id !== child.id),
-      error: (err) => console.error(err)
+      error: (err: any) => console.error(err)
 
     });
 
@@ -60,7 +60,7 @@ export class ChildAdminList implements OnInit {
   onMove(child: ChildWithGroupResponse, groupId: number): void {
     this.adminService.assignChildToGroup(groupId, child.id).subscribe({
       next: () => this.loadChildren(),
-      error: (err) => console.error(err)
+      error: (err: any) => console.error(err)
     });
 
   }
