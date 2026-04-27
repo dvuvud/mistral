@@ -5,3 +5,14 @@
     </mat-list-item>
     }
 </mat-list>
+
+
+<form [formGroup]="form" (ngSubmit)="onCreateGroup()">
+    <mat-form-field>
+        <mat-label>Ny grupp</mat-label>
+        <input matInput formControlName="groupName">
+    </mat-form-field>
+
+    <button mat-raised-button color="mat-sys-primary" type="submit" [disabled]="form.invalid">
+        Skapa ny grupp
+    </button>

@@ -1,10 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ChildService, Child } from '../../../core/child/child.service';
+import { ChildService, Child, GroupData } from '../../../core/child/child.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { ChildActivationEnd } from '@angular/router';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'child-admin-list',
@@ -12,7 +12,8 @@ import { ChildActivationEnd } from '@angular/router';
     CommonModule,
     MatButtonModule,
     MatListModule,
-    MatIconModule
+    MatIconModule,
+    MatSelectModule
   ],
   templateUrl: './child-admin-list.html',
   styleUrl: './child-admin-list.scss',
@@ -23,10 +24,16 @@ export class ChildAdminList implements OnInit {
 
   private childService = inject(ChildService);
 
+  groups: GroupData[] = [];
+
   children: Child[] = [];
 
   ngOnInit(): void {
     this.loadChildren();
+    this.childService.getGroups().subscribe({
+      next: (groups) => this.groups = groups,
+      error: (err) => console.error(err)
+    });
 
   }
 
@@ -42,6 +49,14 @@ export class ChildAdminList implements OnInit {
       next: () => this.children = this.children.filter(x => x.id !== child.id),
       error: (err) => console.error(err)
 
+    });
+
+  }
+
+  onMove(child: Child, groupId: number): void {
+    this.childService.assignChildToGroup(groupId, child.id).subscribe({
+      next: () => this.loadChildren(),
+      error: (err) => console.error(err)
     });
 
   }

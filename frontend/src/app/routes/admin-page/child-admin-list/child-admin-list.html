@@ -10,6 +10,15 @@
                 <mat-icon>cancel</mat-icon>
             </button>
 
+            <mat-select (selectionChange)="onMove(child, $event.value)">
+                @for (group of groups; track group.id) {
+                <mat-option [value]="group.id">{{group.name}}</mat-option>
+                }
+
+            </mat-select>
+
+
+
         </mat-list-item>
         @if (!last) {
         <mat-divider></mat-divider>
