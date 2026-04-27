@@ -34,7 +34,9 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
   inFlight: WsJournalWriteOperation[] = [];
 
   ngOnInit() {
-    const roomDest = 'journal:' + this.child.id + ':' + new Date().toISOString().split('T')[0];
+    this.loadJournal();
+
+    const roomDest = this.getRoom();
     this.journalSocket.connect(`${environment.wsUrl}/ws`, roomDest);
 
     this.journalSocket.getMessages().subscribe(data => {
@@ -54,8 +56,28 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  getRoom(): string {
+    if (this.child.id != 0) {
+      return 'journal:child:' + this.child.id + ':' + new Date().toISOString().split('T')[0];
+    } else {
+      return 'journal:group:' + 1 + ':' + new Date().toISOString().split('T')[0];
+    }
+  }
+
   isMyOwnAck(msg: WsJournalResponse): boolean {
     return msg.userId.toString() === localStorage.getItem('UserId') && this.inFlight.length > 0;
+  }
+
+  loadJournal() {
+    this.journalService.getJournal(this.child.id).subscribe({
+      next: (data) => {
+        console.log(data);
+        this.text.set(data.content);
+        this.serverRevision = data.serverRevision;
+        this.sequence = 0;
+        this.inFlight = [];
+      }
+    });
   }
 
   applyToLocalContent(incoming: WsJournalWriteOperation): void {
@@ -75,17 +97,9 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['child'] && !changes['child'].firstChange) {
-      this.journalService.getJournal(this.child.id).subscribe({
-        next: (data) => {
-          console.log(data);
-          this.text.set(data.content);
-          this.serverRevision = data.serverRevision;
-          this.sequence = 0;
-          this.inFlight = [];
-        }
-      });
+      this.loadJournal();
 
-      const roomDest = 'journal:' + this.child.id + ':' + new Date().toISOString().split('T')[0];
+      const roomDest = this.getRoom();
       console.log(roomDest);
       this.journalSocket.changeRoom(roomDest);
       this.prevText = '';

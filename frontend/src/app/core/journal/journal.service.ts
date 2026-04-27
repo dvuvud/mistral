@@ -15,6 +15,11 @@ export class JournalService {
   private http = inject(HttpClient);
 
   getJournal(childId: number): Observable<JournalResponse> {
-    return this.http.get<JournalResponse>(this.baseUrl + `?childId=${childId}`);
+    console.log(childId);
+    if (childId != 0) {
+      return this.http.get<JournalResponse>(this.baseUrl + `?childId=${childId}`);
+    } else {
+      return this.http.get<JournalResponse>(this.baseUrl + `?groupId=${1}`);
+    }
   }
 }
