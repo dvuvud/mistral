@@ -33,7 +33,7 @@ export class ChildAdminList implements OnInit {
     this.loadChildren();
     this.adminService.getGroups().subscribe({
       next: (groups: GroupResponse[]) => this.groups = groups,
-      error: (err: any) => console.error(err)
+      error: (err) => console.error(err)
     });
 
   }
@@ -41,14 +41,14 @@ export class ChildAdminList implements OnInit {
   loadChildren(): void {
     this.adminService.getChildren().subscribe({
       next: (children: ChildWithGroupResponse[]) => this.children = [...children],
-      error: (err: any) => console.log("Error", err)
+      error: (err) => console.log("Error", err)
     });
   }
 
   onDelete(child: ChildWithGroupResponse): void {
     this.adminService.deleteChild(child.id).subscribe({
       next: () => this.children = this.children.filter(x => x.id !== child.id),
-      error: (err: any) => console.error(err)
+      error: (err) => console.error(err)
 
     });
 
@@ -57,7 +57,7 @@ export class ChildAdminList implements OnInit {
   onMove(child: ChildWithGroupResponse, groupId: number): void {
     this.adminService.assignChildToGroup(groupId, child.id).subscribe({
       next: () => this.loadChildren(),
-      error: (err: any) => console.error(err)
+      error: (err) => console.error(err)
     });
 
   }

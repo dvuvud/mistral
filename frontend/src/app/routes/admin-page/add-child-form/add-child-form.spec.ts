@@ -9,8 +9,7 @@ describe('AddChildForm', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AddChildForm]
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AddChildForm);
     component = fixture.componentInstance;

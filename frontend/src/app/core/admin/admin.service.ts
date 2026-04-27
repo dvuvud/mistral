@@ -14,16 +14,16 @@ export interface ChildResponse {
 }
 
 export interface ChildWithGroupResponse {
-    id : number;
-    name: string;
-    group: GroupResponse | null;
+  id : number;
+  name: string;
+  group: GroupResponse | null;
 }
 
 export interface UserResponse {
-    id: number;
-    name: string;
-    role: string;
-    email: string;
+  id: number;
+  name: string;
+  role: string;
+  email: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -54,7 +54,7 @@ export class AdminService {
 
   assignChildToGroup(groupId: number, childId: number): Observable<GroupResponse> {
     return this.http.put<GroupResponse>(`${this.adminUrl}/group/${groupId}/child/${childId}`, {});
-   }
+  }
 
   activateUser(userId: number): Observable<UserResponse> {
     return this.http.put<UserResponse>(`${this.adminUrl}/user/${userId}`, {});

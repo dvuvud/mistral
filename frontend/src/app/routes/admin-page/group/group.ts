@@ -36,7 +36,7 @@ export class Group implements OnInit {
   ngOnInit(): void {
     this.adminService.getGroups().subscribe({
       next: (GroupResponse) => this.groups = GroupResponse,
-      error: (err: any) => console.error(err)
+      error: (err) => console.error(err)
     });
 
     //hämta alla barn för att räkna antal barn/grupp
@@ -62,11 +62,11 @@ export class Group implements OnInit {
         next: () => {
           this.adminService.getGroups().subscribe({
             next: (GroupResponse) => this.groups = GroupResponse,
-            error: (err: any) => console.error(err)
+            error: (err) => console.error(err)
           });
           this.form.reset();
         },
-        error: (err: any) => console.error(err)
+        error: (err) => console.error(err)
       });
     }
   }
