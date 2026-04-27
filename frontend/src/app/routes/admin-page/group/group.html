@@ -1,7 +1,7 @@
 <mat-list>
     @for (group of groups; track group.id) {
     <mat-list-item>
-        <span matListItemTitle> {{group.name}}</span>
+        <span matListItemTitle> {{group.name}} ({{childCount(group.id)}} barn)</span>
     </mat-list-item>
     }
 </mat-list>
