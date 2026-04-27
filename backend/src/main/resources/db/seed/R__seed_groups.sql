@@ -1,7 +1,7 @@
 INSERT INTO groups (name)
 VALUES
     ('Nyckelpigorna'),
-    ('Björarna'),
+    ('Björnarna'),
     ('Lejonen')
 ON CONFLICT (name) DO NOTHING;
 
