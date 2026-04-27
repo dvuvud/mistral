@@ -68,7 +68,7 @@ export class ChildService {
 
 
   //TODO
-  assignChildToGroup(groupId: string, childId: number): Observable<any> {
+  assignChildToGroup(groupId: number, childId: number): Observable<any> {
     return this.http.put(`${this.adminUrl}/group/${groupId}/child/${childId}`, {});
   }
 

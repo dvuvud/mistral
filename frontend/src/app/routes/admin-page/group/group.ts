@@ -71,5 +71,20 @@ export class Group implements OnInit {
     }
   }
 
+  onCreateGroup(): void {
+    if (this.form.valid) {
+      this.childService.createGroup(this.form.value.groupName!).subscribe({
+        next: () => {
+          this.childService.getGroups().subscribe({
+            next: (groups) => this.groups = groups,
+            error: (err) => console.error(err)
+          });
+          this.form.reset();
+        },
+        error: (err) => console.error(err)
+      });
+    }
+  }
+
 }
 
