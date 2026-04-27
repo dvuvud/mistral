@@ -32,12 +32,12 @@ export class AdminService {
     private adminUrl = "http://localhost:8080/api/admin";
     private http = inject(HttpClient);
 
-    createChild(name: string): Observable<any> {
-        return this.http.post(`${this.adminUrl}/child`, { name });
+    createChild(name: string): Observable<ChildResponse> {
+        return this.http.post<ChildResponse>(`${this.adminUrl}/child`, { name });
     }
 
-    createGroup(name: string): Observable<any> {
-        return this.http.post(`${this.adminUrl}/group`, { name });
+    createGroup(name: string): Observable<GroupResponse> {
+        return this.http.post<GroupResponse>(`${this.adminUrl}/group`, { name });
     }
 
     getAllChildren(): Observable<ChildWithGroupResponse[]> {
@@ -50,13 +50,13 @@ export class AdminService {
     }
 
 
-    assignChildToGroup(groupId: number, childId: number): Observable<any> {
-        return this.http.put(`${this.adminUrl}/group/${groupId}/child/${childId}`, {});
+    assignChildToGroup(groupId: number, childId: number): Observable<GroupResponse> {
+        return this.http.put<ChildResponse>(`${this.adminUrl}/group/${groupId}/child/${childId}`, {});
     }
 
 
-    deleteChild(id: number): Observable<any> {
-        return this.http.delete(`${this.adminUrl}/child/${id}`);
+    deleteChild(id: number): Observable<void> {
+        return this.http.delete<void>(`${this.adminUrl}/child/${id}`);
     }
 
     //TODO

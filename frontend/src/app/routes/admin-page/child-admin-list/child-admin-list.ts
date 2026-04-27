@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-
+import { MatSelect } from '@angular/material/select';
 @Component({
   selector: 'child-admin-list',
   imports: [
@@ -33,7 +33,7 @@ export class ChildAdminList implements OnInit {
     this.loadChildren();
     this.adminService.getAllGroups().subscribe({
       next: (groups: GroupResponse[]) => this.groups = groups,
-      error: (err: any) => console.error(err)
+      error: (err: unknown) => console.error(err)
     });
 
   }
@@ -41,26 +41,26 @@ export class ChildAdminList implements OnInit {
   loadChildren(): void {
     this.adminService.getAllChildren().subscribe({
       next: (children: ChildWithGroupResponse[]) => this.children = [...children].sort((a, b) => a.id - b.id), //listan får en fast ordning, annars problem med att barnen blir huller om buller när man ändrar deras grupp
-      error: (err: any) => console.log("Error", err)
+      error: (err: unknown) => console.log("Error", err)
     });
   }
 
   onDelete(child: ChildWithGroupResponse): void {
     this.adminService.deleteChild(child.id).subscribe({
       next: () => this.children = this.children.filter(x => x.id !== child.id),
-      error: (err: any) => console.error(err)
+      error: (err: unknown) => console.error(err)
 
     });
 
   }
 
-  onMove(child: ChildWithGroupResponse, groupId: number, select: any): void {
+  onMove(child: ChildWithGroupResponse, groupId: number, select: MatSelect): void {
     this.adminService.assignChildToGroup(groupId, child.id).subscribe({
       next: () => {
         select.value = null;
         this.loadChildren();
       },
-      error: (err: any) => console.error(err)
+      error: (err: unknown) => console.error(err)
     });
 
   }
