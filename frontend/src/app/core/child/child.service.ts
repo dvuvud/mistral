@@ -50,5 +50,4 @@ export class ChildService {
   getChildren(): Observable<Child[]> {
     return this.http.get<Child[]>(this.childUrl);
   }
-
 }
