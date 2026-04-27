@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface JournalRepository extends JpaRepository<Journal, Long> {
 
     Optional<Journal> findByChildIdAndDate(Long childId, LocalDate date);
+    Optional<Journal> findByGroupIdAndDate(Long groupId, LocalDate date);
 }

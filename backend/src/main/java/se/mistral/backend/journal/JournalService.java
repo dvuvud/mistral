@@ -31,16 +31,16 @@ public class JournalService {
     // one lock object per journal to only sync threads editing the same document
     private final ConcurrentHashMap<Long, Object> journalLocks = new ConcurrentHashMap<>();
 
-    public JournalDto getOrCreate(Long childId, LocalDate date) {
-        Journal journal = findOrCreate(childId, date);
+    public JournalDto getOrCreate(JournalTarget target, LocalDate date) {
+        Journal journal = findOrCreate(target, date);
         return new JournalDto(journal.getContent(), journal.getVersion());
     }
 
-    public BroadcastMessage applyOperation(Long childId, LocalDate date,
+    public BroadcastMessage applyOperation(JournalTarget target, LocalDate date,
                                            int clientRevision, Operation incoming,
                                            Long userId, Integer sequence) {
         // get the journal id outside the lock
-        Journal journal = findOrCreate(childId, date);
+        Journal journal = findOrCreate(target, date);
         Object lock = journalLocks.computeIfAbsent(journal.getId(), k -> new Object());
 
         synchronized (lock) {
@@ -74,22 +74,31 @@ public class JournalService {
         }
     }
 
-    // handles the race condition where two sessions open the same journal simultaneously
-    private Journal findOrCreate(Long childId, LocalDate date) {
-        return journalRepository.findByChildIdAndDate(childId, date)
-                .orElseGet(() -> {
-                    try {
-                        return journalRepository.save(
-                                Journal.builder()
-                                        .childId(childId)
-                                        .date(date)
-                                        .content("")
-                                        .build());
-                    } catch (DataIntegrityViolationException e) {
-                        return journalRepository.findByChildIdAndDate(childId, date)
-                            .orElseThrow(() -> new NotFoundException("Journal could not be found")); // this will never be thrown
-                    }
-                });
+    private Journal findOrCreate(JournalTarget target, LocalDate date) {
+        return switch (target) {
+            case JournalTarget.Child child -> journalRepository.findByChildIdAndDate(c.childId(), date)
+                    .orElseGet(() -> createJournal(child.childId(), null, date));
+            case JournalTarget.Group group -> journalRepository.findByGroupIdAndDate(g.groupId(), date)
+                    .orElseGet(() -> createJournal(null, group.groupId(), date));
+        };
+    }
+
+    private Journal createJournal(Long childId, Long groupId, LocalDate date) {
+        try {
+            return journalRepository.save(Journal.builder()
+                    .childId(childId)
+                    .groupId(groupId)
+                    .date(date)
+                    .content("")
+                    .build());
+        } catch (DataIntegrityViolationException e) {
+            if (childId != null) {
+                return journalRepository.findByChildIdAndDate(childId, date)
+                        .orElseThrow(() -> new NotFoundException("Journal could not be found"));
+            }
+            return journalRepository.findByGroupIdAndDate(groupId, date)
+                    .orElseThrow(() -> new NotFoundException("Journal could not be found"));
+        }
     }
 
     private String applyToString(String content, Operation op) {
