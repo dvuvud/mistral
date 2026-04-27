@@ -40,7 +40,7 @@ export class ChildAdminList implements OnInit {
 
   loadChildren(): void {
     this.adminService.getAllChildren().subscribe({
-      next: (children: ChildWithGroupResponse[]) => this.children = [...children],
+      next: (children: ChildWithGroupResponse[]) => this.children = [...children].sort((a, b) => a.id - b.id), //listan får en fast ordning, annars problem med att barnen blir huller om buller när man ändrar deras grupp
       error: (err: any) => console.log("Error", err)
     });
   }
@@ -54,9 +54,12 @@ export class ChildAdminList implements OnInit {
 
   }
 
-  onMove(child: ChildWithGroupResponse, groupId: number): void {
+  onMove(child: ChildWithGroupResponse, groupId: number, select: any): void {
     this.adminService.assignChildToGroup(groupId, child.id).subscribe({
-      next: () => this.loadChildren(),
+      next: () => {
+        select.value = null;
+        this.loadChildren();
+      },
       error: (err: any) => console.error(err)
     });
 

@@ -48,8 +48,8 @@ export class AddChildForm implements OnInit {
     })
 
     interval(1000).subscribe(() => {
-      this.adminService.getAllChildren().subscribe({
-        next: (children: ChildWithGroupResponse[]) => this.children = children
+      this.adminService.getAllGroups().subscribe({
+        next: (groups: GroupResponse[]) => this.groups = groups
       });
     })
   }
