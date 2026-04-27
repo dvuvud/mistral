@@ -5,14 +5,21 @@
     <button matButton="tonal" (click)="logout()">Logout</button>
   </mat-toolbar>
 </div>
+
 <div class="main-body">
   <div class="main-panel-container">
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight>
-      <mat-tab label="Nyckelpigorna">
-        <main-panel (attendanceChangeEvent)="wsUpdateAttendance($event)"[(childSignal)]="childSignal"></main-panel>
-      </mat-tab>
-      <mat-tab label="Björnarna"> Content 2 </mat-tab>
-      <mat-tab label="Lejonen"> Content 3 </mat-tab>
+      
+      @for (group of allGroups(); track group.id) {
+        <mat-tab label="{{group.name}}">
+        
+            <main-panel 
+              (attendanceChangeEvent)="wsUpdateAttendance($event)" 
+              [(childSignal)]="childSignal">
+            </main-panel>
+
+        </mat-tab>
+      } 
     </mat-tab-group>
   </div>
 </div>
