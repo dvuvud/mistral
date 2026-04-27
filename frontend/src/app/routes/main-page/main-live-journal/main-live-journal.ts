@@ -93,6 +93,9 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
         this.textArea().nativeElement.setRangeText("", pos, pos + 1, "preserve");
         break;
     }
+
+    this.text.set(this.textArea().nativeElement.value);
+    this.prevText = this.text();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
