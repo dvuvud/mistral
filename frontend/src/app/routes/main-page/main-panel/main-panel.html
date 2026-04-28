@@ -1,17 +1,13 @@
 <mat-card>
   <mat-card-content class="main-card-content">
     <div class="main-card-left">
-      @if (contentSignal() === 'childView') {
-          <mat-card-header>
-          <span class="dagens-datumn">{{childSignal().name}}</span>
-        </mat-card-header>
-        <div class="childDisplay">
-          <child-display (attendanceChangeEvent)="wsUpdateAttendance($event)" [(childSignal)]="childSignal"></child-display>
-        </div>
-        <main-live-journal [childSignal]="childSignal()"
-                          [groupSignal]="groupSignal()"
-                          [contentSignal]="contentSignal()" >
-        </main-live-journal>
+      <mat-card-header>
+        <span class="dagens-datumn">Dagens datumn: {{getDate()}}</span>
+      </mat-card-header>
+      @if (childSignal().name !== ''){
+      <div class="childDisplay">
+        <child-display (attendanceChangeEvent)="wsUpdateAttendance($event)" [(childSignal)]="childSignal"></child-display>
+      </div>
       }
 
       @if (contentSignal() === 'groupView') {
