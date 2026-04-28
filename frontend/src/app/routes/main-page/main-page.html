@@ -8,14 +8,17 @@
 
 <div class="main-body">
   <div class="main-panel-container">
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight>
+    <mat-tab-group mat-stretch-tabs="false" 
+                   mat-align-tabs="start" 
+                   dynamicHeight (selectedTabChange)="onTabChange($event)"
+                   [preserveContent]="true">
       
       @for (group of allGroups(); track group.id) {
         <mat-tab label="{{group.name}}">
         
             <main-panel 
               (attendanceChangeEvent)="wsUpdateAttendance($event)" 
-              [(childSignal)]="childSignal">
+              [groupSignal]="group">
             </main-panel>
 
         </mat-tab>

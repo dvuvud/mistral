@@ -1,4 +1,4 @@
-import { Component, EventEmitter, model, Output, viewChild } from '@angular/core';
+import { Component, EventEmitter, model, Output, signal, viewChild } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { ChildDisplay } from "../child-display/child-display";
 import { Child } from '../../../core/child/child.service';
@@ -6,6 +6,7 @@ import { MatCard, MatCardHeader, MatCardContent } from '@angular/material/card';
 import { ChildList } from '../main-child-list/main-child-list';
 import { MainLiveJournal } from '../main-live-journal/main-live-journal';
 import { WsAttendanceMessage, WsMessageContent } from '../../../core/websocket/websocket.service';
+import { groupResponse } from '../../../core/groups/group.service';
 
 @Component({
   selector: 'main-panel',
@@ -17,7 +18,10 @@ export class MainPanel {
   months = ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti",
     "September", "Oktober", "November", "December"];
   days = ["Söndag", "Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag"];
-  childSignal = model.required<Child>();
+
+  childSignal = signal<Child>({ name: '', id: 0, date: "", present: false });
+  groupSignal = model.required<groupResponse>();
+  
   getDate() {
     const d = new Date();
     return `${this.days[d.getDay()]} ${d.getDate()} ${this.months[d.getMonth()]} ${d.getFullYear()}`
