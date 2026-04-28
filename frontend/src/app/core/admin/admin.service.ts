@@ -29,36 +29,36 @@ export interface UserResponse {
 export class AdminService {
 
 
-    private adminUrl = "http://localhost:8080/api/admin";
-    private http = inject(HttpClient);
+  private adminUrl = "http://localhost:8080/api/admin";
+  private http = inject(HttpClient);
 
-    createChild(name: string): Observable<ChildResponse> {
-        return this.http.post<ChildResponse>(`${this.adminUrl}/child`, { name });
-    }
+  createChild(name: string): Observable<ChildResponse> {
+    return this.http.post<ChildResponse>(`${this.adminUrl}/child`, { name });
+  }
 
-    createGroup(name: string): Observable<GroupResponse> {
-        return this.http.post<GroupResponse>(`${this.adminUrl}/group`, { name });
-    }
+  createGroup(name: string): Observable<GroupResponse> {
+    return this.http.post<GroupResponse>(`${this.adminUrl}/group`, { name });
+  }
 
-    getAllChildren(): Observable<ChildWithGroupResponse[]> {
-        return this.http.get<ChildWithGroupResponse[]>(`${this.adminUrl}/children`);
-    }
-
-
-    getAllGroups(): Observable<GroupResponse[]> {
-        return this.http.get<GroupResponse[]>(`${this.adminUrl}/groups`);
-    }
+  getAllChildren(): Observable<ChildWithGroupResponse[]> {
+    return this.http.get<ChildWithGroupResponse[]>(`${this.adminUrl}/children`);
+  }
 
 
-    assignChildToGroup(groupId: number, childId: number): Observable<GroupResponse> {
-        return this.http.put<ChildResponse>(`${this.adminUrl}/group/${groupId}/child/${childId}`, {});
-    }
+  getAllGroups(): Observable<GroupResponse[]> {
+    return this.http.get<GroupResponse[]>(`${this.adminUrl}/groups`);
+  }
 
 
-    deleteChild(id: number): Observable<void> {
-        return this.http.delete<void>(`${this.adminUrl}/child/${id}`);
-    }
+  assignChildToGroup(groupId: number, childId: number): Observable<GroupResponse> {
+    return this.http.put<ChildResponse>(`${this.adminUrl}/group/${groupId}/child/${childId}`, {});
+  }
 
-    //TODO
-    activateUser() { }
+
+  deleteChild(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.adminUrl}/child/${id}`);
+  }
+
+  //TODO
+  /*  activateUser() { } */
 }
