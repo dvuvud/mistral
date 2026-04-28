@@ -8,6 +8,7 @@ import { MatTab, MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { WebsocketService, WsAttendanceMessage } from '../../core/websocket/websocket.service';
 import { environment } from '../../../environments/environment';
 import { groupResponse, groupService } from '../../core/groups/group.service';
+import { FormControl } from '@angular/forms';
 
 type displayedContent = 'childview' | 'groupView' | 'teacherView' | '';
 
@@ -63,8 +64,9 @@ export class MainPage implements OnInit, OnDestroy {
           this.groupSignal.set(data[0]);
         }
       }
-    });
-  }
+    }
+  });
+}
 
   handleWebsocketMessage(message: WsAttendanceMessage) {
     this.mainPanel().handleWebsocketMessage(message);
