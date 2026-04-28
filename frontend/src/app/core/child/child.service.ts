@@ -15,9 +15,11 @@ export class ChildService {
 
   private childUrl = `${environment.apiUrl}/api/children`;
 
+
   private http = inject(HttpClient);
 
   getChildren(): Observable<Child[]> {
     return this.http.get<Child[]>(this.childUrl);
   }
+
 }

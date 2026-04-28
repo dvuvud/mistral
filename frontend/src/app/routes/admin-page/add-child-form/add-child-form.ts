@@ -29,14 +29,10 @@ export class AddChildForm implements OnInit {
   groups: GroupResponse[] = [];
   children: ChildWithGroupResponse[] = [];
 
-  //output?
-
   form = this.fb.group({
     firstName: ["", Validators.required],
     lastName: ["", Validators.required],
     groupId: [null]
-
-    //id?
   });
 
   //skickar till parent --> kan uppdatera listan
@@ -61,10 +57,8 @@ export class AddChildForm implements OnInit {
           this.childAdded.emit();
           this.form.reset();
         },
-
         error: (err) => console.error(err)
       });
     }
   }
-
 }

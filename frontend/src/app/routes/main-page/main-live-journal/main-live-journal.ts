@@ -83,7 +83,7 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
   applyToLocalContent(incoming: WsJournalWriteOperation): void {
     //const text: string = this.text();
     const pos: number = incoming.position;
-    switch(incoming.type) {
+    switch (incoming.type) {
       case 'INSERT':
         //this.text.set(text.slice(0, pos) + incoming.text + text.slice(pos, text.length));
         this.textArea().nativeElement.setRangeText(incoming.text, pos, pos, "preserve");

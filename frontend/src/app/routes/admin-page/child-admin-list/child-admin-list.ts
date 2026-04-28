@@ -59,7 +59,5 @@ export class ChildAdminList implements OnInit {
       next: () => this.loadChildren(),
       error: (err) => console.error(err)
     });
-
   }
-
 }

@@ -6,19 +6,18 @@
             <span matListItemTitle>
                 {{child.name}} - {{child.group?.name ?? 'Ingen grupp'}} <!--safe -> ? ??-->
             </span>
-            <button matListItemMeta mat-icon-button color="warn" (click)="onDelete(child)">
-                <mat-icon>cancel</mat-icon>
-            </button>
+            <div matListItemMeta class="move-container">
+                <mat-select #groupSelect="matSelect" class="move-symbol" (selectionChange)="onMove(child, $event.value)">
+                    <mat-select-trigger>Flytta</mat-select-trigger>
+                    @for (group of groups; track group.id) {
+                    <mat-option [value]="group.id">{{group.name}}</mat-option>
+                    }
 
-            <mat-select (selectionChange)="onMove(child, $event.value)">
-                @for (group of groups; track group.id) {
-                <mat-option [value]="group.id">{{group.name}}</mat-option>
-                }
-
-            </mat-select>
-
-
-
+                </mat-select>
+                <button matListItemMeta mat-icon-button color="warn" (click)="onDelete(child)">
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </div>
         </mat-list-item>
         @if (!last) {
         <mat-divider></mat-divider>

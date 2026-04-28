@@ -6,6 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { AdminService, ChildWithGroupResponse, GroupResponse } from '../../../core/admin/admin.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { interval } from 'rxjs';
+
 @Component({
   selector: 'group',
   imports: [
@@ -14,8 +15,6 @@ import { interval } from 'rxjs';
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule
-
-
   ],
   templateUrl: './group.html',
   styleUrl: './group.scss',
@@ -70,6 +69,5 @@ export class Group implements OnInit {
       });
     }
   }
-
 }
 
