@@ -1,4 +1,4 @@
-import { Component, model, signal, inject, computed, effect } from '@angular/core';
+import { Component, model, signal, OnInit, inject, computed, effect } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
@@ -26,7 +26,6 @@ export class ChildList implements OnInit {
   childSignal = model.required<Child>();
   searchQuery = signal<string>('');
   groupSignal = model.required<groupResponse>();
-  contentSignal = model.required<string>();
 
   searchedChildren = computed(() => {
     const sq = this.searchQuery();
@@ -52,6 +51,9 @@ export class ChildList implements OnInit {
 
   get isChecked(): boolean {
     return this.attendanceService.getSignal(this.childSignal().id, localDateToday())() ?? false;
+  }
+
+  ngOnInit() {
   }
 
   onSelectChild(child: Child) {

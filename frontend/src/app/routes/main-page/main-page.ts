@@ -8,6 +8,7 @@ import { MatTab, MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { WebsocketService, WsAttendanceMessage } from '../../core/websocket/websocket.service';
 import { environment } from '../../../environments/environment';
 import { groupResponse, groupService } from '../../core/groups/group.service';
+import { FormControl } from '@angular/forms';
 
 type displayedContent = 'childview' | 'groupView' | 'teacherView' | '';
 
@@ -28,9 +29,8 @@ type displayedContent = 'childview' | 'groupView' | 'teacherView' | '';
 })
 export class MainPage implements OnInit, OnDestroy {
   
-  groupNameSignal = signal<string>('');
+  groupSignal = signal<groupResponse>({name: '', id: 0});
   allGroups = signal<groupResponse[]>([]);
-  childSignal = signal<Child>({ name: '', id: 0, date: "", present: false });
   private router = inject(Router);
   private socketService = inject(WebsocketService);
   private groupService = inject(groupService);
@@ -54,12 +54,15 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   loadGroups() {
-    this.groupService.getGroups().subscribe({
-      next: (data) => {
-        this.allGroups.set(data);
+  this.groupService.getGroups().subscribe({
+    next: (data) => {
+      this.allGroups.set(data);
+      if (data.length > 0) {
+        this.groupSignal.set(data[0]);
       }
-    });
-  }
+    }
+  });
+}
 
   handleWebsocketMessage(message: WsAttendanceMessage) {
     this.mainPanel().handleWebsocketMessage(message);
@@ -72,8 +75,7 @@ export class MainPage implements OnInit, OnDestroy {
   onTabChange(event: MatTabChangeEvent) {
     const clickedIndex = event.index;
     const currentGroup = this.allGroups()[clickedIndex];
-    this.contentSignal.set('groupView');
-    this.groupSignal.set(currentGroup); 
+    this.groupSignal.set(currentGroup);
   }
 
   logout() {
