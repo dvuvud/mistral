@@ -42,8 +42,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private final Map<String, Set<WebSocketSession>> rooms = new ConcurrentHashMap<>(); // all sessions in a given room
-    private final Map<WebSocketSession, Set<String>> sessionRooms = new ConcurrentHashMap<>(); // all rooms a given session is in
+    private final Map<String, Set<WebSocketSession>> roomToSessions = new ConcurrentHashMap<>();
+    private final Map<WebSocketSession, Set<String>> sessionToRooms = new ConcurrentHashMap<>(); // all rooms a given session is in
 
     private final Map<String, Map<Long, PresenceUser>> roomPresence = new ConcurrentHashMap<>(); // active members in a given room
 
@@ -81,7 +81,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
             session.getAttributes().put("userId", user.getId());
             session.getAttributes().put("userName", user.getName());
-            sessionRooms.putIfAbsent(session, ConcurrentHashMap.newKeySet());
+            sessionToRooms.putIfAbsent(session, ConcurrentHashMap.newKeySet());
 
         } catch (Exception e) {
             closeQuietly(session);
@@ -90,14 +90,14 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-        Set<String> joined = sessionRooms.remove(session);
+        Set<String> joined = sessionToRooms.remove(session);
         if (joined == null) {
             return;
         }
 
         for (String room : joined) {
             leavePresence(session, room);
-            removeSessionFromRoom(room, session);
+            leaveRoom(session, room);
         }
     }
 
@@ -210,17 +210,29 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    private void removeSessionFromRoom(String room, WebSocketSession session) {
-        rooms.computeIfPresent(room, (k, sessions) -> {
+    private void joinRoom(WebSocketSession session, String room) {
+        Set<String> myRooms = sessionToRooms.get(session);
+        if (myRooms == null) {
+            return;
+        }
+        myRooms.add(room);
+        roomToSessions.computeIfAbsent(room, k -> ConcurrentHashMap.newKeySet()).add(session);
+    }
+
+    private void leaveRoom(WebSocketSession session, String room) {
+        roomToSessions.computeIfPresent(room, (k, sessions) -> {
             sessions.remove(session);
-            // returning null from computeIfPresent atomically removes the key along with its value.
             return sessions.isEmpty() ? null : sessions;
         });
+        Set<String> myRooms = sessionToRooms.get(session);
+        if (myRooms != null) {
+            myRooms.remove(room);
+        }
     }
 
 
     public void broadcastToRoom(WebSocketSession sender, String room, TextMessage message) {
-        Set<WebSocketSession> roomSessions = rooms.get(room); // null means no room, not a fake empty set
+        Set<WebSocketSession> roomSessions = roomToSessions.get(room); // null means no room, not a fake empty set
         if (roomSessions == null) {
             return;
         }
@@ -272,12 +284,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             }
         }
 
-        Set<String> myRooms = sessionRooms.get(session);
-        if (myRooms == null) {
-            return;
-        }
-        myRooms.add(room);
-        rooms.computeIfAbsent(room, k -> ConcurrentHashMap.newKeySet()).add(session);
+        joinRoom(session, room);
 
         if (parts.length == 4 && parts[0].equals("journal")) {
             String name = (String) session.getAttributes().get("userName");
@@ -296,11 +303,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
     private void unsubscribe(WebSocketSession session, String room) {
         leavePresence(session, room);
-        removeSessionFromRoom(room, session);
-        Set<String> myRooms = sessionRooms.get(session);
-        if (myRooms != null) {
-            myRooms.remove(room);
-        }
+        leaveRoom(session, room);
     }
 
     private String extractToken(WebSocketSession session) {
