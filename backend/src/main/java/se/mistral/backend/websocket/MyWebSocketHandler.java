@@ -64,11 +64,23 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             return;
         }
 
-        // store userId to not have to send it for each message
-        Long userId = extractUserId(token);
-        session.getAttributes().put("userId", userId);
+        try {
+            String email = jwtService.extractUsername(token);
+            User user = (User) userDetailsService.loadUserByUsername(email);
 
-        sessionRooms.putIfAbsent(session, ConcurrentHashMap.newKeySet());
+            if (!jwtService.isTokenValid(token, user) || user.getRole() != Role.TEACHER) {
+                closeQuietly(session);
+                return;
+            }
+
+            session.getAttributes().put("userId", user.getId());
+            session.getAttributes().put("userName", user.getFirstName() + " " + user.getLastName());
+
+            sessionRooms.putIfAbsent(session, ConcurrentHashMap.newKeySet());
+
+        } catch (Exception e) {
+            closeQuietly(session);
+        }
     }
 
     @Override
@@ -290,16 +302,6 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             return appUser.getRole() == Role.TEACHER;
         } catch (Exception e) {
             return false;
-        }
-    }
-
-    private Long extractUserId(String token) {
-        try {
-            String email = jwtService.extractUsername(token);
-            User user = (User) userDetailsService.loadUserByUsername(email);
-            return user.getId();
-        } catch (Exception e) {
-            return null;
         }
     }
 
