@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -332,12 +331,14 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
                     session.sendMessage(toTextMessage(obj));
                 }
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) { }
     }
 
     private void leavePresence(WebSocketSession session, String room) {
         String[] parts = room.split(":");
-        if (parts.length != 4 || !parts[0].equals("journal")) return;
+        if (parts.length != 4 || !parts[0].equals("journal")) {
+            return;
+        }
 
         Long userId = (Long) session.getAttributes().get("userId");
         String name  = (String) session.getAttributes().get("userName");
@@ -345,7 +346,9 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         Map<Long, PresenceUser> presence = roomPresence.get(room);
         if (presence != null) {
             presence.remove(userId);
-            if (presence.isEmpty()) roomPresence.remove(room);
+            if (presence.isEmpty()) {
+                roomPresence.remove(room);
+            }
         }
 
         broadcastToRoom(session, room, toTextMessage(
