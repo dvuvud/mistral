@@ -59,7 +59,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) { // after a session is upgraded
         String token = extractToken(session);
-        if (token == null || !isValid(token)) {
+        if (token == null) {
             closeQuietly(session);
             return;
         }
@@ -74,8 +74,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             }
 
             session.getAttributes().put("userId", user.getId());
-            session.getAttributes().put("userName", user.getFirstName() + " " + user.getLastName());
-
+            session.getAttributes().put("userName", user.getName());
             sessionRooms.putIfAbsent(session, ConcurrentHashMap.newKeySet());
 
         } catch (Exception e) {
@@ -282,25 +281,9 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-
     private String extractToken(WebSocketSession session) {
         Object token = session.getAttributes().get("token");
         return token != null ? token.toString() : null;
-    }
-
-    private boolean isValid(String token) {
-        try {
-            String email = jwtService.extractUsername(token);
-            UserDetails user = userDetailsService.loadUserByUsername(email);
-            if (!jwtService.isTokenValid(token, user)) {
-                return false;
-            }
-
-            User appUser = (User) user;
-            return appUser.getRole() == Role.TEACHER;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     private void closeQuietly(WebSocketSession session) {
