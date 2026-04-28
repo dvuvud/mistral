@@ -5,15 +5,15 @@
   </mat-form-field>
   <mat-action-list class="list-class">
     @for (Child of searchedChildren(); track Child.id; let last = $last) {
-      <li>
-        <button mat-list-item (click)="onSelectChild(Child)">
-          <span matListItemTitle>{{Child.name}} </span>
+    
+      <button mat-list-item (click)="onSelectChild(Child)">
+        <span matListItemTitle>{{Child.name}} </span>
 
-          <div matListItemMeta class="meta-container">
-              <attendance-box [disabled]=true [childSignal]="Child"></attendance-box>
-          </div>
-        </button>
-      </li>
+        <div matListItemMeta class="meta-container">
+            <attendance-box [disabled]=true [childSignal]="Child"></attendance-box>
+        </div>
+      </button>
+      
 
       @if (!last) {
         <mat-divider></mat-divider>
