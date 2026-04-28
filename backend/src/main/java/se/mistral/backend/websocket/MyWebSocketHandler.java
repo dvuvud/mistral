@@ -2,6 +2,7 @@ package se.mistral.backend.websocket;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,6 +25,9 @@ import se.mistral.backend.journal.dto.BroadcastMessage;
 import se.mistral.backend.journal.ot.Operation;
 import se.mistral.backend.user.Role;
 import se.mistral.backend.user.User;
+import se.mistral.backend.websocket.dto.PresenceMessage;
+import se.mistral.backend.websocket.dto.PresenceStateMessage;
+import se.mistral.backend.websocket.dto.PresenceUser;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
@@ -40,6 +44,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
     private final Map<String, Set<WebSocketSession>> rooms = new ConcurrentHashMap<>(); // all sessions in a given room
     private final Map<WebSocketSession, Set<String>> sessionRooms = new ConcurrentHashMap<>(); // all rooms a given session is in
+
+    private final Map<String, Map<Long, PresenceUser>> roomPresence = new ConcurrentHashMap<>(); // active members in a given room
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -90,6 +96,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         }
 
         for (String room : joined) {
+            leavePresence(session, room);
             removeSessionFromRoom(room, session);
         }
     }
@@ -250,6 +257,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
                 closeQuietly(session);
                 return;
             }
+
         } else if (parts.length == 4 && parts[0].equals("journal")) {
             if (!parts[1].equals("child") && !parts[1].equals("group")) {
                 closeQuietly(session);
@@ -270,10 +278,24 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         }
         myRooms.add(room);
         rooms.computeIfAbsent(room, k -> ConcurrentHashMap.newKeySet()).add(session);
+
+        if (parts.length == 4 && parts[0].equals("journal")) {
+            String name = (String) session.getAttributes().get("userName");
+            PresenceUser presenceUser = new PresenceUser(userId, name);
+            roomPresence.computeIfAbsent(room, k -> new ConcurrentHashMap<>()).put(userId, presenceUser);
+
+            sendToSession(session, new PresenceStateMessage(
+                "PRESENCE_STATE", room, new ArrayList<>(roomPresence.get(room).values())
+            ));
+
+            broadcastToRoom(session, room, toTextMessage(
+                new PresenceMessage("PRESENCE_JOIN", room, userId, name)
+            ));
+        }
     }
 
-
     private void unsubscribe(WebSocketSession session, String room) {
+        leavePresence(session, room);
         removeSessionFromRoom(room, session);
         Set<String> myRooms = sessionRooms.get(session);
         if (myRooms != null) {
@@ -310,4 +332,21 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         } catch (IOException ignored) {}
     }
 
+    private void leavePresence(WebSocketSession session, String room) {
+        String[] parts = room.split(":");
+        if (parts.length != 4 || !parts[0].equals("journal")) return;
+
+        Long userId = (Long) session.getAttributes().get("userId");
+        String name  = (String) session.getAttributes().get("userName");
+
+        Map<Long, PresenceUser> presence = roomPresence.get(room);
+        if (presence != null) {
+            presence.remove(userId);
+            if (presence.isEmpty()) roomPresence.remove(room);
+        }
+
+        broadcastToRoom(session, room, toTextMessage(
+            new PresenceMessage("PRESENCE_LEAVE", room, userId, name)
+        ));
+    }
 }
