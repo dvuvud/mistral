@@ -1,11 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { AdminService, ChildWithGroupResponse, GroupResponse } from '../../../core/admin/admin.service';
+import { AdminService } from '../../../core/admin/admin.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 
 import { MatSelectModule } from '@angular/material/select';
+import { ChildWithGroupResponse, GroupResponse } from '../../../core/interface/interface';
 import { MatSelect } from '@angular/material/select';
 @Component({
   selector: 'child-admin-list',

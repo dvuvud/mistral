@@ -7,7 +7,6 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { AdminService, ChildWithGroupResponse, GroupResponse } from '../../../core/admin/admin.service';
 import { interval } from 'rxjs';
-
 @Component({
   selector: 'add-child-form',
   imports: [
@@ -28,7 +27,6 @@ export class AddChildForm implements OnInit {
 
   groups: GroupResponse[] = [];
   children: ChildWithGroupResponse[] = [];
-
 
   form = this.fb.group({
     firstName: ["", Validators.required],
@@ -62,7 +60,6 @@ export class AddChildForm implements OnInit {
               next: () => {
                 this.childAdded.emit();
                 this.form.reset();
-
               }
             })
           }

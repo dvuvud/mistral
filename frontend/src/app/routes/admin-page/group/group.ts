@@ -3,9 +3,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
-import { AdminService, ChildWithGroupResponse, GroupResponse } from '../../../core/admin/admin.service';
+import { AdminService } from '../../../core/admin/admin.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { interval } from 'rxjs';
+import { ChildWithGroupResponse, GroupResponse } from '../../../core/interface/interface';
 @Component({
   selector: 'group',
   imports: [

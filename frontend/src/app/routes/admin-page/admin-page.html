@@ -1,7 +1,6 @@
 <div class="admin-top">
   <mat-toolbar class="mat-sys-primary">
     <img src="Kindguardlogo.png" alt="logo">
-    <!-- <span>KîndGuard</span> -->
     <span class="example-spacer"></span>
     <button matButton="tonal" (click)="logout()">Logout</button>
   </mat-toolbar>
@@ -10,16 +9,6 @@
 <div class="admin-container">
   <h1>Adminstration</h1>
   <add-child-form (childAdded)="onChildAdded()"></add-child-form>
-
-  <!-- <mat-card>
-
-    <mat-card-header>
-      <mat-card-title>Lägg till barn</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <add-child-form></add-child-form>
-    </mat-card-content>
-  </mat-card> -->
 
   <mat-card>
     <mat-card-header>
