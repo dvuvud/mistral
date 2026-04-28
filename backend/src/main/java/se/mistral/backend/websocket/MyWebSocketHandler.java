@@ -3,9 +3,11 @@ package se.mistral.backend.websocket;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
@@ -81,6 +83,11 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             session.getAttributes().put("userId", user.getId());
             session.getAttributes().put("userName", user.getName());
             sessionToRooms.putIfAbsent(session, ConcurrentHashMap.newKeySet());
+
+            List<PresenceUser> allPresent = roomPresence.values().stream()
+                .flatMap(m -> m.values().stream())
+                .collect(Collectors.toList());
+            sendToSession(session, new PresenceStateMessage("PRESENCE_STATE", allPresent));
 
         } catch (Exception e) {
             closeQuietly(session);
@@ -229,6 +236,17 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    private void broadcastToAll(TextMessage message) {
+        for (WebSocketSession s : sessionToRooms.keySet()) {
+            try {
+                synchronized (s) {
+                    if (s.isOpen()) {
+                        s.sendMessage(message);
+                    }
+                }
+            } catch (IOException ignored) { }
+        }
+    }
 
     public void broadcastToRoom(WebSocketSession sender, String room, TextMessage message) {
         Set<WebSocketSession> roomSessions = roomToSessions.get(room); // null means no room, not a fake empty set
@@ -287,14 +305,10 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
         if (parts.length == 4 && parts[0].equals("journal")) {
             String name = (String) session.getAttributes().get("userName");
-            PresenceUser presenceUser = new PresenceUser(userId, name);
+            PresenceUser presenceUser = new PresenceUser(userId, name, room);
             roomPresence.computeIfAbsent(room, k -> new ConcurrentHashMap<>()).put(userId, presenceUser);
 
-            sendToSession(session, new PresenceStateMessage(
-                "PRESENCE_STATE", room, new ArrayList<>(roomPresence.get(room).values())
-            ));
-
-            broadcastToRoom(session, room, toTextMessage(
+            broadcastToAll(toTextMessage(
                 new PresenceMessage("PRESENCE_JOIN", room, userId, name)
             ));
         }
@@ -351,7 +365,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             }
         }
 
-        broadcastToRoom(session, room, toTextMessage(
+        broadcastToAll(toTextMessage(
             new PresenceMessage("PRESENCE_LEAVE", room, userId, name)
         ));
     }
