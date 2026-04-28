@@ -3,10 +3,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { AdminService, ChildWithGroupResponse, GroupResponse } from '../../../core/admin/admin.service';
+import { AdminService } from '../../../core/admin/admin.service';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { interval } from 'rxjs';
+import { ChildWithGroupResponse, GroupResponse } from '../../../core/interface/interface';
 @Component({
   selector: 'add-child-form',
   imports: [
@@ -29,14 +30,11 @@ export class AddChildForm implements OnInit {
   groups: GroupResponse[] = [];
   children: ChildWithGroupResponse[] = [];
 
-  //output?
-
   form = this.fb.group({
     firstName: ["", Validators.required],
     lastName: ["", Validators.required],
     groupId: [null]
 
-    //id?
   });
 
   //skickar till parent --> kan uppdatera listan
@@ -64,8 +62,6 @@ export class AddChildForm implements OnInit {
               next: () => {
                 this.childAdded.emit();
                 this.form.reset();
-
-                //error msg?
               }
             })
           }

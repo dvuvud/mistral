@@ -1,10 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { AdminService, ChildWithGroupResponse, GroupResponse } from '../../../core/admin/admin.service';
+import { AdminService } from '../../../core/admin/admin.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { ChildWithGroupResponse, GroupResponse } from '../../../core/interface/interface';
 import { MatSelect } from '@angular/material/select';
 @Component({
   selector: 'child-admin-list',
@@ -40,7 +41,7 @@ export class ChildAdminList implements OnInit {
 
   loadChildren(): void {
     this.adminService.getAllChildren().subscribe({
-      next: (children: ChildWithGroupResponse[]) => this.children = [...children].sort((a, b) => a.id - b.id), //listan får en fast ordning, annars problem med att barnen blir huller om buller när man ändrar deras grupp
+      next: (children: ChildWithGroupResponse[]) => this.children = [...children].sort((a, b) => a.name.localeCompare(b.name)), //listan får en fast ordning, annars problem med att barnen blir huller om buller när man ändrar deras grupp
       error: (err: unknown) => console.log("Error", err)
     });
   }

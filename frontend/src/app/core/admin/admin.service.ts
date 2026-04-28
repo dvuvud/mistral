@@ -1,35 +1,15 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-//import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment';
+import { GroupResponse, ChildResponse, ChildWithGroupResponse } from '../interface/interface';
 
-export interface GroupResponse {
-    id: number;
-    name: string;
-}
-export interface ChildResponse {
-    id: number;
-    name: string;
-}
-
-export interface ChildWithGroupResponse {
-    id: number;
-    name: string;
-    group: GroupResponse | null;
-}
-
-export interface UserResponse {
-    id: number;
-    name: string;
-    role: string;
-    email: string;
-}
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {
 
 
-  private adminUrl = "http://localhost:8080/api/admin";
+  private adminUrl = `${environment.apiUrl}/api/admin`
   private http = inject(HttpClient);
 
   createChild(name: string): Observable<ChildResponse> {
@@ -59,6 +39,5 @@ export class AdminService {
     return this.http.delete<void>(`${this.adminUrl}/child/${id}`);
   }
 
-  //TODO
-  /*  activateUser() { } */
+
 }
