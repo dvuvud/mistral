@@ -1,4 +1,4 @@
-import { Component, model, signal, OnInit, inject, computed } from '@angular/core';
+import { Component, model, signal, OnInit, inject, computed, effect } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { localDateToday } from '../../../core/utils/date-utils';
+import { groupResponse } from '../../../core/groups/group.service';
 
 @Component({
   selector: 'main-child-list',
@@ -24,16 +25,27 @@ export class ChildList implements OnInit {
   children = signal<Child[]>([]);
   childSignal = model.required<Child>();
   searchQuery = signal<string>('');
+  groupSignal = model.required<groupResponse>();
 
   searchedChildren = computed(() => {
     const sq = this.searchQuery();
-    return this.children().filter(x => x.name.toLowerCase().includes(sq)); //TODO: ska gå att säka med små och stora bokstäver
+    return this.children().filter(x => x.name.toLowerCase().includes(sq)); 
   });
 
   private attendanceService = inject(AttendanceService);
   private childService = inject(ChildService);
 
+  constructor() {
+    effect(() => {
+      const group = this.groupSignal();
+      if (group.id !== 0) {
+        this.loadChildren();
+      }
+    });
+  }
+
   onSearchUpdated(sq: string) {
+    console.log(this.groupSignal().name)
     this.searchQuery.set(sq);
   }
 
@@ -42,7 +54,6 @@ export class ChildList implements OnInit {
   }
 
   ngOnInit() {
-    this.loadChildren();
   }
 
   onSelectChild(child: Child) {
@@ -54,7 +65,7 @@ export class ChildList implements OnInit {
   }
 
   loadChildren() {
-    this.childService.getChildren().subscribe({
+    this.childService.getChildrenByGroup(this.groupSignal().id).subscribe({
       next: (data) => {
         this.children.set(data);
       }
