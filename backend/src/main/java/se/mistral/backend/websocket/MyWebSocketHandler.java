@@ -138,8 +138,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         chatService.saveMessage(message);
 
         try {
-            TextMessage outbound = new TextMessage(objectMapper.writeValueAsString(message));
-            broadcastToRoom(session, room, outbound);
+            broadcastToRoom(session, room, toTextMessage(message));
         } catch (Exception ignored) { }
     }
     private void handleDocOperation(WebSocketSession session, String room, JsonNode json) {
@@ -199,8 +198,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
         // null sender so the originator also receives the message
         try {
-            TextMessage outbound = new TextMessage(objectMapper.writeValueAsString(broadcast));
-            broadcastToRoom(null, room, outbound);
+            broadcastToRoom(null, room, toTextMessage(broadcast));
         } catch (Exception ignored) {
             // serialization failure shouldn't crash the handler
         }
@@ -310,4 +308,23 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             session.close(CloseStatus.NOT_ACCEPTABLE);
         } catch (Exception ignored) { }
     }
+
+    private TextMessage toTextMessage(Object obj) {
+        try {
+            return new TextMessage(objectMapper.writeValueAsString(obj));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void sendToSession(WebSocketSession session, Object obj) {
+        try {
+            synchronized (session) {
+                if (session.isOpen()) {
+                    session.sendMessage(toTextMessage(obj));
+                }
+            }
+        } catch (IOException ignored) {}
+    }
+
 }
