@@ -12,7 +12,10 @@
       <main-live-journal [child]="childSignal()"></main-live-journal>
     </div>
     <div class="main-card-right">
-      <main-child-list [(childSignal)]="childSignal"></main-child-list>
+      <main-child-list 
+        [(childSignal)]="childSignal"
+        [(groupSignal)]="groupSignal">
+    </main-child-list>
 
     </div>
   </mat-card-content>
