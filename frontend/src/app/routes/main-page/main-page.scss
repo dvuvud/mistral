@@ -8,9 +8,12 @@
 }
 
 mat-toolbar {
-    background-color:var(--mat-sys-primary);
-    /* Magenta */
-    color: var(--mat-sys-on-primary);
+    background: linear-gradient(
+      90deg,
+      var(--mat-sys-primary) 30%,
+      var(--mat-sys-tertiary) 100%
+    );
+    color: var(--mat-sys-primary-on-surface);
     display: flex;
     align-items: center;
     position: fixed;
