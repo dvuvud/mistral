@@ -1,7 +1,6 @@
 package se.mistral.backend.websocket;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,7 +18,6 @@ import se.mistral.backend.auth.JwtService;
 import se.mistral.backend.chat.ChatService;
 import se.mistral.backend.chat.dto.ChatMessage;
 import se.mistral.backend.journal.JournalService;
-import se.mistral.backend.journal.JournalTarget;
 import se.mistral.backend.journal.dto.BroadcastMessage;
 import se.mistral.backend.journal.ot.Operation;
 import se.mistral.backend.user.Role;
