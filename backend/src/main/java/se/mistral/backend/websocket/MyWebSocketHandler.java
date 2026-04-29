@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
@@ -85,7 +84,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
             List<PresenceUser> allPresent = roomPresence.values().stream()
                 .flatMap(m -> m.values().stream())
-                .collect(Collectors.toList());
+                .toList();
             sendToSession(session, new PresenceStateMessage("PRESENCE_STATE", allPresent));
 
         } catch (Exception e) {
