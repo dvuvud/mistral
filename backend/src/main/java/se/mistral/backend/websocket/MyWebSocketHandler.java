@@ -105,88 +105,42 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    private void handleChatMessage(WebSocketSession session, String room, JsonNode json) {
+    private void handleChatMessage(WebSocketSession session, String rawRoom, JsonNode json) {
         // room format: "chat:{user1_id}:{user2_id}"
-        String[] parts = room.split(":");
+        if (!(Room.parse(rawRoom) instanceof Chat chat)) {
+            closeQuietly(session);
+            return;
+        }
 
         Long userId = (Long) session.getAttributes().get("userId");
-        Long senderId = 0L;
-        Long recipientId = 0L;
-
-        if (parts.length == 3 && parts[0].equals("chat")) { // if type is chat: check if user is member of chat
-            try {
-                Long userOneId = (Long) Long.parseLong(parts[1]);
-                Long userTwoId = (Long) Long.parseLong(parts[2]);
-
-                if (userTwoId < userOneId) {
-                    room = "chat:" + userTwoId + ":" + userOneId;
-                }
-
-                if (userId == userOneId) {
-                    senderId = userOneId;
-                    recipientId = userTwoId;
-                } else if (userId == userTwoId) {
-                    senderId = userTwoId;
-                    recipientId = userOneId;
-                } else {
-                    closeQuietly(session);
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                closeQuietly(session);
-                return;
-            }
+        if (!chat.hasMember(userId)) {
+            closeQuietly(session);
+            return;
         }
 
         ChatMessage message = objectMapper.treeToValue(json.get("message"), ChatMessage.class);
 
-        if (senderId != message.senderId() || recipientId != message.recipientId()) {
+        if (message.senderId() != userId || message.recipientId() != chat.otherMember(userId)) {
             closeQuietly(session);
             return;
         }
 
         chatService.saveMessage(message);
-
-        try {
-            broadcastToRoom(session, room, toTextMessage(message));
-        } catch (Exception ignored) { }
+        broadcastToRoom(session, chat.toKey(), toTextMessage(message));
     }
-    private void handleDocOperation(WebSocketSession session, String room, JsonNode json) {
+
+    private void handleDocOperation(WebSocketSession session, String rawRoom, JsonNode json) {
         // room format: "journal:child:{childId}:{date}"  e.g. "journal:child:42:2026-04-22"
         //           or "journal:group:{groupId}:{date}"  e.g. "journal:group:7:2026-04-27"
-        String[] parts = room.split(":");
-        if (parts.length != 4 || !parts[0].equals("journal")) {
+
+        if (!(Room.parse(rawRoom) instanceof Journal journal)) {
             closeQuietly(session);
             return;
         }
 
-        JournalTarget target;
-        try {
-            target = switch (parts[1]) {
-                case "child" -> new JournalTarget.Child(Long.parseLong(parts[2]));
-                case "group" -> new JournalTarget.Group(Long.parseLong(parts[2]));
-                default -> null;
-            };
-        } catch (NumberFormatException e) {
-            closeQuietly(session);
-            return;
-        }
-
-        if (target == null) {
-            closeQuietly(session);
-            return;
-        }
-
-        LocalDate date;
-        try {
-            date = LocalDate.parse(parts[3]);
-        } catch (Exception e) {
-            closeQuietly(session);
-            return;
-        }
-
-        int clientRevision = json.get("clientRevision").asInt();
-        Long userId = (Long) session.getAttributes().get("userId");
+        Long userId  = (Long) session.getAttributes().get("userId");
+        int revision = json.get("clientRevision").asInt();
+        Integer seq  = json.has("sequence") ? json.get("sequence").asInt() : null;
 
         Operation incoming;
         try {
@@ -195,23 +149,12 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             return;
         }
 
-        Integer clientSequence = json.has("sequence") ? json.get("sequence").asInt() : null;
-
         BroadcastMessage broadcast = journalService.applyOperation(
-            target,
-            date,
-            clientRevision,
-            incoming,
-            userId,
-            clientSequence
+            journal.toJournalTarget(), journal.date(), revision, incoming, userId, seq
         );
 
         // null sender so the originator also receives the message
-        try {
-            broadcastToRoom(null, room, toTextMessage(broadcast));
-        } catch (Exception ignored) {
-            // serialization failure shouldn't crash the handler
-        }
+        broadcastToRoom(null, journal.toKey(), toTextMessage(broadcast));
     }
 
     private void joinRoom(WebSocketSession session, String room) {
@@ -263,52 +206,27 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    private void subscribe(WebSocketSession session, String room) {
-        String[] parts = room.split(":");
-        Long userId = (Long) session.getAttributes().get("userId");
-
-        if (parts.length == 3 && parts[0].equals("chat")) { // if type is chat: check if user is member of chat
-            try {
-                Long userOneId = (Long) Long.parseLong(parts[1]);
-                Long userTwoId = (Long) Long.parseLong(parts[2]);
-
-                if (userId != userOneId && userId != userTwoId) {
-                    closeQuietly(session);
-                    return;
-                }
-
-                if (userTwoId < userOneId) {
-                    room = "chat:" + userTwoId + ":" + userOneId;
-                }
-            } catch (NumberFormatException e) {
-                closeQuietly(session);
-                return;
-            }
-
-        } else if (parts.length == 4 && parts[0].equals("journal")) {
-            if (!parts[1].equals("child") && !parts[1].equals("group")) {
-                closeQuietly(session);
-                return;
-            }
-            try {
-                Long.parseLong(parts[2]);
-                LocalDate.parse(parts[3]);
-            } catch (Exception e) {
-                closeQuietly(session);
-                return;
-            }
+    private void subscribe(WebSocketSession session, String rawRoom) {
+        Room room = Room.parse(rawRoom);
+        if (room == null) {
+            closeQuietly(session); return;
         }
 
-        joinRoom(session, room);
+        Long userId = (Long) session.getAttributes().get("userId");
 
-        if (parts.length == 4 && parts[0].equals("journal")) {
+        if (room instanceof Chat chat && !chat.hasMember(userId)) {
+            closeQuietly(session);
+            return;
+        }
+
+        String key = room.toKey();
+        joinRoom(session, key);
+
+        if (room instanceof Journal) {
             String name = (String) session.getAttributes().get("userName");
-            PresenceUser presenceUser = new PresenceUser(userId, name, room);
-            roomPresence.computeIfAbsent(room, k -> new ConcurrentHashMap<>()).put(userId, presenceUser);
-
-            broadcastToAll(toTextMessage(
-                new PresenceMessage("PRESENCE_JOIN", room, userId, name)
-            ));
+            roomPresence.computeIfAbsent(key, k -> new ConcurrentHashMap<>())
+                .put(userId, new PresenceUser(userId, name, key));
+            broadcastToAll(toTextMessage(new PresenceMessage("PRESENCE_JOIN", key, userId, name)));
         }
     }
 
@@ -346,25 +264,19 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         } catch (IOException ignored) { }
     }
 
-    private void leavePresence(WebSocketSession session, String room) {
-        String[] parts = room.split(":");
-        if (parts.length != 4 || !parts[0].equals("journal")) {
+    private void leavePresence(WebSocketSession session, String roomKey) {
+        if (!(Room.parse(roomKey) instanceof Journal)) {
             return;
         }
 
         Long userId = (Long) session.getAttributes().get("userId");
-        String name  = (String) session.getAttributes().get("userName");
+        String name = (String) session.getAttributes().get("userName");
 
-        Map<Long, PresenceUser> presence = roomPresence.get(room);
-        if (presence != null) {
+        roomPresence.computeIfPresent(roomKey, (k, presence) -> {
             presence.remove(userId);
-            if (presence.isEmpty()) {
-                roomPresence.remove(room);
-            }
-        }
+            return presence.isEmpty() ? null : presence;
+        });
 
-        broadcastToAll(toTextMessage(
-            new PresenceMessage("PRESENCE_LEAVE", room, userId, name)
-        ));
+        broadcastToAll(toTextMessage(new PresenceMessage("PRESENCE_LEAVE", roomKey, userId, name)));
     }
 }
