@@ -1,6 +1,6 @@
 package se.mistral.backend.websocket;
 
-record Chat(long userOneId, long userTwoId) implements Room {
+record Chat(long lowId, long highId) implements Room {
     public static Chat parse(String[] parts) {
         if (parts.length != 3 || !parts[0].equals("chat")) {
             return null;
@@ -16,14 +16,14 @@ record Chat(long userOneId, long userTwoId) implements Room {
     }
 
     public boolean hasMember(long userId) {
-        return userId == userOneId || userId == userTwoId;
+        return userId == lowId || userId == highId;
     }
 
     public long otherMember(long userId) {
-        return userId == userOneId ? userTwoId : userOneId;
+        return userId == lowId ? highId : lowId;
     }
 
     @Override public String toKey() {
-        return "chat:" + userOneId + ":" + userTwoId;
+        return "chat:" + lowId + ":" + highId;
     }
 }
