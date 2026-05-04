@@ -25,8 +25,15 @@
   box-shadow: var(--mat-sys-level1);
 }
 
+.child-list-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .list-class {
-  overflow-y: scroll;
+  flex: 1;
+  overflow-y: auto;
 }
 
 mat-form-field { 
