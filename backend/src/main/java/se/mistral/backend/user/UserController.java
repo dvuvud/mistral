@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import se.mistral.backend.user.dto.BasicUserInformation;
+import se.mistral.backend.user.dto.UserResponse;
 
 import java.util.List;
 
@@ -25,6 +27,11 @@ public class UserController {
     @GetMapping("/teachers")
     public ResponseEntity<List<BasicUserInformation>> retrieveAllTeachers() {
         return ResponseEntity.ok(userService.retrieveAllTeachers());
+    }
+
+    @GetMapping("/teacher")
+    public ResponseEntity<UserResponse> retrieveOneTeacher(@RequestParam Long teacherId) {
+        return ResponseEntity.ok(userService.retrieveOneTeacher(teacherId));
     }
 
 }
