@@ -31,6 +31,8 @@ export class MainPage implements OnInit, OnDestroy {
   
   groupSignal = signal<groupResponse>({name: '', id: 0});
   allGroups = signal<groupResponse[]>([]);
+  contentSignal = signal<string>('');
+
   private router = inject(Router);
   private socketService = inject(WebsocketService);
   private groupService = inject(groupService);
