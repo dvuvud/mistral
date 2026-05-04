@@ -15,19 +15,11 @@ import { groupResponse } from '../../../core/groups/group.service';
   styleUrl: './main-panel.scss',
 })
 export class MainPanel {
-  months = ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti",
-    "September", "Oktober", "November", "December"];
-  days = ["Söndag", "Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag"];
-
+  
   childSignal = signal<Child>({ name: '', id: 0, date: "", present: false });
   groupSignal = model.required<groupResponse>();
   contentSignal = model.required<string>(); 
   
-  getDate() {
-    const d = new Date();
-    return `${this.days[d.getDay()]} ${d.getDate()} ${this.months[d.getMonth()]} ${d.getFullYear()}`
-  }
-
   childList = viewChild.required(ChildList);
 
   handleWebsocketMessage(message: WsAttendanceMessage) {
