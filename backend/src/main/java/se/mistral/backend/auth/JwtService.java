@@ -23,10 +23,23 @@ public class JwtService {
     @Value("${jwt.expiration-ms}")
     private long expirationMs;
 
+    /**
+     * Generate token string.
+     *
+     * @param userDetails the user details
+     * @return the string of the generated token
+     */
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
+    /**
+     * Generate token string.
+     *
+     * @param extraClaims the extra claims
+     * @param userDetails the user details
+     * @return the string of the generated token
+     */
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return Jwts.builder()
                 .claims(extraClaims)
@@ -37,15 +50,36 @@ public class JwtService {
                 .compact();
     }
 
+    /**
+     * Is token valid check.
+     *
+     * @param token       the token
+     * @param userDetails the user details
+     * @return the boolean response for the validity of the token.
+     */
     public boolean isTokenValid(String token, UserDetails userDetails) {
         return extractUsername(token).equals(userDetails.getUsername())
                 && !isTokenExpired(token);
     }
 
+    /**
+     * Extract username from token.
+     *
+     * @param token the token
+     * @return the username
+     */
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
+    /**
+     * Extract claim t.
+     *
+     * @param <T>      the type parameter
+     * @param token    the token
+     * @param resolver the resolver
+     * @return the type T of the claim
+     */
     public <T> T extractClaim(String token, Function<Claims, T> resolver) {
         return resolver.apply(extractAllClaims(token));
     }

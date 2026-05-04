@@ -44,6 +44,13 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
     private final Map<String, Map<Long, PresenceUser>> roomPresence = new ConcurrentHashMap<>(); // active members in a given room
 
+    /**
+     * Handle text message.
+     *
+     * @param session the session
+     * @param message the message
+     * @throws Exception the exception
+     */
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         JsonNode json = objectMapper.readTree(message.getPayload());
@@ -59,6 +66,11 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    /**
+     * After connection established.
+     *
+     * @param session the session
+     */
     @Override
     public void afterConnectionEstablished(WebSocketSession session) { // after a session is upgraded
         String token = extractToken(session);
@@ -90,6 +102,12 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    /**
+     * After connection closed.
+     *
+     * @param session the session
+     * @param status  the status
+     */
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         Set<String> joined = sessionToRooms.remove(session);
@@ -187,6 +205,13 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    /**
+     * Broadcast to room.
+     *
+     * @param sender  the sender
+     * @param room    the room
+     * @param message the message
+     */
     public void broadcastToRoom(WebSocketSession sender, String room, TextMessage message) {
         Set<WebSocketSession> roomSessions = roomToSessions.get(room); // null means no room, not a fake empty set
         if (roomSessions == null) {

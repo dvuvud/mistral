@@ -4,7 +4,14 @@ import java.time.LocalDate;
 
 import se.mistral.backend.journal.JournalTarget;
 
+
 record Journal(String targetType, long targetId, LocalDate date) implements Room {
+    /**
+     * Parse input to see if it is a journal.
+     *
+     * @param parts the parts
+     * @return the new journal
+     */
     public static Journal parse(String[] parts) {
         if (parts.length != 4 || !parts[0].equals("journal")) {
             return null;
@@ -22,6 +29,11 @@ record Journal(String targetType, long targetId, LocalDate date) implements Room
         }
     }
 
+    /**
+     * Creates the target for the journal depending on the case.
+     *
+     * @return the journal target
+     */
     public JournalTarget toJournalTarget() {
         return switch (targetType) {
             case "child" -> new JournalTarget.Child(targetId);
