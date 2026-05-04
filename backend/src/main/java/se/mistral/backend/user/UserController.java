@@ -9,6 +9,7 @@ import se.mistral.backend.user.dto.BasicUserInformation;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
@@ -16,6 +17,11 @@ public class UserController {
 
     private final UserService userService;
 
+    /**
+     * Retrieve all teachers.
+     *
+     * @return the list of all teachers
+     */
     @GetMapping("/teachers")
     public ResponseEntity<List<BasicUserInformation>> retrieveAllTeachers() {
         return ResponseEntity.ok(userService.retrieveAllTeachers());
