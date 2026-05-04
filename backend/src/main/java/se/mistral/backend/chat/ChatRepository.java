@@ -7,8 +7,16 @@ import se.mistral.backend.chat.dto.ChatMessage;
 
 import java.util.List;
 
+
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Long> {
+    /**
+     * Find conversation history list.
+     *
+     * @param user1 the user 1
+     * @param user2 the user 2
+     * @return the list of user history
+     */
     @Query("""
                 SELECT chat FROM Chat chat
                 WHERE (chat.senderId = :user1 AND chat.recipientId = :user2)
