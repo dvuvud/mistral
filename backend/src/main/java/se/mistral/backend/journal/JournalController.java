@@ -10,6 +10,7 @@ import se.mistral.backend.journal.dto.JournalDto;
 
 import java.time.LocalDate;
 
+
 @RestController
 @RequestMapping("/api/journal")
 @RequiredArgsConstructor
@@ -17,6 +18,14 @@ public class JournalController {
 
     private final JournalService journalService;
 
+    /**
+     * Gets journal.
+     *
+     * @param childId the child id
+     * @param groupId the group id
+     * @param date    the date
+     * @return the journal
+     */
     @GetMapping
     public ResponseEntity<JournalDto> getJournal(
         @RequestParam(required = false) Long childId,

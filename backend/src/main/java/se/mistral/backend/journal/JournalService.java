@@ -20,6 +20,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import static se.mistral.backend.journal.ot.Operation.Type.INSERT;
 import static se.mistral.backend.journal.ot.Operation.Type.DELETE;
 
+/**
+ * The type Journal service.
+ */
 @Service
 @RequiredArgsConstructor
 public class JournalService {
@@ -31,11 +34,29 @@ public class JournalService {
     // one lock object per journal to only sync threads editing the same document
     private final ConcurrentHashMap<Long, Object> journalLocks = new ConcurrentHashMap<>();
 
+    /**
+     * Gets or create a journal entry.
+     *
+     * @param target the target
+     * @param date   the date
+     * @return the journal entry
+     */
     public JournalDto getOrCreate(JournalTarget target, LocalDate date) {
         Journal journal = findOrCreate(target, date);
         return new JournalDto(journal.getContent(), journal.getVersion());
     }
 
+    /**
+     * Apply operation broadcast message.
+     *
+     * @param target         the target
+     * @param date           the date
+     * @param clientRevision the client revision
+     * @param incoming       the incoming
+     * @param userId         the user id
+     * @param sequence       the sequence
+     * @return the broadcast message
+     */
     public BroadcastMessage applyOperation(JournalTarget target, LocalDate date,
                                            int clientRevision, Operation incoming,
                                            Long userId, Integer sequence) {
