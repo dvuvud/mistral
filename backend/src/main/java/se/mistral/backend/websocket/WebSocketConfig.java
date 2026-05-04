@@ -7,6 +7,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 
 import lombok.RequiredArgsConstructor;
 
+
 @Configuration
 @EnableWebSocket
 @RequiredArgsConstructor
@@ -14,6 +15,11 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     private final MyWebSocketHandler handler;
 
+    /**
+     * Register web socket handlers.
+     *
+     * @param registry the registry
+     */
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(handler, "/ws")
