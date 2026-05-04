@@ -10,6 +10,7 @@ import se.mistral.backend.exception.NotFoundException;
 import se.mistral.backend.user.User;
 import org.springframework.stereotype.Service;
 import se.mistral.backend.user.UserRepository;
+import se.mistral.backend.user.UserService;
 import se.mistral.backend.user.dto.UserResponse;
 import java.util.List;
 
@@ -29,7 +30,9 @@ public class AdminService {
         User saved = userRepository.save(user);
         return new UserResponse(saved.getId(), saved.getName(), saved.getRole(), saved.getEmail());
     }
-
+    public List<UserResponse> getAllInactiveUsers(){
+        return userRepository.findUserByActiveFalse();
+    }
     public List<ChildWithGroupResponse> getAllChildrenWithGroup() {
         return childService.getAllChildrenWithGroup();
     }
