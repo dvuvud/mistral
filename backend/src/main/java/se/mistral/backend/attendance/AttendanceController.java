@@ -22,11 +22,24 @@ public class AttendanceController {
 
     private final AttendanceService attendanceService;
 
+    /**
+     * Update attendance response.
+     *
+     * @param request the request
+     * @return the response entity from updating the attendance
+     */
     @PutMapping()
     public ResponseEntity<AttendanceDto> updateAttendance(@Valid @RequestBody AttendanceRequest request) {
         return ResponseEntity.ok(attendanceService.updateAttendance(request));
     }
 
+    /**
+     * Gets attendance.
+     *
+     * @param childId the child id
+     * @param date    the date
+     * @return the attendance
+     */
     @GetMapping()
     public ResponseEntity<AttendanceDto> getAttendance(@RequestParam Long childId, @RequestParam(required = false) LocalDate date) {
         return ResponseEntity.ok(attendanceService.getAttendance(childId, date != null ? date : LocalDate.now()));
