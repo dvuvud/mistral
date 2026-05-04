@@ -20,16 +20,33 @@ public class AuthController {
 
     private final AuthService authService;      // set by lombok
 
+    /**
+     * Register the user from the request.
+     *
+     * @param request the request
+     * @return the response entity with a message depending on the result of the registration attempt
+     */
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
 
+    /**
+     * Tries to log in the user.
+     *
+     * @param request the request
+     * @return the response entity with a message depending on the result of the login attempt
+     */
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
 
+    /**
+     * Validates token  .
+     *
+     * @return the response entity fot the validation, being true or false depending on validity of the token.
+     */
     @GetMapping("/validate")
     public ResponseEntity<Boolean> validateToken() {
         return ResponseEntity.ok(true);

@@ -14,6 +14,7 @@ import se.mistral.backend.user.Role;
 import se.mistral.backend.user.User;
 import se.mistral.backend.user.UserRepository;
 
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -24,6 +25,12 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    /**
+     * Register a new user.
+     *
+     * @param request the request
+     * @return the registration response
+     */
     public RegisterResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.email())) {
             throw new IllegalArgumentException("Email already in use: " + request.email());
@@ -40,6 +47,11 @@ public class AuthService {
         return new RegisterResponse("Registration successful, your account is pending activation by an admin");
     }
 
+    /**
+     * Login attempt validation
+     * @param request the request
+     * @return the authentication response
+     */
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.password()));
         User user = userRepository.findByEmail(request.email())
