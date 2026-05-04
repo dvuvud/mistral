@@ -1,5 +1,5 @@
 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-  <mat-tab label="Dagsrapport">
+  <mat-tab label={{reportTitle()}}>
     <mat-form-field>
       <textarea #journalContent matInput [ngModel]="text()" (input)="onInput($event)"></textarea>
     </mat-form-field>
