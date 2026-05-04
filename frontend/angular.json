@@ -89,7 +89,12 @@
           }
         },
         "deploy": {
-          "builder": "angular-cli-ghpages:deploy"
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {
+            "buildTarget": "frontend:build:production",
+            "baseHref": "/mistral/",
+            "dir": "dist/frontend/browser"
+          }
         }
       }
     }
