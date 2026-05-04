@@ -1,6 +1,5 @@
 import { Component, inject, signal, ViewEncapsulation, viewChild, OnDestroy, OnInit } from '@angular/core';
 import { MainPanel } from './main-panel/main-panel';
-import { Child } from '../../core/child/child.service';
 import { Router } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -9,9 +8,8 @@ import { MatTab, MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { WebsocketService, WsAttendanceMessage } from '../../core/websocket/websocket.service';
 import { environment } from '../../../environments/environment';
 import { groupResponse, groupService } from '../../core/groups/group.service';
-import { FormControl } from '@angular/forms';
 
-type displayedContent = 'childview' | 'groupView' | 'teacherView';
+type displayedContent = 'childview' | 'groupView' | 'teacherView' | '';
 
 @Component({
   selector: 'main-page',
@@ -33,7 +31,7 @@ export class MainPage implements OnInit, OnDestroy {
   
   groupSignal = signal<groupResponse>({name: '', id: 0});
   allGroups = signal<groupResponse[]>([]);
-  contentSignal = signal<string>('');
+  contentSignal = signal<displayedContent>('');
 
   private router = inject(Router);
   private socketService = inject(WebsocketService);
@@ -58,15 +56,15 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   loadGroups() {
-  this.groupService.getGroups().subscribe({
-    next: (data) => {
-      this.allGroups.set(data);
-      if (data.length > 0) {
-        this.groupSignal.set(data[0]);
+    this.groupService.getGroups().subscribe({
+      next: (data) => {
+        this.allGroups.set(data);
+        if (data.length > 0) {
+          this.groupSignal.set(data[0]);
+        }
       }
-    }
-  });
-}
+    });
+  }
 
   handleWebsocketMessage(message: WsAttendanceMessage) {
     this.mainPanel().handleWebsocketMessage(message);
