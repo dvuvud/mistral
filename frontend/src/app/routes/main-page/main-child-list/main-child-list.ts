@@ -1,4 +1,4 @@
-import { Component, model, signal, OnInit, inject, computed, effect } from '@angular/core';
+import { Component, model, signal, inject, computed, effect } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
@@ -20,7 +20,7 @@ import { groupResponse } from '../../../core/groups/group.service';
 })
 
 
-export class ChildList implements OnInit {
+export class ChildList {
 
   children = signal<Child[]>([]);
   childSignal = model.required<Child>();
@@ -54,12 +54,9 @@ export class ChildList implements OnInit {
     return this.attendanceService.getSignal(this.childSignal().id, localDateToday())() ?? false;
   }
 
-  ngOnInit() {
-  }
-
   onSelectChild(child: Child) {
-    this.contentSignal.set('childView')
     this.childSignal.set(child);
+    this.contentSignal.set('childView');
   }
 
   loadChildren() {
