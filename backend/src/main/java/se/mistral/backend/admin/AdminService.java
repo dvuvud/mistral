@@ -1,6 +1,5 @@
 package se.mistral.backend.admin;
 
-
 import se.mistral.backend.child.ChildService;
 import se.mistral.backend.child.dto.ChildResponse;
 import se.mistral.backend.child.dto.ChildWithGroupResponse;
@@ -52,6 +51,10 @@ public class AdminService {
         user.setActive(false);
         User saved = userRepository.save(user);
         return new UserResponse(saved.getId(), saved.getName(), saved.getRole(), saved.getEmail());
+    }
+
+    public List<UserResponse> getAllInactiveUsers() {
+        return userRepository.findUserByActiveFalse();
     }
 
     public List<ChildWithGroupResponse> getAllChildrenWithGroup() {

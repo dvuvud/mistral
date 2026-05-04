@@ -13,7 +13,7 @@ import se.mistral.backend.child.dto.CreateChildRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import se.mistral.backend.user.UserService;
+//import se.mistral.backend.user.UserService;
 import se.mistral.backend.user.dto.UserResponse;
 import se.mistral.backend.group.GroupService;
 import se.mistral.backend.group.dto.GroupResponse;
@@ -29,7 +29,7 @@ public class AdminController {
 
     private final AdminService adminService;
     private final GroupService groupService;
-    private final UserService userService;
+    //private final UserService userService;
 
     /**
      * Create a child.
