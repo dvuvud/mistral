@@ -26,6 +26,7 @@ export class ChildList implements OnInit {
   childSignal = model.required<Child>();
   searchQuery = signal<string>('');
   groupSignal = model.required<groupResponse>();
+  contentSignal = model.required<string>();
 
   searchedChildren = computed(() => {
     const sq = this.searchQuery();
@@ -57,8 +58,8 @@ export class ChildList implements OnInit {
   }
 
   onSelectChild(child: Child) {
+    this.contentSignal.set('childView')
     this.childSignal.set(child);
-    this.contentSignal.set('childView');
   }
 
   loadChildren() {
