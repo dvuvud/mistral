@@ -72,13 +72,12 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  getRoom(): string { //TODO skriv om
-    if (this.contentSignal() === 'childView') {
+  getRoom(): string {
+    if (this.childSignal().id != 0) {
       return 'journal:child:' + this.childSignal().id + ':' + localDateToday();
-    } else if (this.contentSignal() === 'groupView') {
+    } else {
       return 'journal:group:' + this.groupSignal().id + ':' + localDateToday();
     }
-    return '';
   }
 
   isMyOwnAck(msg: WsJournalResponse): boolean {
@@ -86,7 +85,7 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
   }
 
   loadJournal() {
-    this.journalService.getJournal(this.childSignal().id).subscribe({
+    this.journalService.getJournal(this.childSignal().id, this.groupSignal().id, this.contentSignal()).subscribe({
       next: (data) => {
         console.log(data);
         this.text.set(data.content);

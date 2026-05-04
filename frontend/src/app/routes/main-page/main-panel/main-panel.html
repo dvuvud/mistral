@@ -3,7 +3,7 @@
     <div class="main-card-left">
       @if (contentSignal() === 'childView') {
           <mat-card-header>
-          <span class="dagens-datumn">Dagens datumn: {{getDate()}}</span>
+          <span class="dagens-datumn">{{childSignal().name}}</span>
         </mat-card-header>
         <div class="childDisplay">
           <child-display (attendanceChangeEvent)="wsUpdateAttendance($event)" [(childSignal)]="childSignal"></child-display>
@@ -26,7 +26,7 @@
 
       @if (contentSignal() === 'teacherView') { 
         <mat-card-header>
-        <span class="dagens-datumn">Funkis</span>
+        <span class="dagens-datumn">Coming soon!</span>
       </mat-card-header>
       }
 
