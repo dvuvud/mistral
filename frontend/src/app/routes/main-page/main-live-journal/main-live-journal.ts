@@ -1,4 +1,4 @@
-import { Component, OnDestroy, signal, inject, viewChild, ElementRef, model, computed, effect } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, Input, OnChanges, SimpleChanges, inject, viewChild, ElementRef, model, computed } from '@angular/core';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
@@ -18,7 +18,7 @@ import { groupResponse } from '../../../core/groups/group.service';
   templateUrl: './main-live-journal.html',
   styleUrl: './main-live-journal.scss',
 })
-export class MainLiveJournal implements OnDestroy {
+export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
 
   private initialized = false;
   
@@ -31,6 +31,20 @@ export class MainLiveJournal implements OnDestroy {
   childSignal = model.required<Child>();
   contentSignal = model.required<string>();
   groupSignal = model.required<groupResponse>();
+
+  reportTitle = computed(() => {
+    switch(this.contentSignal()) {
+      case('childView'):
+        return this.childSignal().name + 's' + ' dagsrapport';
+      case('groupView'):
+        return this.groupSignal().name + 's' + ' dagsrapport';
+      default:
+        return 'ERROR'
+    }
+  })
+
+  text = signal('');
+  prevText = '';
 
   reportTitle = computed(() => {
     switch(this.contentSignal()) {
@@ -73,22 +87,13 @@ export class MainLiveJournal implements OnDestroy {
     });
   }
 
-  text = signal('');
-  prevText = '';
-
-  serverRevision = 0;
-  sequence = 0;
-
-  inFlight: WsJournalWriteOperation[] = [];
-
-
-
-  getRoom(): string {
+  getRoom(): string { //TODO skriv om
     if (this.contentSignal() === 'childView') {
       return 'journal:child:' + this.childSignal().id + ':' + localDateToday();
-    } else {
+    } else if (this.contentSignal() === 'groupView') {
       return 'journal:group:' + this.groupSignal().id + ':' + localDateToday();
     }
+    return '';
   }
 
   isMyOwnAck(msg: WsJournalResponse): boolean {
@@ -96,7 +101,7 @@ export class MainLiveJournal implements OnDestroy {
   }
 
   loadJournal() {
-    this.journalService.getJournal(this.childSignal().id, this.groupSignal().id, this.contentSignal()).subscribe({
+    this.journalService.getJournal(this.childSignal().id).subscribe({
       next: (data) => {
         console.log(data);
         this.text.set(data.content);
