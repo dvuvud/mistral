@@ -10,6 +10,7 @@ import se.mistral.backend.chat.dto.ChatMessage;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/chat")
 @RequiredArgsConstructor
@@ -17,6 +18,13 @@ public class ChatController {
 
     private final ChatService chatService;
 
+    /**
+     * Retrieve history entity.
+     *
+     * @param senderId    the sender id
+     * @param recipientId the recipient id
+     * @return the history between the two users entity
+     */
     @GetMapping("/history")
     public ResponseEntity<List<ChatMessage>> retrieveHistory(@RequestParam long senderId, @RequestParam long recipientId) {
         return ResponseEntity.ok(chatService.retrieveHistory(senderId, recipientId));

@@ -12,6 +12,12 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
 
+    /**
+     * Save chat message.
+     *
+     * @param chatMessage the chat message to save
+     * @return the saved chat message
+     */
     public ChatMessage saveMessage(ChatMessage chatMessage) {
         Chat chat = new Chat();
         chat.setChatMessage(chatMessage.chatMessage());
@@ -22,6 +28,13 @@ public class ChatService {
         return chatMessage;
     }
 
+    /**
+     * Retrieve history list.
+     *
+     * @param senderId    the sender id
+     * @param recipientId the recipient id
+     * @return the list of all messages between users ordered by timestamp
+     */
     public List<ChatMessage> retrieveHistory(long senderId, long recipientId) {
         return chatRepository.findConversationHistory(
                 senderId,
