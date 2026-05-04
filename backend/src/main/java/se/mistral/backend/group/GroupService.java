@@ -16,6 +16,12 @@ public class GroupService {
     private final GroupRepository groupRepository;
     private final ChildRepository childRepository;
 
+    /**
+     * Create a group.
+     *
+     * @param request the request
+     * @return the group response of the created group
+     */
     public GroupResponse createGroup(CreateGroupRequest request) {
         Group group = new Group();
         group.setName(request.name());
@@ -23,10 +29,22 @@ public class GroupService {
         return new GroupResponse(group.getId(), group.getName());
     }
 
+    /**
+     * Gets all groups.
+     *
+     * @return the list of all groups
+     */
     public List<GroupResponse> getAllGroups() {
         return groupRepository.findAllGroups();
     }
 
+    /**
+     * Assign a child to a group.
+     *
+     * @param groupId the group id
+     * @param childId the child id
+     * @return the group response of the group the child was assigned to
+     */
     public GroupResponse assignChildToGroup(Long groupId, Long childId) {
         Child child = childRepository.findById(childId).orElseThrow(() -> new NotFoundException("Child not found"));
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group not found"));
