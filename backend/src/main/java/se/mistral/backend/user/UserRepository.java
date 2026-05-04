@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import se.mistral.backend.user.dto.BasicUserInformation;
+import se.mistral.backend.user.dto.UserResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,4 +34,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT new se.mistral.backend.user.dto.BasicUserInformation(user.id, user.name) " +
            "FROM User user WHERE user.role = TEACHER")
     List<BasicUserInformation> findUserByRole_Teacher();
+    UserResponse findUserById(Long id);
 }
