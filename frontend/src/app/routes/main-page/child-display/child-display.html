@@ -1,5 +1,5 @@
 <div class="columnise"> 
-    <p>Elev: {{childSignal().name}}</p>
+    <p>{{getDate()}}</p>
     <div class="rowise">
         Närvaro:
         <attendance-box (attendanceChangeEvent)="wsUpdateAttendance($event)" [childSignal]="childSignal()"></attendance-box>

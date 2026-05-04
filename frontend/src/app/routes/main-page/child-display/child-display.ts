@@ -12,8 +12,17 @@ import { WsAttendanceMessage } from '../../../core/websocket/websocket.service';
 export class ChildDisplay {
   childSignal = model.required<Child>();
 
+  months = ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti",
+    "September", "Oktober", "November", "December"];
+  days = ["Söndag", "Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag"];
+
   @Output() attendanceChangeEvent = new EventEmitter();
   wsUpdateAttendance(msg: WsAttendanceMessage) {
     this.attendanceChangeEvent.emit(msg);
+  }
+
+  getDate() {
+    const d = new Date();
+    return `${this.days[d.getDay()]} ${d.getDate()} ${this.months[d.getMonth()]} ${d.getFullYear()}`
   }
 }
