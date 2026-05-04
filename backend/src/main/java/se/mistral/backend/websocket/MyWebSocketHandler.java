@@ -232,7 +232,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     private void subscribe(WebSocketSession session, String rawRoom) {
         Room room = Room.parse(rawRoom);
         if (room == null) {
-            closeQuietly(session); return;
+            joinRoom(session, rawRoom);
+            return;
         }
 
         Long userId = (Long) session.getAttributes().get("userId");
