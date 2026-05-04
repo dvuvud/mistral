@@ -89,7 +89,6 @@ export class MainLiveJournal implements OnDestroy {
     } else {
       return 'journal:group:' + this.groupSignal().id + ':' + localDateToday();
     }
-    return '';
   }
 
   isMyOwnAck(msg: WsJournalResponse): boolean {
