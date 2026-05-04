@@ -18,7 +18,8 @@
         
             <main-panel 
               (attendanceChangeEvent)="wsUpdateAttendance($event)" 
-              [groupSignal]="group">
+              [groupSignal]="group"
+              [(contentSignal)]="contentSignal">
             </main-panel>
 
         </mat-tab>
