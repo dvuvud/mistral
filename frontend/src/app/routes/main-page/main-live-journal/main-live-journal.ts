@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, signal, Input, OnChanges, SimpleChanges, inject, viewChild, ElementRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, Input, OnChanges, SimpleChanges, inject, viewChild, ElementRef, model, computed } from '@angular/core';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
@@ -10,6 +10,7 @@ import { operationalTransformation } from './operational-transformation';
 import { JournalService } from '../../../core/journal/journal.service';
 import { environment } from '../../../../environments/environment';
 import { localDateToday } from '../../../core/utils/date-utils';
+import { groupResponse } from '../../../core/groups/group.service';
 
 @Component({
   selector: 'main-live-journal',
@@ -18,13 +19,27 @@ import { localDateToday } from '../../../core/utils/date-utils';
   styleUrl: './main-live-journal.scss',
 })
 export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
-  @Input() child!: Child;
 
   private journalSocket = new WebsocketService;
   private differ = new textDiff();
   private operationalTransformer = new operationalTransformation();
   private journalService = inject(JournalService);
   private textArea = viewChild.required<ElementRef<HTMLTextAreaElement>>("journalContent");
+
+  childSignal = model.required<Child>();
+  contentSignal = model.required<string>();
+  groupSignal = model.required<groupResponse>();
+
+  reportTitle = computed(() => {
+    switch(this.contentSignal()) {
+      case('childView'):
+        return this.childSignal().name + 's' + ' dagsrapport';
+      case('groupView'):
+        return this.groupSignal().name + 's' + ' dagsrapport';
+      default:
+        return 'ERROR'
+    }
+  })
 
   text = signal('');
   prevText = '';
@@ -57,12 +72,13 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  getRoom(): string {
-    if (this.child.id != 0) {
-      return 'journal:child:' + this.child.id + ':' + localDateToday();
-    } else {
-      return 'journal:group:' + 1 + ':' + localDateToday();
+  getRoom(): string { //TODO skriv om
+    if (this.contentSignal() === 'childView') {
+      return 'journal:child:' + this.childSignal().id + ':' + localDateToday();
+    } else if (this.contentSignal() === 'groupView') {
+      return 'journal:group:' + this.groupSignal().id + ':' + localDateToday();
     }
+    return '';
   }
 
   isMyOwnAck(msg: WsJournalResponse): boolean {
@@ -70,7 +86,7 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
   }
 
   loadJournal() {
-    this.journalService.getJournal(this.child.id).subscribe({
+    this.journalService.getJournal(this.childSignal().id).subscribe({
       next: (data) => {
         console.log(data);
         this.text.set(data.content);
