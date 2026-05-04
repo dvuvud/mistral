@@ -27,6 +27,6 @@ export class ChildService {
     if (date) {
       params = params.set('date', date);
     }
-  return this.http.get<Child[]>(this.urlPerGroup, { params });
-}
+    return this.http.get<Child[]>(this.urlPerGroup, { params });
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, signal, Input, OnChanges, SimpleChanges, inject, viewChild, ElementRef, model, computed } from '@angular/core';
+import { Component, OnDestroy, signal, inject, viewChild, ElementRef, model, computed, effect } from '@angular/core';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
@@ -18,7 +18,7 @@ import { groupResponse } from '../../../core/groups/group.service';
   templateUrl: './main-live-journal.html',
   styleUrl: './main-live-journal.scss',
 })
-export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
+export class MainLiveJournal implements OnDestroy {
 
   private initialized = false;
   
@@ -31,20 +31,6 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
   childSignal = model.required<Child>();
   contentSignal = model.required<string>();
   groupSignal = model.required<groupResponse>();
-
-  reportTitle = computed(() => {
-    switch(this.contentSignal()) {
-      case('childView'):
-        return this.childSignal().name + 's' + ' dagsrapport';
-      case('groupView'):
-        return this.groupSignal().name + 's' + ' dagsrapport';
-      default:
-        return 'ERROR'
-    }
-  })
-
-  text = signal('');
-  prevText = '';
 
   reportTitle = computed(() => {
     switch(this.contentSignal()) {
@@ -86,6 +72,16 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
       }
     });
   }
+
+  text = signal('');
+  prevText = '';
+
+  serverRevision = 0;
+  sequence = 0;
+
+  inFlight: WsJournalWriteOperation[] = [];
+
+
 
   getRoom(): string {
     if (this.childSignal().id != 0) {
