@@ -3,6 +3,7 @@ package se.mistral.backend.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.mistral.backend.user.dto.BasicUserInformation;
+import se.mistral.backend.user.dto.UserResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,5 +31,9 @@ public class UserService {
      */
     public List<BasicUserInformation> retrieveAllTeachers() {
         return userRepository.findUserByRole_Teacher();
+    }
+
+    public UserResponse retrieveOneTeacher(Long teacherId) {
+        return userRepository.findUserById(teacherId);
     }
 }
