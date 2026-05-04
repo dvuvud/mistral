@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, signal, Input, OnChanges, SimpleChanges, inject, viewChild, ElementRef, model, computed } from '@angular/core';
+import { Component, OnDestroy, signal, inject, viewChild, ElementRef, model, computed, effect } from '@angular/core';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
@@ -18,8 +18,10 @@ import { groupResponse } from '../../../core/groups/group.service';
   templateUrl: './main-live-journal.html',
   styleUrl: './main-live-journal.scss',
 })
-export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
+export class MainLiveJournal implements OnDestroy {
 
+  private initialized = false;
+  
   private journalSocket = new WebsocketService;
   private differ = new textDiff();
   private operationalTransformer = new operationalTransformation();
@@ -41,25 +43,11 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
     }
   })
 
-  text = signal('');
-  prevText = '';
-
-  serverRevision = 0;
-  sequence = 0;
-
-  inFlight: WsJournalWriteOperation[] = [];
-
-  ngOnInit() {
-    this.loadJournal();
-
-    const roomDest = this.getRoom();
-    this.journalSocket.connect(`${environment.wsUrl}/ws`, roomDest);
-
+  constructor() {
     this.journalSocket.getMessages().subscribe(data => {
-      console.log(this.inFlight);
-      console.log("recieved: ", data)
       const response = data as WsJournalResponse;
       let incoming = response.operation;
+      
       if (this.isMyOwnAck(response)) {
         this.inFlight.shift();
       } else {
@@ -70,7 +58,30 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
       }
       this.serverRevision = response.serverRevision;
     });
+
+    effect(() => {
+      
+      this.loadJournal();
+      const roomDest = this.getRoom();
+
+      if (!this.initialized) {
+        this.journalSocket.connect(`${environment.wsUrl}/ws`, roomDest);
+        this.initialized = true;
+      } else {
+        this.journalSocket.changeRoom(roomDest); 
+      }
+    });
   }
+
+  text = signal('');
+  prevText = '';
+
+  serverRevision = 0;
+  sequence = 0;
+
+  inFlight: WsJournalWriteOperation[] = [];
+
+
 
   getRoom(): string {
     if (this.childSignal().id != 0) {
@@ -112,17 +123,6 @@ export class MainLiveJournal implements OnInit, OnChanges, OnDestroy {
 
     this.text.set(this.textArea().nativeElement.value);
     this.prevText = this.text();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['child'] && !changes['child'].firstChange) {
-      this.loadJournal();
-
-      const roomDest = this.getRoom();
-      console.log(roomDest);
-      this.journalSocket.changeRoom(roomDest);
-      this.prevText = '';
-    }
   }
 
   ngOnDestroy() {
