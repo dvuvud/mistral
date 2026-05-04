@@ -51,4 +51,8 @@ public class UserService {
         user.setColor(color);
         userRepository.save(user);
     }
+
+    public UserResponse retrieveOneTeacher(Long teacherId) {
+        return userRepository.findUserById(teacherId);
+    }
 }
