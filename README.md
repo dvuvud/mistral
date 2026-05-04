@@ -22,6 +22,7 @@ Det här dokumentet går igenom allt du behöver göra för att sätta upp din u
 - [3. Starta databasen](#3-starta-databasen)
 - [4. Starta backend](#4-starta-backend)
 - [5. Starta frontend](#5-starta-frontend)
+- [6. Deploya ändringar](#6-deploya-ändringar)
 - [Test info](#Test-info)
 
 ---
@@ -215,6 +216,18 @@ ng serve
 Frontend körs på [http://localhost:4200](http://localhost:4200) och uppdateras automatiskt när du sparar filer.
 
 ---
+
+## 6. Deploya ändringar
+
+Gör följande för att deploya nya ändringar i frontenden.
+```bash
+# Navigera till frontenden mappen
+cd frontend
+
+# Deploya
+ng deploy
+```
+Filerna kommer pushas till `gh-pages`-branchen och hostas på [https://dvuvud.github.io/mistral/app](https://dvuvud.github.io/mistral/app)
 
 ## Test info
 Lite information gällande testning i projektet.
