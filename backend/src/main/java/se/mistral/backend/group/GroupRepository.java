@@ -7,9 +7,15 @@ import se.mistral.backend.group.dto.GroupResponse;
 
 import java.util.List;
 
+
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
 
+    /**
+     * Find all groups.
+     *
+     * @return the list of all groups
+     */
     @Query("SELECT new se.mistral.backend.group.dto.GroupResponse(g.id, g.name) FROM Group g")
     List<GroupResponse> findAllGroups();
 }
