@@ -11,6 +11,7 @@ import { environment } from '../../../environments/environment';
 import { groupResponse, groupService } from '../../core/groups/group.service';
 import { FormControl } from '@angular/forms';
 
+type displayedContent = 'childview' | 'groupView' | 'teacherView';
 
 @Component({
   selector: 'main-page',
@@ -27,6 +28,7 @@ import { FormControl } from '@angular/forms';
   templateUrl: './main-page.html',
   styleUrl: './main-page.scss'
 })
+
 export class MainPage implements OnInit, OnDestroy {
   
   groupSignal = signal<groupResponse>({name: '', id: 0});
@@ -77,6 +79,7 @@ export class MainPage implements OnInit, OnDestroy {
   onTabChange(event: MatTabChangeEvent) {
     const clickedIndex = event.index;
     const currentGroup = this.allGroups()[clickedIndex];
+    this.contentSignal.set('groupView');
     this.groupSignal.set(currentGroup);
   }
 
@@ -84,5 +87,9 @@ export class MainPage implements OnInit, OnDestroy {
     document.cookie = 'jwtToken=""';
     localStorage.removeItem('token');
     this.router.navigateByUrl('/');
+  }
+
+  minaSidor() {
+    this.contentSignal.set('teacherView');
   }
 }
