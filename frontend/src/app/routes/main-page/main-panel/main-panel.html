@@ -33,13 +33,16 @@
       }
       
     </div>
-    <div class="main-card-right">
-      <main-child-list 
-        [(childSignal)]="childSignal"
-        [(groupSignal)]="groupSignal"
-        [(contentSignal)]="contentSignal">
-    </main-child-list>
-
+    
+    <mat-card class="main-card-right">
+      <div class="main-card-right">
+        <main-child-list 
+          [(childSignal)]="childSignal"
+          [(groupSignal)]="groupSignal"
+          [(contentSignal)]="contentSignal"
+          [(allGroups)]="allGroups">
+      </main-child-list>
     </div>
+    </mat-card>
   </mat-card-content>
 </mat-card>

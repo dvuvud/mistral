@@ -11,10 +11,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { localDateToday } from '../../../core/utils/date-utils';
 import { groupResponse } from '../../../core/groups/group.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'main-child-list',
-  imports: [MatListModule, RouterModule, MatDividerModule, AttendanceBox, MatFormFieldModule, MatInputModule, MatIconModule],
+  imports: [MatListModule, RouterModule, MatDividerModule, AttendanceBox, MatFormFieldModule, MatInputModule, MatIconModule, MatCardModule, MatSelectModule],
   templateUrl: './main-child-list.html',
   styleUrl: './main-child-list.scss',
 })
@@ -27,6 +29,7 @@ export class ChildList {
   searchQuery = signal<string>('');
   groupSignal = model.required<groupResponse>();
   contentSignal = model.required<string>();
+  allGroups = model.required<groupResponse[]>();
 
   searchedChildren = computed(() => {
     const sq = this.searchQuery();
