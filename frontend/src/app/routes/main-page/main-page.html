@@ -16,11 +16,11 @@
       
       @for (group of allGroups(); track group.id) {
         <mat-tab label="{{group.name}}">
-        
             <main-panel 
               (attendanceChangeEvent)="wsUpdateAttendance($event)" 
               [groupSignal]="group"
-              [(contentSignal)]="contentSignal">
+              [(contentSignal)]="contentSignal"
+              [(allGroups)]="allGroups">
             </main-panel>
 
         </mat-tab>

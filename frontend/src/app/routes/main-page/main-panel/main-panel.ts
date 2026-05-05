@@ -20,7 +20,9 @@ export class MainPanel {
   childSignal = signal<Child>({ name: '', id: 0, date: "", present: false });
   groupSignal = model.required<groupResponse>();
   contentSignal = model.required<string>(); 
-  
+  allGroups = model.required<groupResponse[]>()
+
+
   childList = viewChild.required(ChildList);
 
   handleWebsocketMessage(message: WsAttendanceMessage) {
