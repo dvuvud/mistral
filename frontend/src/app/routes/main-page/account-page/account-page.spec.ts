@@ -10,7 +10,7 @@ describe('AccountPage', () => {
     await TestBed.configureTestingModule({
       imports: [AccountPage]
     })
-      .compileComponents();
+    .compileComponents();
 
     fixture = TestBed.createComponent(AccountPage);
     component = fixture.componentInstance;
