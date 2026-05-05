@@ -39,7 +39,7 @@ export class AuthService {
       .post<AuthResponse>(`${this.baseUrl}/login`, data)
       .pipe(tap((response) => {
         localStorage.setItem('token', response.token);
-        localStorage.setItem('UserId', response.id.toString());
+        sessionStorage.setItem('UserId', response.id.toString());
       }));
   }
 

@@ -5,28 +5,18 @@ export interface Diff {
 }
 
 export class textDiff {
-  getDiff(prevText: string, newText: string): Diff {
-    const operation = prevText.length < newText.length ? 'INSERT' : 'DELETE';
-    const diff: Diff = {operation: operation, idx: 0, value: ''}
+  getDiff(prevText: string, newText: string, idx: number): Diff {
+    const length = prevText.length - newText.length
+    const operation = length < 0 ? 'INSERT' : 'DELETE';
+    const diff: Diff = {operation: operation, idx: idx, value: ''}
     switch (operation) {
       case 'DELETE':
-        diff.idx = this.getDiffIdx(prevText, newText);
-        diff.value = prevText.charAt(diff.idx);
+        diff.value = length.toString(); // lite ineffektivt att förvandla fram och tillbaka men blir smidigt att koda
         break;
       case 'INSERT':
-        diff.idx = this.getDiffIdx(prevText, newText);
-        diff.value = newText.charAt(diff.idx);
+        diff.value = newText.substring(idx + length, idx); // blir minus eftersom att insert ger negativ "length"
         break;
     }
     return diff;
-  }
-
-  getDiffIdx(prevText: string, newText: string): number {
-    let idx = 0;
-    while (prevText.charAt(idx) == newText.charAt(idx)) {
-      idx++;
-      if (idx > Math.max(prevText.length, newText.length)) break;
-    }
-    return idx;
   }
 }
