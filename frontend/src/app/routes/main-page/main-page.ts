@@ -78,7 +78,7 @@ export class MainPage implements OnInit, OnDestroy {
     const clickedIndex = event.index;
     const currentGroup = this.allGroups()[clickedIndex];
     this.contentSignal.set('groupView');
-    this.groupSignal.set(currentGroup);
+    this.groupSignal.set(currentGroup); 
   }
 
   logout() {
