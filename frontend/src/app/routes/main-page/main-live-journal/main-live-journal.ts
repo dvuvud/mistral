@@ -84,7 +84,7 @@ export class MainLiveJournal implements OnDestroy {
 
 
   getRoom(): string {
-    if (this.childSignal().id != 0) {
+    if (this.contentSignal() === 'childView') {
       return 'journal:child:' + this.childSignal().id + ':' + localDateToday();
     } else {
       return 'journal:group:' + this.groupSignal().id + ':' + localDateToday();
