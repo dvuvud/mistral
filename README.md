@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="2116" height="496" alt="kindguard-logo" src="https://github.com/user-attachments/assets/a170cbca-3e75-482b-9a4d-a11cba0aa616" />
+  <img width="800" alt="kindguard-logo" src="https://github.com/user-attachments/assets/a170cbca-3e75-482b-9a4d-a11cba0aa616" />
   <br/>
   <img src="https://img.shields.io/badge/-Spring_Boot-2D3436?style=flat&logo=springboot&logoColor=6DB33F" />
   <img src="https://img.shields.io/badge/-Angular-2D3436?style=flat&logo=angular&logoColor=DD0031" />
