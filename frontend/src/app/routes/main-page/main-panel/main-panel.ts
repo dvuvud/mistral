@@ -7,10 +7,11 @@ import { ChildList } from '../main-child-list/main-child-list';
 import { MainLiveJournal } from '../main-live-journal/main-live-journal';
 import { WsAttendanceMessage, WsMessageContent } from '../../../core/websocket/websocket.service';
 import { groupResponse } from '../../../core/groups/group.service';
+import { AccountPage } from '../account-page/account-page';
 
 @Component({
   selector: 'main-panel',
-  imports: [ChildList, MatDividerModule, ChildDisplay, MatCard, MatCardHeader, MatCardContent, MainLiveJournal],
+  imports: [ChildList, MatDividerModule, ChildDisplay, MatCard, MatCardHeader, MatCardContent, MainLiveJournal, AccountPage],
   templateUrl: './main-panel.html',
   styleUrl: './main-panel.scss',
 })

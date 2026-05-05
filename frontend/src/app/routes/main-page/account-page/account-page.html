@@ -1,0 +1,18 @@
+<mat-card appearance="outlined">
+    <mat-card-header>
+        <div mat-card-avatar class="icon-display"><mat-icon>person</mat-icon></div>
+        <mat-card-title>{{(currentUser | async)?.name}}</mat-card-title>
+        <mat-card-subtitle>{{(currentUser | async)?.role}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <p>Mejladress: {{(currentUser | async)?.email}}</p>
+        <p>Exempeltext</p>
+        <p>Exempeltext</p>
+        <p>Exempeltext</p>
+        <p>Exempeltext</p>
+        <p>Exempeltext</p>
+        <p>Exempeltext</p>
+    </mat-card-content>
+</mat-card>
+
+
