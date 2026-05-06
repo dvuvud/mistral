@@ -1,4 +1,11 @@
 package se.mistral.backend.attendance.dto;
 
-public record AttendanceDto(Boolean present) {
-}
+import se.mistral.backend.attendance.AttendanceStatus;
+
+import java.time.LocalDateTime;
+
+public record AttendanceDto(
+    AttendanceStatus status,
+    LocalDateTime checkInTime,
+    LocalDateTime checkOutTime
+) {}
