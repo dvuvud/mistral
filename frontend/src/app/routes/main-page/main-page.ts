@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTab, MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { WebsocketService, WsAttendanceMessage, WsMailbox } from '../../core/websocket/websocket.service';
 import { environment } from '../../../environments/environment';
-import { groupResponse, groupService } from '../../core/groups/group.service';
+import { groupResponse } from '../../core/groups/group.service';
 import { Presence } from '../../core/presence/presence.service';
 
 type displayedContent = 'childview' | 'groupView' | 'teacherView' | 'homeView' | '';
@@ -29,33 +29,21 @@ type displayedContent = 'childview' | 'groupView' | 'teacherView' | 'homeView' |
 })
 
 export class MainPage implements OnInit, OnDestroy {
-<<<<<<< HEAD
-  
-=======
-
   groupSignal = signal<groupResponse>({name: '', id: 0});
   allGroups = signal<groupResponse[]>([]);
->>>>>>> e0b5dfd (Websocket service rewrite)
   contentSignal = signal<displayedContent>('');
   private router = inject(Router);
   private presence = inject(Presence);
   private socketService = inject(WebsocketService);
   mainPanel = viewChild.required(MainPanel);
 
-<<<<<<< HEAD
-  ngOnInit() {
-    this.socketService.connect(`${environment.wsUrl}/ws`, "group=Nyckelpigorna");
-    this.contentSignal.set('homeView')
-    this.socketService.getMessages().subscribe((message) => {
-=======
   async ngOnInit() {
-    this.loadGroups();
+    this.contentSignal.set('homeView')
     this.socketService.connect(`${environment.wsUrl}/ws`);
     await this.socketService.ensureConnected();
     this.socketService.setAttendanceRoom("group=Nyckelpigorna");
     this.presence.init();
     this.socketService.getMessages(WsMailbox.attendance).subscribe((message) => {
->>>>>>> e0b5dfd (Websocket service rewrite)
       if (!("childId" in message)) {
         console.error("Attendance message with incorrect body!");
         return;
@@ -77,16 +65,14 @@ export class MainPage implements OnInit, OnDestroy {
     this.socketService.sendAttendanceUpdate(msg);
   }
 
-<<<<<<< HEAD
-=======
   onTabChange(event: MatTabChangeEvent) {
     const clickedIndex = event.index;
     const currentGroup = this.allGroups()[clickedIndex];
     this.contentSignal.set('groupView');
     this.groupSignal.set(currentGroup);
+    this.presence.spoofTeacherUpdate();
   }
 
->>>>>>> e0b5dfd (Websocket service rewrite)
   logout() {
     document.cookie = 'jwtToken=""';
     localStorage.removeItem('token');

@@ -121,7 +121,7 @@ export class MainLiveJournal implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    this.journalSocket.disconnect();
+    this.journalSocket.leaveJournalRoom();
   }
 
   onInput(event: Event) {
