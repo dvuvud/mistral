@@ -12,6 +12,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 
 import lombok.Data;
 import lombok.Builder;
@@ -19,6 +21,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -34,8 +37,13 @@ public class Attendance {
     @Column(nullable = false)
     private LocalDate date;
 
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Boolean present;
+    private AttendanceStatus status = AttendanceStatus.NOT_SET;
+
+    private LocalDateTime checkInTime;
+    private LocalDateTime checkOutTime;
 
     @Version
     private int version;
