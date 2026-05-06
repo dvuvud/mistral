@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,5 +44,16 @@ public class AttendanceController {
     @GetMapping()
     public ResponseEntity<AttendanceDto> getAttendance(@RequestParam Long childId, @RequestParam(required = false) LocalDate date) {
         return ResponseEntity.ok(attendanceService.getAttendance(childId, date != null ? date : LocalDate.now()));
+    }
+
+    /**
+     * Gets attendance history for a child.
+     *
+     * @param childId the child id
+     * @return the full attendance history ordered by date descending
+     */
+    @GetMapping("/history")
+    public ResponseEntity<List<AttendanceDto>> getAttendanceHistory(@RequestParam Long childId) {
+        return ResponseEntity.ok(attendanceService.getAttendanceHistory(childId));
     }
 }
