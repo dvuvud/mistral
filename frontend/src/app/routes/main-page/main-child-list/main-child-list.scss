@@ -43,22 +43,36 @@ mat-form-field {
 
 .list-topper { //squashd av liten ruta FIX
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 }
 
-
 .stats {
   display: flex;
   flex-direction: row;
-  justify-content: baseline;
-  background-color: var(--mat-sys-surface-container-highest); //fel färg
-  flex: 1
+  justify-content: space-between;
+  background-color: var(--mat-sys-surface-variant);
+  color: var(--mat-sys-on-surface-variant);
+  flex: 1;
+  padding: 0.5em;
+}
+
+.stats::after {
+  content: "";
+}
+
+.stats::before {
+  content: "";
+}
+
+.stats p {
+  padding: 0;
+  margin: 0.1em;
 }
 
 .pick-class {
-  width: 30%;
+  width: 100%;
 }
 
 .stats-text {

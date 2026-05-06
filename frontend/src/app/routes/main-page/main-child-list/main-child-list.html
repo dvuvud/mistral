@@ -1,7 +1,8 @@
 <div class="child-list-container">
   <mat-card class="list-topper">
       <mat-form-field subscriptSizing="dynamic" class="pick-class">
-        <mat-label>Välj klass<mat-icon>groups</mat-icon></mat-label>
+        <mat-label><mat-icon>groups</mat-icon> Välj klass</mat-label>
+
         <mat-select>
           @for (group of allGroups(); track group.id) {
               <mat-option [value]="group" (click)="handleSelection(group)">
