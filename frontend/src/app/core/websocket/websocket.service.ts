@@ -5,8 +5,7 @@ import { AttendanceStatus } from '../child/attendance.service';
 
 const DEBUG = true;
 
-type WsMessageType = "ATTENDANCE" | "DOC_OPERATION" | "PRESENCE_STATE" | "PRESENCE_LEAVE" | "PRESENCE_JOIN" | "CHAT"
-
+type WsMessageType = "ATTENDANCE" | "DOC_OPERATION" | "PRESENCE_STATE" | "PRESENCE_LEAVE" | "PRESENCE_JOIN" | "CHAT_MESSAGE"
 export type WsJournalWriteOperation = InsertOperation | DeleteOperation;
 
 export enum WsMailbox {
@@ -203,7 +202,7 @@ export class WebsocketService {
 
     message.room = this.rooms[type == "ATTENDANCE"
       ? "attendance"
-      : type == "CHAT"
+      : type == "CHAT_MESSAGE"
         ? "chat"
         : "journal"];
     message.type = type;
@@ -220,17 +219,17 @@ export class WebsocketService {
     this.sendMessage("DOC_OPERATION", message);
   }
 
-<<<<<<< HEAD
-  getMessages(mailbox: WsMailbox): Observable<WsMessageContent> {
-    return this.mailboxes[mailbox].asObservable();
-=======
-  sendChatMessage(room: string, message: WsChatMessage): void {
-    const payload= JSON.stringify({type: "CHAT_MESSAGE", room, message})
-    this.socket?.send(payload);
+  setChatRoom(newRoom: string): void {
+    this.setRoom("chat", newRoom);
   }
 
-  getMessages(): Observable<WsMessageContent> {
-    return this.messages.asObservable();
->>>>>>> 4564164 (lagt till chatttyper i WebsocketService)
+  sendChatMessage(message: WsChatMessage): void {
+    const payload = JSON.stringify({ type: "CHAT_MESSAGE", room: this.rooms["chat"], message });
+    if (DEBUG) console.log("[Websocket] - Sending off: ", payload);
+    this.connectedSocket?.send(payload);
+  }
+
+  getMessages(mailbox: WsMailbox): Observable<WsMessageContent> {
+    return this.mailboxes[mailbox].asObservable();
   }
 }
