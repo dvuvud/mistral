@@ -46,6 +46,13 @@ export interface WsJournalResponse extends WsMessageContent {
   sequence: number
 }
 
+export interface WsChatMessage {
+  senderId: number,
+  recipientId: number,
+  chatMessage: string,
+  timestamp: string
+}
+
 export interface InsertOperation {
   type: 'INSERT',
   position: number,
@@ -213,7 +220,17 @@ export class WebsocketService {
     this.sendMessage("DOC_OPERATION", message);
   }
 
+<<<<<<< HEAD
   getMessages(mailbox: WsMailbox): Observable<WsMessageContent> {
     return this.mailboxes[mailbox].asObservable();
+=======
+  sendChatMessage(room: string, message: WsChatMessage): void {
+    const payload= JSON.stringify({type: "CHAT_MESSAGE", room, message})
+    this.socket?.send(payload);
+  }
+
+  getMessages(): Observable<WsMessageContent> {
+    return this.messages.asObservable();
+>>>>>>> 4564164 (lagt till chatttyper i WebsocketService)
   }
 }
