@@ -9,7 +9,7 @@ import { WebsocketService, WsAttendanceMessage } from '../../core/websocket/webs
 import { environment } from '../../../environments/environment';
 import { groupResponse, groupService } from '../../core/groups/group.service';
 
-type displayedContent = 'childview' | 'groupView' | 'teacherView' | '';
+type displayedContent = 'childview' | 'groupView' | 'teacherView' | 'homeView' | '';
 
 @Component({
   selector: 'main-page',
@@ -36,6 +36,7 @@ export class MainPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.socketService.connect(`${environment.wsUrl}/ws`, "group=Nyckelpigorna");
+    this.contentSignal.set('homeView')
     this.socketService.getMessages().subscribe((message) => {
       if (!("childId" in message)) {
         console.error("Attendance message with incorrect body!");
@@ -67,5 +68,9 @@ export class MainPage implements OnInit, OnDestroy {
 
   minaSidor() {
     this.contentSignal.set('teacherView');
+  }
+
+  hem() {
+    this.contentSignal.set('homeView');
   }
 }

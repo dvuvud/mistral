@@ -36,6 +36,14 @@ export class ChildList {
     return this.children().filter(x => x.name.toLowerCase().includes(sq)); 
   });
 
+  groupAttendance = computed(() => {
+    return this.searchedChildren().filter(x => x.present === true).length;
+  })
+
+  groupAbsent = computed(() => {
+    return this.searchedChildren().length - this.groupAttendance();
+  })
+
   private attendanceService = inject(AttendanceService);
   private childService = inject(ChildService);
 
@@ -81,7 +89,7 @@ export class ChildList {
   handleSelection(value: groupResponse) {
     console.log(value);
     if(value.name === 'alla') {
-      this.contentSignal.set('');
+      this.contentSignal.set('homeView');
       this.showAllChildren();
       return;
     }

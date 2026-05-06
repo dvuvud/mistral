@@ -1,8 +1,7 @@
 <div class="child-list-container">
-  <mat-card>
-    <mat-card-header>
-      <mat-form-field>
-        <mat-label>Välj klass</mat-label>
+  <mat-card class="list-topper">
+      <mat-form-field subscriptSizing="dynamic" class="pick-class">
+        <mat-label>Välj klass<mat-icon>groups</mat-icon></mat-label>
         <mat-select>
           @for (group of allGroups(); track group.id) {
               <mat-option [value]="group" (click)="handleSelection(group)">
@@ -13,16 +12,20 @@
                         (click)="handleSelection({name: 'alla', id: 0})">Alla elever</mat-option>
         </mat-select>
       </mat-form-field>
-    </mat-card-header>
+      <mat-card-content class="stats">
+          <p class="stats-text">Närvarande: {{groupAttendance()}}</p>
+          <p class="stats-text">Icke närvarande: {{groupAbsent()}}</p>
+          <p class="stats-text">Antal elever: {{children().length}}</p>
+        </mat-card-content>
+    </mat-card>
+    <mat-divider></mat-divider>
       <mat-form-field subscriptSizing="dynamic">
-      <mat-label><mat-icon>search</mat-icon>Sök</mat-label>
+      <mat-label>Sök<mat-icon>search</mat-icon></mat-label>
       <input matInput #searchQuery type="search" 
              (input)="onSearchUpdated(searchQuery.value.toLowerCase())">
     </mat-form-field>
-  </mat-card>
   <mat-action-list class="list-class">
     @for (Child of searchedChildren(); track Child.id; let last = $last) {
-    
       <button mat-list-item (click)="onSelectChild(Child)">
         <span matListItemTitle>{{Child.name}} </span>
 

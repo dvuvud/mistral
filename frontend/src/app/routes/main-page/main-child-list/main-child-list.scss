@@ -11,6 +11,7 @@
   flex-direction: column;
   min-height: 0;
   height: 100%;
+  overflow: hidden;
 }
 
 .mat-mdc-action-list {
@@ -40,12 +41,30 @@ mat-form-field {
   width: 100%;
 }
 
-mat-form-field { 
-  width: 100%;
+.list-topper { //squashd av liten ruta FIX
+  display: flex;
+  flex-direction: row;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }
 
-mat-form-field { 
-  width: 100%;
+
+.stats {
+  display: flex;
+  flex-direction: row;
+  justify-content: baseline;
+  background-color: var(--mat-sys-surface-container-highest); //fel färg
+  flex: 1
+}
+
+.pick-class {
+  width: 30%;
+}
+
+.stats-text {
+  margin: 1em;
+  font: var(--mat-sys-title-small);
+  color: var(--mat-sys-on-secondary-container);
 }
 
 mat-form-field { 

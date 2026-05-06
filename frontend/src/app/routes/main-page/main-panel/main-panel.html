@@ -2,8 +2,8 @@
   <mat-card-content class="main-card-content">
     <div class="main-card-left">
       @if (contentSignal() === 'childView') {
-          <mat-card-header>
-          <span class="dagens-datumn">{{childSignal().name}}</span>
+          <mat-card-header class="title">
+          <span>{{childSignal().name}}</span>
         </mat-card-header>
         <div class="childDisplay">
           <child-display (attendanceChangeEvent)="wsUpdateAttendance($event)" [(childSignal)]="childSignal"></child-display>
@@ -15,8 +15,8 @@
       }
 
       @if (contentSignal() === 'groupView') {
-        <mat-card-header>
-        <span class="dagens-datumn">{{groupSignal().name}}</span>
+        <mat-card-header class="title">
+        <span>{{groupSignal().name}}</span>
       </mat-card-header>
         <main-live-journal [childSignal]="childSignal()"
                           [groupSignal]="groupSignal()"
@@ -28,7 +28,7 @@
         <account-page></account-page>
       }
 
-      @if (contentSignal() === '') {
+      @if (contentSignal() === 'homeView') {
         <h1>Hej och välkommen till KindGuard</h1>
         <p>Skola</p>
         <p>kalender?</p>
