@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
-export type WsMessageContent = WsAttendanceMessage | WsJournalMessage | WsJournalResponse;
+export type WsMessageContent = WsAttendanceMessage | WsJournalMessage | WsJournalResponse | WsChatMessage;
 export type WsJournalWriteOperation = InsertOperation | DeleteOperation;
-type WsMessageType = "ATTENDANCE" | "DOC_OPERATION";
+type WsMessageType = "ATTENDANCE" | "DOC_OPERATION" | "CHAT_MESSAGE";
 
 export interface WsAttendanceMessage {
   childId: number,
@@ -22,6 +22,13 @@ export interface WsJournalResponse {
   serverRevision: number,
   userId: number,
   sequence: number
+}
+
+export interface WsChatMessage {
+  senderId: number,
+  recipientId: number,
+  chatMessage: string,
+  timestamp: string
 }
 
 export interface InsertOperation {
@@ -92,6 +99,11 @@ export class WebsocketService {
 
   sendJournalUpdate(message: WsJournalMessage): void {
     this.sendMessage("DOC_OPERATION", message);
+  }
+
+  sendChatMessage(room: string, message: WsChatMessage): void {
+    const payload= JSON.stringify({type: "CHAT_MESSAGE", room, message})
+    this.socket?.send(payload);
   }
 
   getMessages(): Observable<WsMessageContent> {
