@@ -1,14 +1,13 @@
-import { Component, OnDestroy, signal, inject, viewChild, ElementRef, model, computed, effect } from '@angular/core';
+import { Component, OnDestroy, signal, inject, viewChild, ElementRef, model, computed, effect, OnInit } from '@angular/core';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { FormsModule } from '@angular/forms';
-import { WsJournalWriteOperation, WebsocketService, WsJournalMessage, WsJournalResponse } from '../../../core/websocket/websocket.service';
+import { WsJournalWriteOperation, WebsocketService, WsJournalMessage, WsJournalResponse, WsMailbox } from '../../../core/websocket/websocket.service';
 import { Child } from '../../../core/child/child.service';
 import { textDiff, Diff } from './text-diff';
 import { operationalTransformation } from './operational-transformation';
 import { JournalService } from '../../../core/journal/journal.service';
-import { environment } from '../../../../environments/environment';
 import { localDateToday } from '../../../core/utils/date-utils';
 import { groupResponse } from '../../../core/groups/group.service';
 
@@ -18,11 +17,11 @@ import { groupResponse } from '../../../core/groups/group.service';
   templateUrl: './main-live-journal.html',
   styleUrl: './main-live-journal.scss',
 })
-export class MainLiveJournal implements OnDestroy {
+export class MainLiveJournal implements OnDestroy, OnInit {
 
   private initialized = false;
-  
-  private journalSocket = new WebsocketService;
+
+  private journalSocket = inject(WebsocketService);
   private differ = new textDiff();
   private operationalTransformer = new operationalTransformation();
   private journalService = inject(JournalService);
@@ -43,11 +42,12 @@ export class MainLiveJournal implements OnDestroy {
     }
   })
 
-  constructor() {
-    this.journalSocket.getMessages().subscribe(data => {
+  async ngOnInit() {
+    await this.journalSocket.ensureConnected();
+    this.journalSocket.getMessages(WsMailbox.journal).subscribe(data => {
       const response = data as WsJournalResponse;
       let incoming = response.operation;
-      
+
       if (this.isMyOwnAck(response)) {
         this.inFlight.shift();
       } else {
@@ -58,18 +58,13 @@ export class MainLiveJournal implements OnDestroy {
       }
       this.serverRevision = response.serverRevision;
     });
+  }
 
+  constructor() {
     effect(() => {
-      
       this.loadJournal();
       const roomDest = this.getRoom();
-
-      if (!this.initialized) {
-        this.journalSocket.connect(`${environment.wsUrl}/ws`, roomDest);
-        this.initialized = true;
-      } else {
-        this.journalSocket.changeRoom(roomDest); 
-      }
+      this.journalSocket.setJournalRoom(roomDest);
     });
   }
 
