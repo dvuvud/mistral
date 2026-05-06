@@ -4,16 +4,20 @@
       <mat-form-field>
         <mat-label>Välj klass</mat-label>
         <mat-select>
-          @for (group of allGroups(); track group) {
-            <mat-option [value]="group.name">{{group.name}}</mat-option>
-          }
-          <mat-option [value]="">Alla elever</mat-option>
+          @for (group of allGroups(); track group.id) {
+              <mat-option [value]="group" (click)="handleSelection(group)">
+                {{ group.name }}
+              </mat-option>
+            }
+            <mat-option [value]="{name: 'alla', id: 0}" 
+                        (click)="handleSelection({name: 'alla', id: 0})">Alla elever</mat-option>
         </mat-select>
       </mat-form-field>
     </mat-card-header>
       <mat-form-field subscriptSizing="dynamic">
       <mat-label><mat-icon>search</mat-icon>Sök</mat-label>
-      <input matInput #searchQuery type="search" (input)="onSearchUpdated(searchQuery.value.toLowerCase())">
+      <input matInput #searchQuery type="search" 
+             (input)="onSearchUpdated(searchQuery.value.toLowerCase())">
     </mat-form-field>
   </mat-card>
   <mat-action-list class="list-class">

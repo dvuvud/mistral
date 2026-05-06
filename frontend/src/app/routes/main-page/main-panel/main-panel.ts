@@ -1,4 +1,4 @@
-import { Component, EventEmitter, model, Output, signal, viewChild } from '@angular/core';
+import { Component, EventEmitter, inject, model, OnInit, Output, signal, viewChild } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { ChildDisplay } from "../child-display/child-display";
 import { Child } from '../../../core/child/child.service';
@@ -6,7 +6,7 @@ import { MatCard, MatCardHeader, MatCardContent } from '@angular/material/card';
 import { ChildList } from '../main-child-list/main-child-list';
 import { MainLiveJournal } from '../main-live-journal/main-live-journal';
 import { WsAttendanceMessage, WsMessageContent } from '../../../core/websocket/websocket.service';
-import { groupResponse } from '../../../core/groups/group.service';
+import { groupResponse, groupService } from '../../../core/groups/group.service';
 import { AccountPage } from '../account-page/account-page';
 
 @Component({
@@ -15,15 +15,29 @@ import { AccountPage } from '../account-page/account-page';
   templateUrl: './main-panel.html',
   styleUrl: './main-panel.scss',
 })
-export class MainPanel {
+export class MainPanel implements OnInit{
   
   childSignal = signal<Child>({ name: '', id: 0, date: "", present: false });
-  groupSignal = model.required<groupResponse>();
   contentSignal = model.required<string>(); 
-  allGroups = model.required<groupResponse[]>()
-
-
+  groupSignal = signal<groupResponse>({name: '', id: 0});
+  allGroups = signal<groupResponse[]>([]);
+  private groupService = inject(groupService);
   childList = viewChild.required(ChildList);
+
+  ngOnInit() {
+    this.loadGroups();
+  }
+
+  loadGroups() {
+    this.groupService.getGroups().subscribe({
+      next: (data) => {
+        this.allGroups.set(data);
+        if (data.length > 0) {
+          this.groupSignal.set(data[0]);
+        }
+      }
+    });
+  }
 
   handleWebsocketMessage(message: WsAttendanceMessage) {
     this.childList().handleWebsocketMessage(message);
