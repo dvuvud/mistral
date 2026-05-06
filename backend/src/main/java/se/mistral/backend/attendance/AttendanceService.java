@@ -9,6 +9,8 @@ import se.mistral.backend.child.ChildRepository;
 import se.mistral.backend.attendance.dto.AttendanceDto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
@@ -26,8 +28,21 @@ public class AttendanceService {
      * @return the attendance dto of the child at the given date
      */
     public AttendanceDto getAttendance(Long childId, LocalDate date) {
-        return attendanceRepository.findPresenceByChildIdAndDate(childId, date)
+        return attendanceRepository.findAttendanceByChildIdAndDate(childId, date)
         .orElseThrow(() -> new NotFoundException("Attendance is not logged for this child on " + date.toString()));
+    }
+
+    /**
+     * Gets the full attendance history for a child, ordered by date descending.
+     *
+     * @param childId the child id
+     * @return the list of attendance dtos for the child
+     */
+    public List<AttendanceDto> getAttendanceHistory(Long childId) {
+        if (!childRepository.existsById(childId)) {
+            throw new NotFoundException("Child not found");
+        }
+        return attendanceRepository.findAttendanceHistoryByChildId(childId);
     }
 
     /**
@@ -41,12 +56,18 @@ public class AttendanceService {
             .orElseGet(() -> Attendance.builder()
                 .date(request.date())
                 .child(childRepository.findById(request.childId()).orElseThrow(() -> new NotFoundException("Child not found")))
-                .present(request.present())
                 .build()
             );
-        attendance.setPresent(request.present());
+
+        attendance.setStatus(request.status());
+
+        if (request.status() == AttendanceStatus.CHECKED_IN) {
+            attendance.setCheckInTime(LocalDateTime.now());
+        } else if (request.status() == AttendanceStatus.CHECKED_OUT) {
+            attendance.setCheckOutTime(LocalDateTime.now());
+        }
+
         attendance = attendanceRepository.save(attendance);      // throws ObjectOptimisticLockingFailureException on conflict
-        return new AttendanceDto(attendance.getPresent());
+        return new AttendanceDto(attendance.getStatus(), attendance.getCheckInTime(), attendance.getCheckOutTime());
     }
 }
-
