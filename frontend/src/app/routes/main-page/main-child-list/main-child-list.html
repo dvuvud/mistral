@@ -9,7 +9,7 @@
                 {{ group.name }}
               </mat-option>
             }
-            <mat-option [value]="{name: 'alla', id: 0}" 
+            <mat-option [value]="{name: 'alla', id: 0}"
                         (click)="handleSelection({name: 'alla', id: 0})">Alla elever</mat-option>
         </mat-select>
       </mat-form-field>
@@ -22,19 +22,22 @@
     <mat-divider></mat-divider>
       <mat-form-field subscriptSizing="dynamic">
       <mat-label>Sök<mat-icon>search</mat-icon></mat-label>
-      <input matInput #searchQuery type="search" 
+      <input matInput #searchQuery type="search"
              (input)="onSearchUpdated(searchQuery.value.toLowerCase())">
     </mat-form-field>
   <mat-action-list class="list-class">
     @for (Child of searchedChildren(); track Child.id; let last = $last) {
       <button mat-list-item (click)="onSelectChild(Child)">
+        <div matListItemMeta class="meta-container">
+          <main-presence-container filter={{Child.id}}></main-presence-container>
+        </div>
         <span matListItemTitle>{{Child.name}} </span>
 
         <div matListItemMeta class="meta-container">
             <attendance-box [disabled]=true [childSignal]="Child"></attendance-box>
         </div>
       </button>
-      
+
 
       @if (!last) {
         <mat-divider></mat-divider>

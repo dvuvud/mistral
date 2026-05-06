@@ -1,11 +1,13 @@
 import { Injectable, signal } from '@angular/core';
 import { inject } from '@angular/core/primitives/di';
 import { WebsocketService, WsMailbox, WsPresenceChangeMessage } from '../websocket/websocket.service';
+import { Subject } from 'rxjs';
 
 export interface Teacher {
   name: string,
-  room: string
-  userId: number
+  room: string,
+  userId: number,
+  color?: string
 }
 
 @Injectable({
@@ -14,12 +16,20 @@ export interface Teacher {
 export class Presence {
   socket = inject(WebsocketService);
   connectedTeachers = signal<Teacher[]>([]);
+  private _teacherUpdates = new Subject<Teacher>();
+  readonly teacherUpdates = this._teacherUpdates.asObservable();
+
   async init() {
     await this.socket.ensureConnected();
     this.socket.getMessages(WsMailbox.presence).subscribe((message) => {
       console.log("From presence service", message);
       this.handleMessage(message as WsPresenceChangeMessage)
     })
+  }
+
+  spoofTeacherUpdate() {
+    console.log("Spoofing teacher");
+    this._teacherUpdates.next({ name: "Spoof", userId: -1, room: "Spoof" });
   }
 
   private handleMessage(msg: WsPresenceChangeMessage) {
@@ -42,11 +52,13 @@ export class Presence {
     if (!msg.room)
       console.error("Incorrectly formatted leave message in presence service: ", msg);
 
+    const msgTeacher = { userId: msg.userId, name: msg.name, room: msg.room! };
     const updated = this.connectedTeachers().filter((teacher: Teacher) => {
       return teacher.userId != msg.userId;
     });
     this.connectedTeachers.set(updated);
     console.log("Someone left, new status: ", this.connectedTeachers());
+    this._teacherUpdates.next(msgTeacher);
   }
 
   private handleJoinMessage(msg: WsPresenceChangeMessage) {
@@ -57,9 +69,12 @@ export class Presence {
       return teacher.userId == msg.userId;
     });
 
+    const msgTeacher: Teacher = { userId: msg.userId, name: msg.name, room: msg.room!};
+
     if (index == -1) {
       const updated = this.connectedTeachers();
-      updated.push({ userId: msg.userId, name: msg.name, room: msg.room! });
+      msgTeacher.color = this.randomColor();
+      updated.push(msgTeacher);
       this.connectedTeachers.set(updated);
     }
     else {
@@ -68,11 +83,22 @@ export class Presence {
       this.connectedTeachers.set(updated);
     }
     console.log("Someone joined, new status: ", this.connectedTeachers());
+    this._teacherUpdates.next(msgTeacher);
   }
 
   private handleStateMessage(msg: WsPresenceChangeMessage) {
-    if(msg.users)
-      this.connectedTeachers.set(msg.users)
+    if (msg.users) {
+      const withColors = msg.users.map((teacher) => {
+        const res: Teacher = { ...teacher, color: this.randomColor() }
+        return res;
+      });
+      this.connectedTeachers.set(withColors)
+    };
     console.log(this.connectedTeachers());
+  }
+
+  randomColor() {
+    const num = Math.floor((Math.random() * 256 * 256 * 256));
+    return "#" + num.toString(16);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, input, signal } from '@angular/core';
+import { Component, input } from '@angular/core';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { Teacher } from '../../../core/presence/presence.service';
 
@@ -12,5 +12,4 @@ import { Teacher } from '../../../core/presence/presence.service';
 export class MainPresenceIndicator {
 
   teacher = input.required<Teacher>();
-  color = signal<number>(0);
 }

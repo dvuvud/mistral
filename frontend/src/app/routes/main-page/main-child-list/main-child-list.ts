@@ -13,10 +13,11 @@ import { localDateToday } from '../../../core/utils/date-utils';
 import { groupResponse } from '../../../core/groups/group.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
+import { MainPresenceContainer } from '../main-presence-container/main-presence-container';
 
 @Component({
   selector: 'main-child-list',
-  imports: [MatListModule, RouterModule, MatDividerModule, AttendanceBox, MatFormFieldModule, MatInputModule, MatIconModule, MatCardModule, MatSelectModule],
+  imports: [MatListModule, RouterModule, MatDividerModule, AttendanceBox, MatFormFieldModule, MatInputModule, MatIconModule, MatCardModule, MatSelectModule, MainPresenceContainer],
   templateUrl: './main-child-list.html',
   styleUrl: './main-child-list.scss',
 })
@@ -33,7 +34,7 @@ export class ChildList {
 
   searchedChildren = computed(() => {
     const sq = this.searchQuery();
-    return this.children().filter(x => x.name.toLowerCase().includes(sq)); 
+    return this.children().filter(x => x.name.toLowerCase().includes(sq));
   });
 
   groupAttendance = computed(() => {

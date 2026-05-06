@@ -157,6 +157,7 @@ export class WebsocketService {
       return;
 
     this.socket.subscribe((ws) => {
+      console.log("[Websocket] - Unsubscribing:", JSON.stringify({ type: 'unsubscribe', room: this.rooms[socketRoom] }));
       ws.send(JSON.stringify({ type: 'unsubscribe', room: this.rooms[socketRoom] }));
     });
     this.rooms[socketRoom] = "";

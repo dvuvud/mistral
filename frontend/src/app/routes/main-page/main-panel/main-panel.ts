@@ -9,6 +9,7 @@ import { WsAttendanceMessage, WsMessageContent } from '../../../core/websocket/w
 import { groupResponse, groupService } from '../../../core/groups/group.service';
 import { AccountPage } from '../account-page/account-page';
 import { MainPresenceContainer } from "../main-presence-container/main-presence-container";
+import { Presence } from '../../../core/presence/presence.service';
 
 @Component({
   selector: 'main-panel',
@@ -16,22 +17,13 @@ import { MainPresenceContainer } from "../main-presence-container/main-presence-
   templateUrl: './main-panel.html',
   styleUrl: './main-panel.scss',
 })
-<<<<<<< HEAD
 export class MainPanel implements OnInit{
-  
+  presence = inject(Presence);
   childSignal = signal<Child>({ name: '', id: 0, date: "", present: false });
-  contentSignal = model.required<string>(); 
+  contentSignal = model.required<string>();
   groupSignal = signal<groupResponse>({name: '', id: 0});
   allGroups = signal<groupResponse[]>([]);
   private groupService = inject(groupService);
-=======
-export class MainPanel {
-
-  childSignal = signal<Child>({ name: '', id: 0, date: "", present: false });
-  groupSignal = model.required<groupResponse>();
-  contentSignal = model.required<string>();
-
->>>>>>> e0b5dfd (Websocket service rewrite)
   childList = viewChild.required(ChildList);
   teachers = [{}]
 
