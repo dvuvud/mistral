@@ -10,10 +10,10 @@ export class textDiff {
     const length = prevText.length - newText.length;
 
     const operation = this.surroundingMatch(prevText, newText, idx, length) 
-    ? length > 0 
-    ? 'DELETE' 
-    : 'INSERT' 
-    : 'REPLACEMENT'
+      ? length > 0 
+        ? 'DELETE' 
+        : 'INSERT' 
+      : 'REPLACEMENT'
 
     const diff: Diff = {operation: operation, idx: idx, value: '', length: 0}
 
