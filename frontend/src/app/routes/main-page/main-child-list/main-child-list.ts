@@ -70,6 +70,26 @@ export class ChildList {
     });
   }
 
+  showAllChildren() {
+    this.childService.getChildren().subscribe({
+      next: (data) => {
+        this.children.set(data);
+      }
+    });
+  }
+
+  handleSelection(value: groupResponse) {
+    console.log(value);
+    if(value.name === 'alla') {
+      this.contentSignal.set('');
+      this.showAllChildren();
+      return;
+    }
+
+    this.groupSignal.set(value);
+    this.contentSignal.set('groupView');
+  }
+
   handleWebsocketMessage(message: WsAttendanceMessage) {
     const targetChild: Child | undefined = this.children().find((child: Child) => {
       return child.id === message.childId;

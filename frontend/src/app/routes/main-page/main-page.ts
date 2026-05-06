@@ -29,18 +29,13 @@ type displayedContent = 'childview' | 'groupView' | 'teacherView' | '';
 
 export class MainPage implements OnInit, OnDestroy {
   
-  groupSignal = signal<groupResponse>({name: '', id: 0});
-  allGroups = signal<groupResponse[]>([]);
   contentSignal = signal<displayedContent>('');
-
   private router = inject(Router);
   private socketService = inject(WebsocketService);
-  private groupService = inject(groupService);
   mainPanel = viewChild.required(MainPanel);
 
   ngOnInit() {
     this.socketService.connect(`${environment.wsUrl}/ws`, "group=Nyckelpigorna");
-    this.loadGroups();
     this.socketService.getMessages().subscribe((message) => {
       if (!("childId" in message)) {
         console.error("Attendance message with incorrect body!");
@@ -55,30 +50,12 @@ export class MainPage implements OnInit, OnDestroy {
     this.socketService.disconnect();
   }
 
-  loadGroups() {
-    this.groupService.getGroups().subscribe({
-      next: (data) => {
-        this.allGroups.set(data);
-        if (data.length > 0) {
-          this.groupSignal.set(data[0]);
-        }
-      }
-    });
-  }
-
   handleWebsocketMessage(message: WsAttendanceMessage) {
     this.mainPanel().handleWebsocketMessage(message);
   }
 
   wsUpdateAttendance(msg: WsAttendanceMessage) {
     this.socketService.sendAttendanceUpdate(msg);
-  }
-
-  onTabChange(event: MatTabChangeEvent) {
-    const clickedIndex = event.index;
-    const currentGroup = this.allGroups()[clickedIndex];
-    this.contentSignal.set('groupView');
-    this.groupSignal.set(currentGroup); 
   }
 
   logout() {
