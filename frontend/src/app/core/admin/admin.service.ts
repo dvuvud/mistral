@@ -63,4 +63,10 @@ export class AdminService {
   inactivateUser(userId: number): Observable<UserResponse> {
     return this.http.delete<UserResponse>(`${this.adminUrl}/user/${userId}/inactivate`, {});
   }
+
+  getInactiveUsers(): Observable<UserResponse[]> {
+    return this.http.get<UserResponse[]>(`${this.adminUrl}/users/inactive`);
+
+  }
+  
 }

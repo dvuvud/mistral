@@ -59,7 +59,11 @@ mat-card {
   background-color: #fafafa;
 }
 
-img {
-  width: 15rem;
-  padding-right: .25rem;
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #d32f2f;
+  border-bottom: 2px solid #d32f2f;
 }

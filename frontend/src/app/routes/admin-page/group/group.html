@@ -1,10 +1,16 @@
-<mat-list>
-    @for (group of groups; track group.id) {
-    <mat-list-item>
-        <span matListItemTitle> {{group.name}} ({{childCount(group.id)}} barn)</span>
-    </mat-list-item>
-    }
-</mat-list>
+<div class="group-container">
+    <mat-list>
+        @for (group of groups(); track group.id; let last = $last) {
+        <mat-list-item>
+            <span matListItemTitle> {{group.name}} ({{childCount(group.id)}} barn)</span>
+        </mat-list-item>
+        @if (!last) {
+        <mat-divider></mat-divider>
+        }
+        }
+
+    </mat-list>
+</div>
 
 
 <form [formGroup]="form" (ngSubmit)="onCreateGroup()">

@@ -1,15 +1,16 @@
-<p>Antal barn: {{children.length}}</p>
+<span class="antal-barn">Antal barn: {{children().length}}</span>
 <div class="child-admin-list-container">
     <mat-list>
-        @for (child of children; track child.id; let last = $last) { <!--håller koll på id-->
+        @for (child of children(); track child.id; let last = $last) { <!--håller koll på id-->
         <mat-list-item>
             <span matListItemTitle>
                 {{child.name}} - {{child.group?.name ?? 'Ingen grupp'}} <!--safe -> ? ??-->
             </span>
             <div matListItemMeta class="move-container">
-                <mat-select #groupSelect="matSelect" class="move-symbol" (selectionChange)="onMove(child, $event.value, groupSelect)">
-                    <mat-select-trigger>Flytta</mat-select-trigger>
-                    @for (group of groups; track group.id) {
+                <mat-select #groupSelect="matSelect" class="move-symbol"
+                    (selectionChange)="onMove(child, $event.value, groupSelect)">
+                    <!-- <mat-select-trigger>Flytta</mat-select-trigger> -->
+                    @for (group of groups(); track group.id) {
                     <mat-option [value]="group.id">{{group.name}}</mat-option>
                     }
 

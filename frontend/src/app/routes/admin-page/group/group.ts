@@ -1,12 +1,13 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal, Output, EventEmitter } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { AdminService } from '../../../core/admin/admin.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { interval } from 'rxjs';
 import { ChildWithGroupResponse, GroupResponse } from '../../../core/interface/interface';
+import { MatDividerModule } from '@angular/material/divider';
+
 @Component({
   selector: 'group',
   imports: [
@@ -14,9 +15,8 @@ import { ChildWithGroupResponse, GroupResponse } from '../../../core/interface/i
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    ReactiveFormsModule
-
-
+    ReactiveFormsModule,
+    MatDividerModule
   ],
   templateUrl: './group.html',
   styleUrl: './group.scss',
@@ -31,40 +31,41 @@ export class Group implements OnInit {
     groupName: ["", Validators.required]
   });
 
-  groups: GroupResponse[] = [];
-  children: ChildWithGroupResponse[] = [];
+  groups = signal<GroupResponse[]>([]);
+  children = signal<ChildWithGroupResponse[]>([]);
+
+  @Output() groupCreated = new EventEmitter<void>();
+
 
   ngOnInit(): void {
+    this.loadGroups();
+    this.loadChildren();
+
+  }
+
+  loadGroups(): void {
     this.adminService.getGroups().subscribe({
-      next: (GroupResponse) => this.groups = GroupResponse,
-      error: (err: unknown) => console.error(err)
+      next: (GroupResponse) => this.groups.set(GroupResponse),
+      error: (err) => console.error(err)
     });
-
-    //hämta alla barn för att räkna antal barn/grupp
+  }
+  loadChildren(): void {
     this.adminService.getChildren().subscribe({
-      next: (children: ChildWithGroupResponse[]) => this.children = children
+      next: (children) => this.children.set(children),
+      error: (err) => console.log("Error", err)
     });
-
-    interval(1000).subscribe(() => {
-      this.adminService.getChildren().subscribe({
-        next: (children: ChildWithGroupResponse[]) => this.children = children
-      });
-    })
-
   }
   //ha kvar bara barnen med samma grupp id + beräkna lägnden
   childCount(groupId: number): number {
-    return this.children.filter(x => x.group?.id == groupId).length;
+    return this.children().filter(x => x.group?.id == groupId).length;
   }
 
   onCreateGroup(): void {
     if (this.form.valid) {
       this.adminService.createGroup(this.form.value.groupName!).subscribe({
         next: () => {
-          this.adminService.getGroups().subscribe({
-            next: (GroupResponse) => this.groups = GroupResponse,
-            error: (err: unknown) => console.error(err)
-          });
+          this.loadGroups();
+          this.groupCreated.emit();
           this.form.reset();
         },
         error: (err: unknown) => console.error(err)

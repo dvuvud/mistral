@@ -39,16 +39,16 @@ export class AddChildForm implements OnInit {
   @Output() childAdded = new EventEmitter<void>();
 
   ngOnInit(): void {
-    this.adminService.getGroups().subscribe({
-      next: (groups) => this.groups.set(groups)
-    });
-
-    interval(1000).subscribe(() => {
-      this.adminService.getChildren().subscribe({
-        next: (children) => this.children.set(children)
-      });
-    })
+    this.loadGroups();
   }
+
+  loadGroups(): void {
+    this.adminService.getGroups().subscribe({
+      next: (GroupResponse) => this.groups.set(GroupResponse),
+      error: (err) => console.error(err)
+    });
+  }
+
 
   onSubmit(): void {
     if (this.form.valid) {
@@ -61,9 +61,8 @@ export class AddChildForm implements OnInit {
                 this.childAdded.emit();
                 this.form.reset();
               }
-            })
-          }
-          else {
+            });
+          } else {
             this.childAdded.emit();
             this.form.reset();
           }
