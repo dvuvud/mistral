@@ -147,7 +147,7 @@ export class MainLiveJournal implements OnDestroy {
         operation = {
           type: 'DELETE',
           position: diff.idx,
-          length: parseInt(diff.value)
+          length: diff.length
         }
         break;
       case 'INSERT':
@@ -157,8 +157,26 @@ export class MainLiveJournal implements OnDestroy {
           text: diff.value
         }
         break;
+      case 'REPLACEMENT':
+        operation = {
+          type: 'DELETE',
+          position: diff.idx,
+          length: diff.length
+        }
+        this.sendOperation(operation);
+        this.sequence++;
+        operation = {
+          type: 'INSERT',
+          position: diff.idx,
+          text: diff.value
+        }
+        break;
     }
 
+    this.sendOperation(operation);
+  }
+
+  sendOperation(operation: WsJournalWriteOperation) {
     const message: WsJournalMessage = {
       clientRevision: this.serverRevision,
       operation: operation,
