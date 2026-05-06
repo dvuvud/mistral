@@ -32,9 +32,6 @@ export class MainPanel implements OnInit{
     this.groupService.getGroups().subscribe({
       next: (data) => {
         this.allGroups.set(data);
-        if (data.length > 0) {
-          this.groupSignal.set(data[0]);
-        }
       }
     });
   }
