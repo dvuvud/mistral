@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.springframework.transaction.annotation.Transactional;
 import se.mistral.backend.attendance.AttendanceService;
+import se.mistral.backend.attendance.AttendanceStatus;
 import se.mistral.backend.attendance.dto.AttendanceRequest;
 import se.mistral.backend.child.ChildService;
 import se.mistral.backend.child.dto.AttendanceResponse;
@@ -60,7 +61,7 @@ public class ChildTests {
     void getAllChildrenWithAttendanceIfExistsEmptyTest() {
         List<AttendanceResponse> childList = childService.getAllChildrenWithAttendanceIfExists(LocalDate.parse("2026-04-01"));
 
-        assertThat(childList.isEmpty());
+        assertThat(childList).isEmpty();
     }
 
     @Test
@@ -72,7 +73,7 @@ public class ChildTests {
         assertThat(childList.getFirst().name()).isEqualTo(childResponse.name());
         assertThat(childList.getFirst().id()).isEqualTo(childResponse.id());
         assertThat(childList.getFirst().date()).isNull();
-        assertThat(childList.getFirst().present()).isNull();
+        assertThat(childList.getFirst().status()).isNull();
 
         assertThat(childList.size()).isEqualTo(1);
 
@@ -90,9 +91,9 @@ public class ChildTests {
 
         LocalDate testDate = LocalDate.of(2026, 4, 1);
 
-        AttendanceRequest request1 = new AttendanceRequest(childResponse1.id(), testDate, true);
-        AttendanceRequest request2 = new AttendanceRequest(childResponse2.id(), testDate, true);
-        AttendanceRequest request3 = new AttendanceRequest(childResponse3.id(), testDate, true);
+        AttendanceRequest request1 = new AttendanceRequest(childResponse1.id(), testDate, AttendanceStatus.CHECKED_IN);
+        AttendanceRequest request2 = new AttendanceRequest(childResponse2.id(), testDate, AttendanceStatus.CHECKED_IN);
+        AttendanceRequest request3 = new AttendanceRequest(childResponse3.id(), testDate, AttendanceStatus.CHECKED_IN);
 
         attendanceService.updateAttendance(request1);
         attendanceService.updateAttendance(request2);
@@ -101,19 +102,19 @@ public class ChildTests {
         List<AttendanceResponse> childList = childService.getAllChildrenWithAttendanceIfExists(LocalDate.parse("2026-04-01"));
         assertThat(childList.size()).isEqualTo(3);
 
-        AttendanceResponse attendanceResponse1 = new AttendanceResponse(childResponse1.id(), childResponse1.name(), testDate, true);
-        AttendanceResponse attendanceResponse2 = new AttendanceResponse(childResponse2.id(), childResponse2.name(), testDate, true);
-        AttendanceResponse attendanceResponse3 = new AttendanceResponse(childResponse3.id(), childResponse3.name(), testDate, true);
+        AttendanceResponse attendanceResponse1 = new AttendanceResponse(childResponse1.id(), childResponse1.name(), testDate, AttendanceStatus.CHECKED_IN);
+        AttendanceResponse attendanceResponse2 = new AttendanceResponse(childResponse2.id(), childResponse2.name(), testDate, AttendanceStatus.CHECKED_IN);
+        AttendanceResponse attendanceResponse3 = new AttendanceResponse(childResponse3.id(), childResponse3.name(), testDate, AttendanceStatus.CHECKED_IN);
 
-        assertThat(childList.contains(attendanceResponse1));
-        assertThat(childList.contains(attendanceResponse2));
-        assertThat(childList.contains(attendanceResponse3));
+        assertThat(childList).contains(attendanceResponse1);
+        assertThat(childList).contains(attendanceResponse2);
+        assertThat(childList).contains(attendanceResponse3);
     }
 
     @Test
     void getAllChildrenWithAttendanceIfExistsInGroupEmptyTest() {
         List<AttendanceResponse> childList = childService.getAllChildrenWithAttendanceIfExistsInGroup(LocalDate.parse("2026-04-01"), 1L);
-        assertThat(childList.isEmpty());
+        assertThat(childList).isEmpty();
     }
 
     @Test
@@ -127,9 +128,9 @@ public class ChildTests {
         ChildResponse childResponse3 = childService.createChild(childRequest3);
         LocalDate testDate = LocalDate.of(2026, 4, 1);
 
-        AttendanceRequest request1 = new AttendanceRequest(childResponse1.id(), testDate, true);
-        AttendanceRequest request2 = new AttendanceRequest(childResponse2.id(), testDate, true);
-        AttendanceRequest request3 = new AttendanceRequest(childResponse3.id(), testDate, true);
+        AttendanceRequest request1 = new AttendanceRequest(childResponse1.id(), testDate, AttendanceStatus.CHECKED_IN);
+        AttendanceRequest request2 = new AttendanceRequest(childResponse2.id(), testDate, AttendanceStatus.CHECKED_IN);
+        AttendanceRequest request3 = new AttendanceRequest(childResponse3.id(), testDate, AttendanceStatus.CHECKED_IN);
 
         attendanceService.updateAttendance(request1);
         attendanceService.updateAttendance(request2);
@@ -151,9 +152,9 @@ public class ChildTests {
         ChildResponse childResponse3 = childService.createChild(childRequest3);
         LocalDate testDate = LocalDate.of(2026, 4, 1);
 
-        AttendanceRequest request1 = new AttendanceRequest(childResponse1.id(), testDate, true);
-        AttendanceRequest request2 = new AttendanceRequest(childResponse2.id(), testDate, true);
-        AttendanceRequest request3 = new AttendanceRequest(childResponse3.id(), testDate, true);
+        AttendanceRequest request1 = new AttendanceRequest(childResponse1.id(), testDate, AttendanceStatus.CHECKED_IN);
+        AttendanceRequest request2 = new AttendanceRequest(childResponse2.id(), testDate, AttendanceStatus.CHECKED_IN);
+        AttendanceRequest request3 = new AttendanceRequest(childResponse3.id(), testDate, AttendanceStatus.CHECKED_IN);
 
         attendanceService.updateAttendance(request1);
         attendanceService.updateAttendance(request2);
@@ -179,9 +180,9 @@ public class ChildTests {
         ChildResponse childResponse3 = childService.createChild(childRequest3);
         LocalDate testDate = LocalDate.of(2026, 4, 1);
 
-        AttendanceRequest request1 = new AttendanceRequest(childResponse1.id(), testDate, true);
-        AttendanceRequest request2 = new AttendanceRequest(childResponse2.id(), testDate, true);
-        AttendanceRequest request3 = new AttendanceRequest(childResponse3.id(), testDate, true);
+        AttendanceRequest request1 = new AttendanceRequest(childResponse1.id(), testDate, AttendanceStatus.CHECKED_IN);
+        AttendanceRequest request2 = new AttendanceRequest(childResponse2.id(), testDate, AttendanceStatus.CHECKED_IN);
+        AttendanceRequest request3 = new AttendanceRequest(childResponse3.id(), testDate, AttendanceStatus.CHECKED_IN);
 
         attendanceService.updateAttendance(request1);
         attendanceService.updateAttendance(request2);
@@ -224,7 +225,7 @@ public class ChildTests {
         List<ChildResponse> childList = childService.getChildrenByGroup(groupResponse.id());
 
         assertThat(childList.size()).isEqualTo(1);
-        assertThat(childList.contains(childResponse1));
+        assertThat(childList).contains(childResponse1);
     }
 
     @Test
@@ -248,9 +249,9 @@ public class ChildTests {
         List<ChildResponse> childList = childService.getChildrenByGroup(groupResponse.id());
 
         assertThat(childList.size()).isEqualTo(3);
-        assertThat(childList.contains(childResponse1));
-        assertThat(childList.contains(childResponse2));
-        assertThat(childList.contains(childResponse3));
+        assertThat(childList).contains(childResponse1);
+        assertThat(childList).contains(childResponse2);
+        assertThat(childList).contains(childResponse3);
 
     }
 
