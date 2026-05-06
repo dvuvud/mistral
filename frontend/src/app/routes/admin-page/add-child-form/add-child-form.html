@@ -12,7 +12,7 @@
     <mat-form-field>
         <mat-label>Grupp</mat-label>
         <mat-select formControlName="groupId">
-            @for (group of groups; track group.id) {
+            @for (group of groups(); track group.id) {
             <mat-option [value]="group.id">{{group.name}}</mat-option>
             }
         </mat-select>

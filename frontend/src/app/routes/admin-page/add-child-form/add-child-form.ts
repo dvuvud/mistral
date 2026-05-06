@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -25,8 +25,8 @@ export class AddChildForm implements OnInit {
 
   private adminService = inject(AdminService);
 
-  groups: GroupResponse[] = [];
-  children: ChildWithGroupResponse[] = [];
+  groups = signal<GroupResponse[]>([]);
+  children = signal<ChildWithGroupResponse[]>([]);
 
   form = this.fb.group({
     firstName: ["", Validators.required],
@@ -40,12 +40,12 @@ export class AddChildForm implements OnInit {
 
   ngOnInit(): void {
     this.adminService.getGroups().subscribe({
-      next: (GroupResponse) => this.groups = GroupResponse
-    })
+      next: (groups) => this.groups.set(groups)
+    });
 
     interval(1000).subscribe(() => {
       this.adminService.getChildren().subscribe({
-        next: (children: ChildWithGroupResponse[]) => this.children = children
+        next: (children) => this.children.set(children)
       });
     })
   }

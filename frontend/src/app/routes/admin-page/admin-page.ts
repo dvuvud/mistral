@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { Group } from './group/group';
 import { MatToolbar } from '@angular/material/toolbar';
 import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @Component({
@@ -19,7 +20,8 @@ import { Router } from '@angular/router';
     ChildAdminList,
     Group,
     CommonModule,
-    MatToolbar
+    MatToolbar,
+    MatButtonModule
   ],
   templateUrl: './admin-page.html',
   styleUrl: './admin-page.scss',
