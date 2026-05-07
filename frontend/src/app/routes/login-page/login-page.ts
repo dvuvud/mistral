@@ -21,7 +21,6 @@ export class LoginPage {
   private authService = inject(AuthService);
 
   onLoginSubmit() {
-    console.log(this.email(), this.password());
     this.authService.login(this.email(), this.password()).subscribe({
       error: (err) => {
         this.errorMessage.set(err.error.error);

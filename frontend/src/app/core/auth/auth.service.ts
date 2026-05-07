@@ -61,7 +61,6 @@ export class AuthService {
       });
     })
     const t = await x;
-    //console.log(t);
     return t;
   }
 }
