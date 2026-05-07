@@ -32,5 +32,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return the list of users with a given role
      */
     List<BasicUserInformation> findUserByRole(Role role);
+
     UserResponse findUserById(Long id);
 }

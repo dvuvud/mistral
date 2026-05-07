@@ -17,7 +17,6 @@ import se.mistral.backend.user.dto.UserResponse;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor

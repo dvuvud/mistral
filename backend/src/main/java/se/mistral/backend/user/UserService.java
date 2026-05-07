@@ -43,11 +43,11 @@ public class UserService {
      * Update a users color
      *
      * @param userid the user's id
-     * @param color the new color
+     * @param color  the new color
      */
     public void updateColor(Long userId, String color) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new NotFoundException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
         user.setColor(color);
         userRepository.save(user);
     }
