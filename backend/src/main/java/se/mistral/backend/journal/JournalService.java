@@ -17,9 +17,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static se.mistral.backend.journal.ot.Operation.Type.INSERT;
-import static se.mistral.backend.journal.ot.Operation.Type.DELETE;
-
 /**
  * The type Journal service.
  */
@@ -58,14 +55,15 @@ public class JournalService {
      * @return the broadcast message
      */
     public BroadcastMessage applyOperation(JournalTarget target, LocalDate date,
-                                           int clientRevision, Operation incoming,
-                                           Long userId, Integer sequence) {
+            int clientRevision, Operation incoming,
+            Long userId, Integer sequence) {
         // get the journal id outside the lock
         Journal journal = findOrCreate(target, date);
         Object lock = journalLocks.computeIfAbsent(journal.getId(), k -> new Object());
 
         synchronized (lock) {
-            journal = journalRepository.findById(journal.getId()).orElseThrow(() -> new NotFoundException("Journal could not be found"));
+            journal = journalRepository.findById(journal.getId())
+                    .orElseThrow(() -> new NotFoundException("Journal could not be found"));
 
             List<OperationLog> missed = operationLogRepository
                     .findByJournalIdAndRevisionGreaterThanOrderByRevisionAsc(
