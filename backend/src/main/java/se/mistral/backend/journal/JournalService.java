@@ -66,8 +66,8 @@ public class JournalService {
                     .orElseThrow(() -> new NotFoundException("Journal could not be found"));
 
             List<OperationLog> missed = operationLogRepository
-                    .findByJournalIdAndRevisionGreaterThanOrderByRevisionAsc(
-                            journal.getId(), clientRevision);
+                    .findByJournalIdAndRevisionGreaterThanAndUserIdNotOrderByRevisionAsc(
+                            journal.getId(), clientRevision, userId);
 
             // transform the incoming op through each missed op in order
             Operation transformed = incoming;
