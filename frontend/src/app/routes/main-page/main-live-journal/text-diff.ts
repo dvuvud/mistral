@@ -1,11 +1,39 @@
+/**
+ * Represents a text difference operation between two strings.
+ * 
+ * @interface Diff
+ * @property {('INSERT'|'DELETE'|'REPLACEMENT')} operation - The type of operation performed
+ * @property {number} idx - The position of the change
+ * @property {string} value - The text content inserted (used for INSERT operations)
+ * @property {number} length - The length of text deleted (used for DELETE operations)
+ * 
+ * OBS: REPLACEMENT operations are represented as a DELETE followed by an INSERT
+ */
 export interface Diff {
     operation: 'INSERT' | 'DELETE' | 'REPLACEMENT';
-    idx: number; // position av cursor efter förändring
-    value: string; // används för insert delen
-    length: number // används för delete delen
+    idx: number; 
+    value: string; 
+    length: number
 }
 
+/**
+ * Calculates the differences between two text strings and represents them as a 'Diff' (see above).
+ * 
+ * This class analyzes changes between a previous and new text version to determine
+ * whether the operation is an insertion, deletion, or replacement, and extracts
+ * the relevant position and content information for that operation.
+ * 
+ * @class textDiff
+ */
 export class textDiff {
+  /**
+   * Main function for calculating diffs
+   * 
+   * @param {string} prevText - The text prior to the change
+   * @param {string} newText - The text after the change
+   * @param {number} idx - The cursor position after the change
+   * @returns {Diff} The resulting diff
+   */
   getDiff(prevText: string, newText: string, idx: number): Diff {
     const length = prevText.length - newText.length;
 
@@ -19,11 +47,11 @@ export class textDiff {
 
     switch (operation) {
       case 'DELETE':
-        diff.length = length; // lite ineffektivt att förvandla fram och tillbaka men blir smidigt att koda
+        diff.length = length; 
         break;
       case 'INSERT':
         diff.idx = idx + length;
-        diff.value = newText.substring(idx + length, idx); // blir minus eftersom att insert ger negativ "length"
+        diff.value = newText.substring(idx + length, idx); 
         break;
       case 'REPLACEMENT': {  
         const firstDiff = this.findFirstDiff(prevText, newText);
@@ -52,6 +80,18 @@ export class textDiff {
     return diff;
   }
 
+  /**
+   * Verifies that the text before and after a modification segment is identical
+   * in both strings. This determines if a change is a simple INSERT or DELETE
+   * rather than a REPLACEMENT.
+   * 
+   * @private
+   * @param {string} prevText - The text prior to the change
+   * @param {string} newText - The text after the change
+   * @param {number} idx - The cursor position after the change
+   * @param {number} length - The length difference (positive for deletion, negative for insertion)
+   * @returns {boolean} True if surrounding text matches, false otherwise
+   */
   surroundingMatch(prevText: string, newText: string, idx: number, length: number): boolean {
     switch (length < 0) {
       case true:
@@ -63,6 +103,14 @@ export class textDiff {
     }
   }
 
+  /**
+   * Finds the index of the first character that differs between the text previous text and the new text
+   * 
+   * @private
+   * @param {string} prevText - The text prior to the change
+   * @param {string} newText - The text after the change
+   * @returns {number} The index of the first differing character
+   */
   findFirstDiff(prevText: string, newText: string): number {
     let idx = 0;
     while(true) {
@@ -74,13 +122,25 @@ export class textDiff {
     }
   }
 
+  /**
+   * Finds the index of the first character after the modified segment that differs between the previous 
+   * text and the new text. In the case that no difference is found before the 'end' of either string, 
+   * an OutOfBounds message is returned based on which text that triggered the OutOfBound response. 
+   * 
+   * @private
+   * @param {string} prevText - The text prior to the change
+   * @param {string} newText - The text after the change
+   * @returns {(number|'prevOutOfBounds'|'newOutOfBounds')} The index of the last differing character if found,
+   *          'prevOutOfBounds' if prevText is a substring of newText (de-facto insert),
+   *          or 'newOutOfBounds' if newText is a substring of prevText (de-facto delete)
+   */
   findLastDiff(prevText: string, newText: string): number | 'prevOutOfBounds' | 'newOutOfBounds' {
     let idx = 1;
     while(true) {
-      if (idx >= prevText.length) {
+      if (idx > prevText.length) {
         // in this case, the operation is a de-facto insert 
         return 'prevOutOfBounds'
-      } else if (idx >= newText.length) {
+      } else if (idx > newText.length) {
         // in this case, the operation is a de-facto delete
         return 'newOutOfBounds'
       } else if (prevText.charAt(prevText.length - idx) === newText.charAt(newText.length - idx)) {
