@@ -73,7 +73,6 @@ export class ChildList {
   }
 
   onSearchUpdated(sq: string) {
-    console.log(this.groupSignal().name)
     this.searchQuery.set(sq);
   }
 
