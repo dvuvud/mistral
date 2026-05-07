@@ -26,7 +26,7 @@ export class textDiff {
         diff.value = newText.substring(idx + length, idx); // blir minus eftersom att insert ger negativ "length"
         break;
       case 'REPLACEMENT':
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-case-declarations
         const firstDiff = this.findFirstDiff(prevText, newText);
         diff.value = newText.substring(firstDiff, this.findLastDiff(prevText, newText)); 
         diff.length = length + diff.value.length;
