@@ -73,7 +73,7 @@ export class MainPage implements OnInit, OnDestroy {
 
   logout() {
     document.cookie = 'jwtToken=""';
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
     sessionStorage.removeItem('UserId');
     this.socketService.disconnect();
     window.location.reload();
