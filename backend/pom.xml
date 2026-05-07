@@ -132,6 +132,23 @@
 
 	<build>
         <plugins>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>12.4.0</version>
+
+                <configuration>
+                    <url>jdbc:postgresql://localhost:5432/mistral</url>
+                    <user>admin</user>
+                    <password>secret</password>
+                    <cleanDisabled>false</cleanDisabled>
+                    <locations>
+                        <location>classpath:db/migration</location>
+                        <location>classpath:db/seed</location>
+                    </locations>
+                </configuration>
+            </plugin>
+
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
