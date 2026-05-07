@@ -3,18 +3,18 @@ import { DeleteOperation, InsertOperation, WsJournalWriteOperation } from "../..
 /**
  * Implements operational transformation algorithms for collaborative editing when recieving opreations
  * from the server.
- * 
+ *
  * @class operationalTransformation
  */
 export class operationalTransformation {
 
   /**
    * Transforms an incoming operation against an in-flight operation (an operation in transit).
-   * 
+   *
    * Resolves conflicts between an incoming operation and a flight operation by transforming
    * the incoming operation to account for changes made by the in-flight operation. The transformation
    * ensures both operations can be applied to the document while maintaining consistency.
-   * 
+   *
    * @param {WsJournalWriteOperation} inOp - The incoming operation to transform
    * @param {WsJournalWriteOperation} flightOp - The in-flight operation (in-transit operation) to transform against
    * @returns {WsJournalWriteOperation} The transformed incoming operation
@@ -31,11 +31,11 @@ export class operationalTransformation {
 
   /**
    * Transforms an insert operation against an in-flight operation.
-   * 
+   *
    * Adjusts the position and/or length of an incoming insert operation based on how
    * the flight operation affects the document. Handles cases where the in-flight operation
    * is an insert or delete that impacts the target position of the incoming insert.
-   * 
+   *
    * @private
    * @param {WsJournalWriteOperation} inOp - The incoming insert operation to transform
    * @param {WsJournalWriteOperation} flightOp - The in-flight operation to transform against
@@ -46,14 +46,14 @@ export class operationalTransformation {
     switch (flightOp.type) {
       case 'INSERT':
         if (flightOp.position <= inOp.position) {
-          // if flightOp is before or at incoming insert, shift incoming to the right    
+          // if flightOp is before or at incoming insert, shift incoming to the right
           resOp.position += flightOp.text.length;
         }
         break;
       case 'DELETE':
         if (flightOp.position < inOp.position) {
-          // if flightOp is before incoming delete 
-          Math.max(flightOp.position, resOp.position -= flightOp.length);
+          // if flightOp is before incoming delete
+          resOp.position = Math.max(flightOp.position, resOp.position -= flightOp.length);
         }
         break;
     }
@@ -62,11 +62,11 @@ export class operationalTransformation {
 
   /**
    * Transforms a delete operation against a flight operation.
-   * 
+   *
    * Adjusts the position and/or length of an incoming delete operation based on how
    * the flight operation affects the document. Handles cases where the flight operation
    * is an insert or delete that overlaps or precedes the delete range of the incoming operation.
-   * 
+   *
    * @private
    * @param {WsJournalWriteOperation} inOp - The incoming delete operation to transform
    * @param {WsJournalWriteOperation} flightOp - The in-flight operation to transform against
@@ -86,15 +86,16 @@ export class operationalTransformation {
         }
         break;
       case 'DELETE':
-        if (flightOp.position + flightOp.length <= resOp.position) {
-          // the entirety of the flightOp delete is prior to the starting position of the incoming operation,
-          // shift the incoming operation left, but no further than the start of the flightOp
+        const flightEnd = flightOp.position + flightOp.length;
+        if (flightEnd <= resOp.position) {
           resOp.position -= flightOp.length;
-        } else if (flightOp.position <= resOp.position) {
-          // there is crossover between flightOp and resOp, adjustment needed
-          const crossOverLength = flightOp.position + flightOp.length - resOp.position;
-          resOp.position = Math.max(flightOp.position, resOp.position -= flightOp.length);
-          resOp.length -= crossOverLength;
+        } else if (flightOp.position >= resOp.position + resOp.length) {
+          // no-op
+        } else {
+          const overlapStart = Math.max(resOp.position, flightOp.position);
+          const overlapEnd = Math.min(resOp.position + resOp.length, flightEnd);
+          resOp.length = Math.max(0, resOp.length - (overlapEnd - overlapStart));
+          resOp.position = Math.min(resOp.position, flightOp.position);
         }
         break;
     }
