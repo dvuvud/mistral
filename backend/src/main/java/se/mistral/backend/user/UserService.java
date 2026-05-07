@@ -2,6 +2,8 @@ package se.mistral.backend.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import se.mistral.backend.exception.NotFoundException;
 import se.mistral.backend.user.dto.BasicUserInformation;
 import se.mistral.backend.user.dto.UserResponse;
 
@@ -35,5 +37,18 @@ public class UserService {
 
     public UserResponse retrieveOneTeacher(Long teacherId) {
         return userRepository.findUserById(teacherId);
+    }
+
+    /**
+     * Update a users color
+     *
+     * @param userid the user's id
+     * @param color the new color
+     */
+    public void updateColor(Long userId, String color) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException("User not found"));
+        user.setColor(color);
+        userRepository.save(user);
     }
 }
