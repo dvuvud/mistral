@@ -19,7 +19,8 @@ export interface WsMessageContent {
 export interface WsPresenceChangeMessage extends WsMessageContent {
   name: string,
   userId: number
-  users?: Teacher[]
+  users?: Teacher[],
+  color: string
 }
 
 export interface WsAttendanceMessage extends WsMessageContent {

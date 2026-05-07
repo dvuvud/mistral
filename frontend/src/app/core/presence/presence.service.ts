@@ -7,7 +7,7 @@ export interface Teacher {
   name: string,
   room: string,
   userId: number,
-  color?: string
+  color: string
 }
 
 @Injectable({
@@ -29,7 +29,7 @@ export class Presence {
 
   spoofTeacherUpdate() {
     console.log("Spoofing teacher");
-    this._teacherUpdates.next({ name: "Spoof", userId: -1, room: "Spoof" });
+    this._teacherUpdates.next({ name: "Spoof", userId: -1, room: "Spoof", color: "#ffffff"});
   }
 
   private handleMessage(msg: WsPresenceChangeMessage) {
@@ -52,7 +52,7 @@ export class Presence {
     if (!msg.room)
       console.error("Incorrectly formatted leave message in presence service: ", msg);
 
-    const msgTeacher = { userId: msg.userId, name: msg.name, room: msg.room! };
+    const msgTeacher = { userId: msg.userId, name: msg.name, room: msg.room!, color: msg.color};
     const updated = this.connectedTeachers().filter((teacher: Teacher) => {
       return teacher.userId != msg.userId;
     });
@@ -69,11 +69,10 @@ export class Presence {
       return teacher.userId == msg.userId;
     });
 
-    const msgTeacher: Teacher = { userId: msg.userId, name: msg.name, room: msg.room!};
+    const msgTeacher: Teacher = { userId: msg.userId, name: msg.name, room: msg.room!, color: msg.color};
 
     if (index == -1) {
       const updated = this.connectedTeachers();
-      msgTeacher.color = this.randomColor();
       updated.push(msgTeacher);
       this.connectedTeachers.set(updated);
     }
@@ -89,7 +88,7 @@ export class Presence {
   private handleStateMessage(msg: WsPresenceChangeMessage) {
     if (msg.users) {
       const withColors = msg.users.map((teacher) => {
-        const res: Teacher = { ...teacher, color: this.randomColor() }
+        const res: Teacher = { ...teacher }
         return res;
       });
       this.connectedTeachers.set(withColors)
