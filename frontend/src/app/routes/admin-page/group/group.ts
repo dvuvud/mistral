@@ -3,9 +3,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
-import { AdminService } from '../../../core/admin/admin.service';
+import { AdminService, GroupResponse, ChildWithGroupResponse } from '../../../core/admin/admin.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ChildWithGroupResponse, GroupResponse } from '../../../core/interface/interface';
 import { MatDividerModule } from '@angular/material/divider';
 
 @Component({

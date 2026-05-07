@@ -10,7 +10,7 @@ describe('InactiveUsers', () => {
     await TestBed.configureTestingModule({
       imports: [InactiveUsers]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(InactiveUsers);
     component = fixture.componentInstance;

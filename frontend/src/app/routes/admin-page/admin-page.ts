@@ -1,4 +1,4 @@
-import { Component, inject, viewChild, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { MatCard, MatCardHeader, MatCardContent, MatCardModule } from "@angular/material/card";
 import { AddChildForm } from './add-child-form/add-child-form';
 import { ChildAdminList } from './child-admin-list/child-admin-list';
