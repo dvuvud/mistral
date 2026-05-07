@@ -30,7 +30,7 @@ public class UserService {
      * @return the list of all teachers.
      */
     public List<BasicUserInformation> retrieveAllTeachers() {
-        return userRepository.findUserByRole_Teacher();
+        return userRepository.findUserByRole(Role.TEACHER);
     }
 
     public UserResponse retrieveOneTeacher(Long teacherId) {
