@@ -27,17 +27,31 @@ export class textDiff {
         break;
       case 'REPLACEMENT': {  
         const firstDiff = this.findFirstDiff(prevText, newText);
-        diff.value = newText.substring(firstDiff, this.findLastDiff(prevText, newText)); 
-        diff.length = length + diff.value.length;
-        diff.idx = firstDiff;
-        break;
+        const lastDiff = this.findLastDiff(prevText, newText);
+        switch (lastDiff) {
+          case 'prevOutOfBounds':
+            // pivot if equivalent to insert
+            diff.idx = 0;
+            diff.value = newText.substring(0, 0 - length);
+            diff.operation = 'INSERT';
+            break;
+          case 'newOutOfBounds':
+            // pivot if equivalent to delete
+            diff.idx = 0;
+            diff.length = length;
+            diff.operation = 'DELETE';
+            break;
+          default:
+            diff.value = newText.substring(firstDiff, lastDiff); 
+            diff.length = length + diff.value.length;
+            diff.idx = firstDiff;
+            break;
+        }
       }
     }
-    console.log(diff);
     return diff;
   }
 
-  // kollar om allt runt längdskillnaden matchar
   surroundingMatch(prevText: string, newText: string, idx: number, length: number): boolean {
     switch (length < 0) {
       case true:
@@ -60,10 +74,16 @@ export class textDiff {
     }
   }
 
-  findLastDiff(prevText: string, newText: string): number {
+  findLastDiff(prevText: string, newText: string): number | 'prevOutOfBounds' | 'newOutOfBounds' {
     let idx = 1;
     while(true) {
-      if (prevText.charAt(prevText.length - idx) === newText.charAt(newText.length - idx)) {
+      if (idx >= prevText.length) {
+        // in this case, the operation is a de-facto insert 
+        return 'prevOutOfBounds'
+      } else if (idx >= newText.length) {
+        // in this case, the operation is a de-facto delete
+        return 'newOutOfBounds'
+      } else if (prevText.charAt(prevText.length - idx) === newText.charAt(newText.length - idx)) {
         idx++;
       } else {
         return newText.length - idx + 1;

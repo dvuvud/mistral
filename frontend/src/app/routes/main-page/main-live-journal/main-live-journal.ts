@@ -89,7 +89,6 @@ export class MainLiveJournal implements OnDestroy, OnInit, OnChanges {
   loadJournal() {
     this.journalService.getJournal(this.childSignal().id, this.groupSignal().id, this.contentSignal()).subscribe({
       next: (data) => {
-        console.log(data);
         this.text.set(data.content);
         this.serverRevision = data.serverRevision;
         this.sequence = 0;
@@ -129,7 +128,6 @@ export class MainLiveJournal implements OnDestroy, OnInit, OnChanges {
     const newValue = textarea.value;
     this.prevText = this.text();
     const idx = textarea.selectionStart;
-    console.log("indexet här är:", idx);
     const diff: Diff = this.differ.getDiff(this.prevText, newValue, idx);
     this.text.set(newValue);
     let operation: WsJournalWriteOperation;
