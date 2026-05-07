@@ -26,9 +26,10 @@ export class textDiff {
         diff.value = newText.substring(idx + length, idx); // blir minus eftersom att insert ger negativ "length"
         break;
       case 'REPLACEMENT':
-        diff.value = newText.substring(this.findFirstDiff(prevText, newText), this.findLastDiff(prevText, newText)); 
+        const firstDiff = this.findFirstDiff(prevText, newText)
+        diff.value = newText.substring(firstDiff, this.findLastDiff(prevText, newText)); 
         diff.length = length + diff.value.length;
-        diff.idx = idx - diff.value.length;
+        diff.idx = firstDiff;
         break;
     }
     console.log(diff);
