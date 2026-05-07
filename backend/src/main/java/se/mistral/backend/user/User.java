@@ -55,7 +55,7 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     @Builder.Default
-    private String color = "#808080";
+    private String color = "#0b8de3";
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
