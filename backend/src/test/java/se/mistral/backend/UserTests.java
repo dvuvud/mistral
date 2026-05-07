@@ -24,7 +24,6 @@ public class UserTests {
     @Autowired
     private AuthService authService;
 
-
     @Test
     void retrieveAllTeachersNoTeacherTest() {
         assertThat(userService.retrieveAllTeachers().isEmpty());
@@ -41,7 +40,8 @@ public class UserTests {
         assertThat(user1.isPresent());
 
         assertThat(userService.retrieveAllTeachers().size()).isEqualTo(1);
-        assertThat(userService.retrieveAllTeachers().getFirst()).isEqualTo(new BasicUserInformation(user1.get().getId(), user1.get().getName()));
+        assertThat(userService.retrieveAllTeachers().getFirst()).isEqualTo(
+                new BasicUserInformation(user1.get().getId(), user1.get().getName(), user1.get().getColor()));
     }
 
     @Test
@@ -64,8 +64,10 @@ public class UserTests {
         assertThat(user1.isPresent());
         assertThat(user2.isPresent());
 
-        assertThat(userService.retrieveAllTeachers().getFirst()).isEqualTo(new BasicUserInformation(user1.get().getId(), user1.get().getName()));
-        assertThat(userService.retrieveAllTeachers().getLast()).isEqualTo(new BasicUserInformation(user2.get().getId(), user2.get().getName()));
+        assertThat(userService.retrieveAllTeachers().getFirst())
+                .isEqualTo(new BasicUserInformation(user1.get().getId(), user1.get().getName(), user1.get().getColor()));
+        assertThat(userService.retrieveAllTeachers().getLast())
+                .isEqualTo(new BasicUserInformation(user2.get().getId(), user2.get().getName(), user2.get().getColor()));
     }
 
     @Test
@@ -132,8 +134,11 @@ public class UserTests {
         assertThat(user5.isPresent());
         assertThat(user10.isPresent());
 
-        assertThat(userService.retrieveAllTeachers().getFirst()).isEqualTo(new BasicUserInformation(user1.get().getId(), user1.get().getName()));
-        assertThat(userService.retrieveAllTeachers().contains(new BasicUserInformation(user5.get().getId(), user5.get().getName())));
-        assertThat(userService.retrieveAllTeachers().getLast()).isEqualTo(new BasicUserInformation(user10.get().getId(), user10.get().getName()));
+        assertThat(userService.retrieveAllTeachers().getFirst())
+                .isEqualTo(new BasicUserInformation(user1.get().getId(), user1.get().getName(), user1.get().getColor()));
+        assertThat(userService.retrieveAllTeachers()
+                .contains(new BasicUserInformation(user5.get().getId(), user5.get().getName(), user5.get().getColor())));
+        assertThat(userService.retrieveAllTeachers().getLast())
+                .isEqualTo(new BasicUserInformation(user10.get().getId(), user10.get().getName(), user10.get().getColor()));
     }
 }

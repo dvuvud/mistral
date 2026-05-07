@@ -84,6 +84,7 @@ export class MainPage implements OnInit, OnDestroy {
   logout() {
     document.cookie = 'jwtToken=""';
     localStorage.removeItem('token');
+    sessionStorage.removeItem('userId');
     this.router.navigateByUrl('/');
   }
 

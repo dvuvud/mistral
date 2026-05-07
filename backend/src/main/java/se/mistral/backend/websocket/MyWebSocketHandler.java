@@ -90,6 +90,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
             session.getAttributes().put("userId", user.getId());
             session.getAttributes().put("userName", user.getName());
+            session.getAttributes().put("userColor", user.getColor());
             sessionToRooms.putIfAbsent(session, ConcurrentHashMap.newKeySet());
 
             List<PresenceUser> allPresent = roomPresence.values().stream()
@@ -248,9 +249,10 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
         if (room instanceof Journal) {
             String name = (String) session.getAttributes().get("userName");
+            String color = (String) session.getAttributes().get("userColor");
             roomPresence.computeIfAbsent(key, k -> new ConcurrentHashMap<>())
-                .put(userId, new PresenceUser(userId, name, key));
-            broadcastToAll(toTextMessage(new PresenceMessage("PRESENCE_JOIN", key, userId, name)));
+                .put(userId, new PresenceUser(userId, name, key, color));
+            broadcastToAll(toTextMessage(new PresenceMessage("PRESENCE_JOIN", key, userId, name, color)));
         }
     }
 
@@ -295,12 +297,13 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
         Long userId = (Long) session.getAttributes().get("userId");
         String name = (String) session.getAttributes().get("userName");
+        String color = (String) session.getAttributes().get("userColor");
 
         roomPresence.computeIfPresent(roomKey, (k, presence) -> {
             presence.remove(userId);
             return presence.isEmpty() ? null : presence;
         });
 
-        broadcastToAll(toTextMessage(new PresenceMessage("PRESENCE_LEAVE", roomKey, userId, name)));
+        broadcastToAll(toTextMessage(new PresenceMessage("PRESENCE_LEAVE", roomKey, userId, name, color)));
     }
 }

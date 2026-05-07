@@ -92,7 +92,7 @@ export class MainLiveJournal implements OnDestroy {
   }
 
   isMyOwnAck(msg: WsJournalResponse): boolean {
-    return msg.userId.toString() === localStorage.getItem('UserId') && this.inFlight.length > 0;
+    return msg.userId.toString() === sessionStorage.getItem('UserId') && this.inFlight.length > 0;
   }
 
   loadJournal() {
@@ -117,7 +117,7 @@ export class MainLiveJournal implements OnDestroy {
         break;
       case 'DELETE':
         //this.text.set(text.slice(0, pos) + text.slice(pos + 1, text.length));
-        this.textArea().nativeElement.setRangeText("", pos, pos + 1, "preserve");
+        this.textArea().nativeElement.setRangeText("", pos, pos + incoming.length, "preserve");
         break;
     }
 
@@ -131,10 +131,15 @@ export class MainLiveJournal implements OnDestroy {
 
   onInput(event: Event) {
     this.sequence++;
+    // hämta information om textytan
+    const textarea = event.target as HTMLTextAreaElement;
 
-    const newValue = (event.target as HTMLTextAreaElement).value;
+    // hämta senaste verisionen och uppdatera föregående
+    const newValue = textarea.value;
     this.prevText = this.text();
-    const diff: Diff = this.differ.getDiff(this.prevText, newValue);
+    const idx = textarea.selectionStart;
+    console.log("indexet här är:", idx);
+    const diff: Diff = this.differ.getDiff(this.prevText, newValue, idx);
     this.text.set(newValue);
     let operation: WsJournalWriteOperation;
     switch (diff.operation) {
@@ -142,7 +147,7 @@ export class MainLiveJournal implements OnDestroy {
         operation = {
           type: 'DELETE',
           position: diff.idx,
-          length: 1
+          length: diff.length
         }
         break;
       case 'INSERT':
@@ -152,8 +157,26 @@ export class MainLiveJournal implements OnDestroy {
           text: diff.value
         }
         break;
+      case 'REPLACEMENT':
+        operation = {
+          type: 'DELETE',
+          position: diff.idx,
+          length: diff.length
+        }
+        this.sendOperation(operation);
+        this.sequence++;
+        operation = {
+          type: 'INSERT',
+          position: diff.idx,
+          text: diff.value
+        }
+        break;
     }
 
+    this.sendOperation(operation);
+  }
+
+  sendOperation(operation: WsJournalWriteOperation) {
     const message: WsJournalMessage = {
       clientRevision: this.serverRevision,
       operation: operation,

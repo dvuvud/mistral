@@ -1,7 +1,6 @@
 package se.mistral.backend.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import se.mistral.backend.user.dto.BasicUserInformation;
 import se.mistral.backend.user.dto.UserResponse;
@@ -27,12 +26,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
 
     /**
-     * Find user by role teacher.
+     * Find user by role.
      *
-     * @return the list of all teachers
+     * @param role the role to filter by
+     * @return the list of users with a given role
      */
-    @Query("SELECT new se.mistral.backend.user.dto.BasicUserInformation(user.id, user.name) " +
-           "FROM User user WHERE user.role = TEACHER")
-    List<BasicUserInformation> findUserByRole_Teacher();
+    List<BasicUserInformation> findUserByRole(Role role);
+
     UserResponse findUserById(Long id);
 }
