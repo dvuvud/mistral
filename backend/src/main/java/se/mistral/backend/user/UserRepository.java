@@ -31,7 +31,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      *
      * @return the list of all teachers
      */
-    @Query("SELECT new se.mistral.backend.user.dto.BasicUserInformation(user.id, user.name) " +
+    @Query("SELECT new se.mistral.backend.user.dto.BasicUserInformation(user.id, user.name, user.color) " +
            "FROM User user WHERE user.role = TEACHER")
     List<BasicUserInformation> findUserByRole_Teacher();
     UserResponse findUserById(Long id);
