@@ -12,8 +12,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import lombok.Data;
 import lombok.Builder;
@@ -38,7 +38,7 @@ public class Attendance {
     private LocalDate date;
 
     @Builder.Default
-    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(nullable = false)
     private AttendanceStatus status = AttendanceStatus.NOT_SET;
 
