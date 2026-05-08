@@ -8,4 +8,4 @@ public record AttendanceDto(
     AttendanceStatus status,
     LocalDateTime checkInTime,
     LocalDateTime checkOutTime
-) {}
+) { }
