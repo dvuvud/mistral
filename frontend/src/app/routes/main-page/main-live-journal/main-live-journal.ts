@@ -13,7 +13,7 @@ import { groupResponse } from '../../../core/groups/group.service';
 
 @Component({
   selector: 'main-live-journal',
-  imports: [MatFormField, MatInput, MatTabGroup, MatTab, FormsModule],
+  imports: [MatFormField, MatInput, FormsModule],
   templateUrl: './main-live-journal.html',
   styleUrl: './main-live-journal.scss',
 })
@@ -28,16 +28,6 @@ export class MainLiveJournal implements OnDestroy, OnInit, OnChanges {
   contentSignal = model.required<string>();
   groupSignal = model.required<groupResponse>();
 
-  reportTitle = computed(() => {
-    switch(this.contentSignal()) {
-      case('childView'):
-        return this.childSignal().name + 's' + ' dagsrapport';
-      case('groupView'):
-        return this.groupSignal().name + 's' + ' dagsrapport';
-      default:
-        return 'ERROR'
-    }
-  })
 
   async ngOnInit() {
     await this.journalSocket.ensureConnected();

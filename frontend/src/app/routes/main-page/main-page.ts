@@ -27,6 +27,7 @@ type displayedContent = 'childview' | 'groupView' | 'teacherView' | 'homeView' |
 })
 
 export class MainPage implements OnInit, OnDestroy {
+
   groupSignal = signal<groupResponse>({name: '', id: 0});
   allGroups = signal<groupResponse[]>([]);
   contentSignal = signal<displayedContent>('');

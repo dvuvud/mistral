@@ -63,6 +63,26 @@ mat-card-header {
   border-radius: 12px;
 }
 
+mat-tab-group {
+  height: 100%;
+}
+
+mat-tab-group * {
+  height: 100%;
+}
+
+mat-mdc-tab-body-wrapper {
+  height: 100%;
+}
+
+::ng-deep .mat-mdc-form-field-flex {
+  height: 100%;
+}
+
+::ng-deep .mat-mdc-form-field-infix {
+  height: 100%;
+}
+
 main-live-journal {
   flex: 4;
 }
