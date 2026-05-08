@@ -1,16 +1,36 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, model, OnInit } from '@angular/core';
 import { userService } from '../../../core/user/user.service';
 import { AsyncPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'account-page',
-  imports: [AsyncPipe, MatCardModule, MatIconModule],
+  imports: [AsyncPipe, MatCardModule, MatIconModule, MatFormFieldModule, MatInputModule, FormsModule],
   templateUrl: './account-page.html',
   styleUrl: './account-page.scss',
 })
-export class AccountPage {
+export class AccountPage implements OnInit {
   private userService = inject(userService);
-  currentUser = this.userService.getUser(Number(localStorage.getItem('UserId')));
+  teacherColor = model<string>("#ffffff");
+  userDataObservable = this.userService.getUser(Number(sessionStorage.getItem('UserId')));
+  currentUser = this.userDataObservable.pipe();
+
+  ngOnInit() {
+    this.userDataObservable.subscribe((next) => {
+      this.teacherColor.set(next.color);
+    })
+  }
+
+  updateColor() {
+    console.log("From updatecolor", this.teacherColor());
+    const res = this.userService.updateColor(this.teacherColor());
+    res.subscribe((next) => {
+      console.log("From updatecolor", next);
+    })
+  }
 }

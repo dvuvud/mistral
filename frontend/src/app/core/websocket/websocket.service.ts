@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
 import {Observable, ReplaySubject, Subject } from 'rxjs';
-import { Teacher } from '../presence/presence.service';
+import { User } from '../user/user.service';
 
-type WsMessageType = "ATTENDANCE" | "DOC_OPERATION" | "PRESENCE_STATE" | "PRESENCE_LEAVE" | "PRESENCE_JOIN"
+const DEBUG = true;
+
+type WsMessageType = "ATTENDANCE" | "DOC_OPERATION" | "PRESENCE_STATE" | "PRESENCE_LEAVE" | "PRESENCE_JOIN" | "CHAT"
+
 export type WsJournalWriteOperation = InsertOperation | DeleteOperation;
+
 export enum WsMailbox {
   attendance = "attendanceMessages",
   presence = "presenceMessages",
@@ -19,7 +23,7 @@ export interface WsMessageContent {
 export interface WsPresenceChangeMessage extends WsMessageContent {
   name: string,
   userId: number
-  users?: Teacher[],
+  users?: User[],
   color: string
 }
 
@@ -58,12 +62,8 @@ export interface DeleteOperation {
 })
 
 export class WebsocketService {
-  //private socket: WebSocket;
-  private socket = new ReplaySubject<WebSocket>();
-
-  liveSocket(): Observable<WebSocket> {
-    return this.socket.asObservable();
-  }
+  private observedSocket: ReplaySubject<WebSocket> = new ReplaySubject<WebSocket>(1);
+  private connectedSocket: WebSocket | null = null;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private mailboxes: Record<string, Subject<any>> = {
@@ -74,7 +74,8 @@ export class WebsocketService {
 
   private rooms: Record<string, string> = {
     attendance: "",
-    journal: ""
+    journal: "",
+    chat: ""
   };
 
   deliverMessage(msg: WsMessageContent) {
@@ -93,56 +94,66 @@ export class WebsocketService {
   }
 
   connect(url: string): void {
+    this.observedSocket = new ReplaySubject<WebSocket>(1);
     const token = localStorage.getItem("token");
     const socket = new WebSocket(`${url}?token=${token}`);
+
     socket.onmessage = (event) => {
       const rawJSON = JSON.parse(event.data);
-      console.log("[Websocket] - Received:", rawJSON);
+      if (DEBUG) console.log("[Websocket] - Received:", rawJSON);
       this.deliverMessage(rawJSON);
     };
 
     socket.onclose = (event) => {
-      console.log("[Websocket] - Disconnected", event.code, event.reason);
+      if (DEBUG) console.log("[Websocket] - Disconnected", event.code, event.reason);
     };
 
     socket.onopen = () => {
-      console.log("[Websocket] - Connected");
-      this.socket.next(socket);
+      if (DEBUG) console.log("[Websocket] - Connected");
+      this.observedSocket.next(socket);
+      this.connectedSocket = socket;
     }
+
   }
 
   disconnect(): void {
-    this.socket.subscribe((ws) => {
-      for (const value of Object.values(this.rooms)) {
-        if (value === "")
-          continue;
-        ws?.send(JSON.stringify({ type: 'unsubscribe', room: value}));
-      }
-      ws.close();
-    })
+    if (this.connectedSocket == null) {
+      console.error("[Websocket] - Tried disconnecting an unconnected websocket.");
+      return;
+    }
+
+    for (const value of Object.values(this.rooms)) {
+      if (value === "")
+        continue;
+      this.connectedSocket.send(JSON.stringify({ type: 'unsubscribe', room: value}));
+    }
+    this.connectedSocket.close();
+    this.observedSocket.complete();
   }
 
   async ensureConnected(): Promise<void> {
     return new Promise<void>((resolve) => {
-      this.socket.subscribe(() => {
+      this.observedSocket.subscribe(() => {
         resolve();
       });
     });
   }
 
   private setRoom(socketRoom: string, newRoom: string): void {
+    if (this.connectedSocket == null) {
+      console.error("[Websocket] - Attempted to set room of an unconnected socket");
+      return;
+    }
 
     if (this.rooms[socketRoom] !== "") {
       this.leaveRoom(socketRoom);
     }
 
-    this.socket.subscribe((ws) => {
-      this.rooms[socketRoom] = newRoom;
-      if (ws != null && ws.OPEN) {
-        console.log("[Websocket] - Subscribing:", JSON.stringify({ type: 'subscribe', room: newRoom }));
-        ws.send(JSON.stringify({ type: 'subscribe', room: newRoom}));
-      }
-    })
+    this.rooms[socketRoom] = newRoom;
+    if (this.connectedSocket.readyState == this.connectedSocket.OPEN) {
+      if (DEBUG) console.log("[Websocket] - Subscribing:", JSON.stringify({ type: 'subscribe', room: newRoom }));
+      this.connectedSocket.send(JSON.stringify({ type: 'subscribe', room: newRoom}));
+    }
   }
 
   setAttendanceRoom(newRoom: string): void {
@@ -154,13 +165,16 @@ export class WebsocketService {
   }
 
   private leaveRoom(socketRoom: string): void {
+    if (this.connectedSocket == null) {
+      console.error("[Websocket] - Tried to leave room on unconnected socket.");
+      return;
+    }
+
     if (this.rooms[socketRoom] == "")
       return;
 
-    this.socket.subscribe((ws) => {
-      console.log("[Websocket] - Unsubscribing:", JSON.stringify({ type: 'unsubscribe', room: this.rooms[socketRoom] }));
-      ws.send(JSON.stringify({ type: 'unsubscribe', room: this.rooms[socketRoom] }));
-    });
+    if (DEBUG) console.log("[Websocket] - Unsubscribing:", JSON.stringify({ type: 'unsubscribe', room: this.rooms[socketRoom] }));
+    this.connectedSocket.send(JSON.stringify({ type: 'unsubscribe', room: this.rooms[socketRoom] }));
     this.rooms[socketRoom] = "";
   }
 
@@ -173,13 +187,21 @@ export class WebsocketService {
   }
 
   sendMessage(type: WsMessageType, message: WsMessageContent): void {
-    this.socket.subscribe((ws) => {
-      message.room = this.rooms[type == "ATTENDANCE" ? "attendance" : "journal"];
-      message.type = type;
-      const msgAsString = JSON.stringify({ ...message });
-      console.log("Sending off ", msgAsString)
-      ws.send(msgAsString);
-    });
+    if (this.connectedSocket == null) {
+      console.error("[Websocket] - Tried to send message on unconnected socket.");
+      return;
+    }
+
+
+    message.room = this.rooms[type == "ATTENDANCE"
+      ? "attendance"
+      : type == "CHAT"
+        ? "chat"
+        : "journal"];
+    message.type = type;
+    const msgAsString = JSON.stringify({ ...message });
+    if (DEBUG) console.log("[Websocket] - Sending off: ", msgAsString);
+    this.connectedSocket.send(msgAsString);
   }
 
   sendAttendanceUpdate(message: WsAttendanceMessage): void {

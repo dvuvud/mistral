@@ -1,7 +1,6 @@
 import { Component, input } from '@angular/core';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import { Teacher } from '../../../core/presence/presence.service';
-
+import { User } from '../../../core/user/user.service';
 
 @Component({
   selector: 'main-presence-indicator',
@@ -11,5 +10,5 @@ import { Teacher } from '../../../core/presence/presence.service';
 })
 export class MainPresenceIndicator {
 
-  teacher = input.required<Teacher>();
+  teacher = input.required<User>();
 }

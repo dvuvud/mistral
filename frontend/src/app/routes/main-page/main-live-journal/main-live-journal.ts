@@ -1,4 +1,4 @@
-import { Component, OnDestroy, signal, inject, viewChild, ElementRef, model, computed, effect, OnInit } from '@angular/core';
+import { Component, OnDestroy, signal, inject, viewChild, ElementRef, model, computed, OnInit, OnChanges } from '@angular/core';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
@@ -17,10 +17,7 @@ import { groupResponse } from '../../../core/groups/group.service';
   templateUrl: './main-live-journal.html',
   styleUrl: './main-live-journal.scss',
 })
-export class MainLiveJournal implements OnDestroy, OnInit {
-
-  private initialized = false;
-
+export class MainLiveJournal implements OnDestroy, OnInit, OnChanges {
   private journalSocket = inject(WebsocketService);
   private differ = new textDiff();
   private operationalTransformer = new operationalTransformation();
@@ -58,14 +55,13 @@ export class MainLiveJournal implements OnDestroy, OnInit {
       }
       this.serverRevision = response.serverRevision;
     });
+    this.loadJournal();
   }
 
-  constructor() {
-    effect(() => {
-      this.loadJournal();
-      const roomDest = this.getRoom();
-      this.journalSocket.setJournalRoom(roomDest);
-    });
+  ngOnChanges() {
+    const roomDest = this.getRoom();
+    this.journalSocket.setJournalRoom(roomDest);
+    this.loadJournal();
   }
 
   text = signal('');
