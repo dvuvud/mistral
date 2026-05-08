@@ -2,12 +2,17 @@
   <mat-card-content class="main-card-content">
     <div class="main-card-left">
       @if (contentSignal() === 'childView') {
-          <mat-card-header class="title">
-          <span>{{childSignal().name}}</span>
-            <main-presence-container filter={{childSignal().id}}></main-presence-container>
-        </mat-card-header>
-        <div class="childDisplay">
-          <child-display (attendanceChangeEvent)="wsUpdateAttendance($event)" [(childSignal)]="childSignal"></child-display>
+        <div class="sub-row">
+            <mat-card-header class="title">
+            <span>{{childSignal().name}}</span>
+            @if (groupSignal().name != 'alla') {
+              <p class="mini-spacer">{{groupSignal().name}}</p>
+            }
+              <main-presence-container filter={{childSignal().id}}></main-presence-container>
+          </mat-card-header>
+          <div class="childDisplay">
+            <child-display (attendanceChangeEvent)="wsUpdateAttendance($event)" [(childSignal)]="childSignal"></child-display>
+          </div>
         </div>
         <main-live-journal [childSignal]="childSignal()"
                           [groupSignal]="groupSignal()"

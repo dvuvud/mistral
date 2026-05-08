@@ -51,7 +51,8 @@ mat-form-field {
 .stats {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 1em;
   background-color: var(--mat-sys-surface-variant);
   color: var(--mat-sys-on-surface-variant);
   flex: 1;
