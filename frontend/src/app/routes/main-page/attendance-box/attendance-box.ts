@@ -1,16 +1,14 @@
 import { Component, input, effect, inject, model, EventEmitter, Output } from '@angular/core';
-import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { Child } from '../../../core/child/child.service';
-import { AttendanceService } from '../../../core/child/attendance.service';
-import { MatDialog } from '@angular/material/dialog';
-import { ConfirmationDialog } from '../confirmation-dialog/confirmation-dialog';
-import { firstValueFrom } from 'rxjs';
+import { AttendanceService, AttendanceStatus } from '../../../core/child/attendance.service';
 import { WsAttendanceMessage } from '../../../core/websocket/websocket.service';
 import { localDateToday } from '../../../core/utils/date-utils';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'attendance-box',
-  imports: [MatCheckboxModule],
+  imports: [MatSelectModule, MatFormFieldModule],
   templateUrl: './attendance-box.html',
   styleUrl: './attendance-box.scss',
 })
@@ -18,13 +16,24 @@ export class AttendanceBox {
   childSignal = model.required<Child>();
   disabled = input<boolean>();
   errorMessage = '';
-  dialog = inject(MatDialog);
 
-  get isChecked(): boolean {
-    return this.attendanceService.getSignal(this.childSignal().id, localDateToday())() ?? false;
-  }
+  readonly statusOptions: { value: AttendanceStatus; label: string }[] = [
+    { value: 'NOT_SET',     label: '—'         },
+    { value: 'CHECKED_IN',  label: 'Incheckad' },
+    { value: 'CHECKED_OUT', label: 'Utcheckad' },
+    { value: 'LEAVE',       label: 'Ledig'      },
+    { value: 'ABSENT',      label: 'Sjuk'       },
+  ];
+
+  readonly statusLabels = Object.fromEntries(
+    this.statusOptions.map(o => [o.value, o.label])
+  ) as Record<AttendanceStatus, string>;
 
   private attendanceService = inject(AttendanceService);
+
+  get currentStatus(): AttendanceStatus {
+    return this.attendanceService.getSignal(this.childSignal().id, localDateToday())() ?? 'NOT_SET';
+  }
 
   constructor() {
     effect(() => {
@@ -33,61 +42,35 @@ export class AttendanceBox {
 
       const sig = this.attendanceService.getSignal(child.id, localDateToday());
       if (sig() === null) {
-        if (child.present === null) {
-          sig.set(false);
-        } else {
-          sig.set(child.present);
-        }
+        sig.set(child.status ?? 'NOT_SET');
       }
     });
   }
 
-  async onCheckBox(event: MatCheckboxChange) {
-
-    const newStatus = event.checked;
-
-    if (newStatus === false) {
-      event.source.checked = true;
-
-      const confirmed = await this.confirmation();
-
-      if(!confirmed) { // early return
-        return;
-      }
-    }
-
+  onStatusChange(newStatus: AttendanceStatus) {
     const sig = this.attendanceService.getSignal(this.childSignal().id, localDateToday());
+    const previousStatus = sig();
     sig.set(newStatus);
 
     this.attendanceService.setAttendance(this.childSignal().id, localDateToday(), newStatus).subscribe({
-      next: (data) => sig.set(data.present),
+      next: (data) => sig.set(data.status),
       error: (err) => {
         console.error('Kunde inte spara', err);
-        sig.set(!newStatus);
-        event.source.checked = !newStatus;
+        sig.set(previousStatus);
         this.errorMessage = 'Misslyckades att spara till databasen.';
         setTimeout(() => this.errorMessage = '', 2000);
       },
     });
 
-    this.wsUpdateAttendance(event.checked)
+    this.wsUpdateAttendance(newStatus);
   }
 
   @Output() attendanceChangeEvent = new EventEmitter();
-  wsUpdateAttendance(checked: boolean) {
+  wsUpdateAttendance(status: AttendanceStatus) {
     const msg: WsAttendanceMessage = {
       childId: this.childSignal().id,
-      present: checked
-    }
+      status
+    };
     this.attendanceChangeEvent.emit(msg);
-  }
-
-  async confirmation() {
-    const dialogRef = this.dialog.open(ConfirmationDialog, {
-      height: '120px',
-      width: '400px',
-    });
-    const result = await firstValueFrom(dialogRef.afterClosed());
-    return result;
   }
 }
