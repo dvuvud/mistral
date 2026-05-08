@@ -1,12 +1,17 @@
 <div>
-    <mat-checkbox
-        [disabled]="disabled()"
-        [checked]="isChecked"
-        (change)="onCheckBox($event)">
-        <!--Enbart låda lägg till egen text i respektive html dokument-->
-    </mat-checkbox>
+  @if (disabled()) {
+    <span>{{ statusLabels[currentStatus] }}</span>
+  } @else {
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-select [value]="currentStatus" (selectionChange)="onStatusChange($event.value)">
+        @for (option of statusOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
 
-    @if (errorMessage) {
-        <p class="error-text">{{ errorMessage }}</p>
-    }
+  @if (errorMessage) {
+    <p class="error-text">{{ errorMessage }}</p>
+  }
 </div>
