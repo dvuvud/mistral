@@ -86,4 +86,8 @@ export class MainPage implements OnInit, OnDestroy {
   hem() {
     this.contentSignal.set('homeView');
   }
+
+  hover(event: Event) {
+    console.log(event);
+  }
 }

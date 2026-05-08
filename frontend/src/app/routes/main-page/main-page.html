@@ -1,8 +1,11 @@
 <div class="main-nav">
   <mat-toolbar color="mat-sys-primary">
     <span>KîndGuard</span>
-    <button matButton="tonal" class="mina-sidor-button" (click)="minaSidor()">Mina sidor</button>
-    <button matButton="tonal" (click)="hem()">Hem</button>
+    <div (onmouseenter)="hover($event)" class="funny">
+      <button matButton="tonal" class="mina-sidor-button" (click)="minaSidor()">Mina sidor</button>
+    </div>
+
+    <button  matButton="tonal" (click)="hem()">Hem</button>
     <span class="example-spacer"></span>
     <button matButton="tonal" class="logout-button" (click)="logout()">Logout</button>
   </mat-toolbar>
@@ -10,8 +13,8 @@
 
 <div class="main-body">
   <div class="main-panel-container">
-      <main-panel 
-        (attendanceChangeEvent)="wsUpdateAttendance($event)" 
+      <main-panel
+        (attendanceChangeEvent)="wsUpdateAttendance($event)"
         [(contentSignal)]="contentSignal">
       </main-panel>
   </div>
