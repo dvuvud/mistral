@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import {Observable, ReplaySubject, Subject } from 'rxjs';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { User } from '../user/user.service';
+import { AttendanceStatus } from '../child/attendance.service';
 
 const DEBUG = true;
 
@@ -29,7 +30,7 @@ export interface WsPresenceChangeMessage extends WsMessageContent {
 
 export interface WsAttendanceMessage extends WsMessageContent {
   childId: number,
-  present: boolean
+  status: AttendanceStatus;
 }
 
 export interface WsJournalMessage extends WsMessageContent {
