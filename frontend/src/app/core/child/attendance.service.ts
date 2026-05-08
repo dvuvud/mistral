@@ -1,6 +1,6 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 export type AttendanceStatus = 'NOT_SET' | 'CHECKED_IN' | 'CHECKED_OUT' | 'LEAVE' | 'ABSENT';
@@ -22,9 +22,10 @@ export class AttendanceService {
 
   private url = `${environment.apiUrl}/api/attendance`;
   private attendanceSignals = new Map<string, ReturnType<typeof signal<AttendanceStatus | null>>>();
-
+  private attendanceChanges = new ReplaySubject<SetAttendanceRequest>();
   private http = inject(HttpClient);
 
+  readonly getAttendanceChanges = this.attendanceChanges.asObservable();
 
   getSignal(childId: number, dateStr: string) {
     const key = `${childId}_${dateStr}`;
@@ -40,7 +41,7 @@ export class AttendanceService {
       date,
       status,
     };
-
+    this.attendanceChanges.next(data);
     return this.http.put<AttendanceInfo>(this.url, data);
   }
 }
