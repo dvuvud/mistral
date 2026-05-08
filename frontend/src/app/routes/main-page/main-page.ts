@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTab, MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { WebsocketService, WsAttendanceMessage, WsMailbox } from '../../core/websocket/websocket.service';
 import { environment } from '../../../environments/environment';
 import { groupResponse } from '../../core/groups/group.service';
@@ -19,8 +19,6 @@ type displayedContent = 'childview' | 'groupView' | 'teacherView' | 'homeView' |
     MainPanel,
     MatSidenavModule,
     MatButtonModule,
-    MatTabGroup,
-    MatTab
   ],
   encapsulation: ViewEncapsulation.Emulated,
 
@@ -54,7 +52,7 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.socketService.disconnect();
+    this.socketService.leaveJournalRoom();
   }
 
   handleWebsocketMessage(message: WsAttendanceMessage) {
@@ -76,8 +74,9 @@ export class MainPage implements OnInit, OnDestroy {
   logout() {
     document.cookie = 'jwtToken=""';
     localStorage.removeItem('token');
-    sessionStorage.removeItem('userId');
-    this.router.navigateByUrl('/');
+    sessionStorage.removeItem('UserId');
+    this.socketService.disconnect();
+    window.location.reload();
   }
 
   minaSidor() {

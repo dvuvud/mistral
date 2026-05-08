@@ -1,5 +1,5 @@
 <mat-card class="container">
-  @for (teacher of teachers(); track teacher.userId) {
+  @for (teacher of teachers(); track teacher.id) {
     <main-presence-indicator [teacher]=teacher></main-presence-indicator>
   }
 </mat-card>

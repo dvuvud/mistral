@@ -1,8 +1,8 @@
 .icon-display {
     transform: scale(2);
     display: flex;
-    align-items: center;     
-    justify-content: center;  
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
 }
 
@@ -13,4 +13,22 @@ p {
 mat-card {
     margin-top: 7em;
     height: 100%;
+}
+
+mat-card-header {
+  width: 100%;
+  display: flex;
+}
+
+.card-header-left {
+  flex: 2;
+}
+
+.card-header-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family: var(--mat-sys-label-large);
 }
