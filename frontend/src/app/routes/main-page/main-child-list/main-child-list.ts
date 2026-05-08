@@ -38,7 +38,7 @@ export class ChildList {
   });
 
   groupAttendance = computed(() => {
-    return this.searchedChildren().filter(x => x.present === true).length;
+    return this.searchedChildren().filter(x => x.status === 'CHECKED_IN' || x.status === 'CHECKED_OUT').length;
   })
 
   groupAbsent = computed(() => {
@@ -60,10 +60,6 @@ export class ChildList {
   onSearchUpdated(sq: string) {
     console.log(this.groupSignal().name)
     this.searchQuery.set(sq);
-  }
-
-  get isChecked(): boolean {
-    return this.attendanceService.getSignal(this.childSignal().id, localDateToday())() ?? false;
   }
 
   onSelectChild(child: Child) {
@@ -110,6 +106,6 @@ export class ChildList {
     }
 
     const sig = this.attendanceService.getSignal(targetChild.id, localDateToday());
-    sig.set(message.present);
+    sig.set(message.status);
   }
 }
