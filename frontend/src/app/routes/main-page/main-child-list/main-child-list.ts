@@ -31,8 +31,11 @@ export class ChildList {
   groupSignal = model.required<groupResponse>();
   contentSignal = model.required<string>();
   allGroups = model.required<groupResponse[]>();
+  stupidFix = signal<number>(0);
+
 
   searchedChildren = computed(() => {
+    this.stupidFix();
     const sq = this.searchQuery();
     return this.children().filter(x => x.name.toLowerCase().includes(sq));
   });
@@ -46,9 +49,21 @@ export class ChildList {
   })
 
   private attendanceService = inject(AttendanceService);
+
   private childService = inject(ChildService);
 
   constructor() {
+    this.attendanceService.getAttendanceChanges.subscribe((next) => {
+      const targetChild: Child | undefined = this.children().find((child: Child) => {
+        return child.id === next.childId;
+      });
+      if (targetChild == null) {
+        return;
+      }
+      targetChild.status = next.status;
+      this.stupidFix.update((x) => x + 1);
+    });
+
     effect(() => {
       const group = this.groupSignal();
       if (group.id !== 0) {
@@ -99,13 +114,13 @@ export class ChildList {
     const targetChild: Child | undefined = this.children().find((child: Child) => {
       return child.id === message.childId;
     });
-
     if (!targetChild) {
-      alert("Child not found");
+      console.error("Attendance message received from other group. Child not found.");
       return;
     }
-
     const sig = this.attendanceService.getSignal(targetChild.id, localDateToday());
     sig.set(message.status);
+    targetChild.status = message.status;
+    this.stupidFix.update((x) => x + 1);
   }
 }
