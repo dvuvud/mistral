@@ -7,7 +7,8 @@ import { environment } from '../../../environments/environment';
 export interface User {
   name: string,
   room: string,
-  id: number,
+  userId: number,
+  id?: number,
   color: string,
   role?: string,
   email?: string,
