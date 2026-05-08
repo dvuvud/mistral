@@ -22,7 +22,7 @@ export class AttendanceBox {
     { value: 'CHECKED_IN',  label: 'Incheckad' },
     { value: 'CHECKED_OUT', label: 'Utcheckad' },
     { value: 'LEAVE',       label: 'Ledig'      },
-    { value: 'ABSENT',      label: 'Sjuk'       },
+    { value: 'ABSENT',      label: 'Frånvarande' },
   ];
 
   readonly statusLabels = Object.fromEntries(
