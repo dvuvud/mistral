@@ -22,7 +22,7 @@ export interface WsMessageContent {
 
 export interface WsPresenceChangeMessage extends WsMessageContent {
   name: string,
-  userId: number
+  userId: number,
   users?: User[],
   color: string
 }

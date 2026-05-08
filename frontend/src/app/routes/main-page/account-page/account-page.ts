@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -15,6 +16,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './account-page.scss',
 })
 export class AccountPage implements OnInit {
+  private _snackBar = inject(MatSnackBar);
   private userService = inject(userService);
   teacherColor = model<string>("#ffffff");
   userDataObservable = this.userService.getUser(Number(sessionStorage.getItem('UserId')));
@@ -29,8 +31,11 @@ export class AccountPage implements OnInit {
   updateColor() {
     console.log("From updatecolor", this.teacherColor());
     const res = this.userService.updateColor(this.teacherColor());
-    res.subscribe((next) => {
-      console.log("From updatecolor", next);
+    res.subscribe(() => {
+      this._snackBar.open("Din färg uppdateras nästa gång du loggar in.", "Stäng", {
+        duration: 2500,
+        verticalPosition: "top"
+      });
     })
   }
 }
