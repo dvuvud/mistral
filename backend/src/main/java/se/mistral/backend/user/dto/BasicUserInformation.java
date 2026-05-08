@@ -2,5 +2,6 @@ package se.mistral.backend.user.dto;
 
 public record BasicUserInformation(
         Long id,
-        String name
-) { }
+        String name,
+        String color) {
+}

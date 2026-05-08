@@ -2,8 +2,9 @@
   <mat-card-content class="main-card-content">
     <div class="main-card-left">
       @if (contentSignal() === 'childView') {
-          <mat-card-header>
-          <span class="dagens-datumn">{{childSignal().name}}</span>
+          <mat-card-header class="title">
+          <span>{{childSignal().name}}</span>
+            <main-presence-container filter={{childSignal().id}}></main-presence-container>
         </mat-card-header>
         <div class="childDisplay">
           <child-display (attendanceChangeEvent)="wsUpdateAttendance($event)" [(childSignal)]="childSignal"></child-display>
@@ -15,8 +16,9 @@
       }
 
       @if (contentSignal() === 'groupView') {
-        <mat-card-header>
-        <span class="dagens-datumn">{{groupSignal().name}}</span>
+        <mat-card-header class="title">
+        <span>{{groupSignal().name}}</span>
+        <main-presence-container isGroup="yes" filter={{groupSignal().id}}></main-presence-container>
       </mat-card-header>
         <main-live-journal [childSignal]="childSignal()"
                           [groupSignal]="groupSignal()"
@@ -24,22 +26,29 @@
         </main-live-journal>
       }
 
-      @if (contentSignal() === 'teacherView') { 
+      @if (contentSignal() === 'teacherView') {
         <account-page></account-page>
       }
 
-      @if (contentSignal() === '') {
-        <h1>Den är tom</h1>
+      @if (contentSignal() === 'homeView') {
+        <h1>Hej och välkommen till KindGuard</h1>
+        <p>Skola</p>
+        <p>kalender?</p>
+        <p>HomepageMög</p>
+        <p>Oklart</p>
       }
-      
-    </div>
-    <div class="main-card-right">
-      <main-child-list 
-        [(childSignal)]="childSignal"
-        [(groupSignal)]="groupSignal"
-        [(contentSignal)]="contentSignal">
-    </main-child-list>
 
     </div>
+
+    <mat-card class="main-card-right">
+      <div class="main-card-right">
+        <main-child-list
+          [(childSignal)]="childSignal"
+          [(groupSignal)]="groupSignal"
+          [(contentSignal)]="contentSignal"
+          [(allGroups)]="allGroups">
+      </main-child-list>
+    </div>
+    </mat-card>
   </mat-card-content>
 </mat-card>

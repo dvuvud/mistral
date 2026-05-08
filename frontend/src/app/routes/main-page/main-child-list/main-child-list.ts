@@ -11,10 +11,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { localDateToday } from '../../../core/utils/date-utils';
 import { groupResponse } from '../../../core/groups/group.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatSelectModule } from '@angular/material/select';
+import { MainPresenceContainer } from '../main-presence-container/main-presence-container';
 
 @Component({
   selector: 'main-child-list',
-  imports: [MatListModule, RouterModule, MatDividerModule, AttendanceBox, MatFormFieldModule, MatInputModule, MatIconModule],
+  imports: [MatListModule, RouterModule, MatDividerModule, AttendanceBox, MatFormFieldModule, MatInputModule, MatIconModule, MatCardModule, MatSelectModule, MainPresenceContainer],
   templateUrl: './main-child-list.html',
   styleUrl: './main-child-list.scss',
 })
@@ -27,11 +30,20 @@ export class ChildList {
   searchQuery = signal<string>('');
   groupSignal = model.required<groupResponse>();
   contentSignal = model.required<string>();
+  allGroups = model.required<groupResponse[]>();
 
   searchedChildren = computed(() => {
     const sq = this.searchQuery();
-    return this.children().filter(x => x.name.toLowerCase().includes(sq)); 
+    return this.children().filter(x => x.name.toLowerCase().includes(sq));
   });
+
+  groupAttendance = computed(() => {
+    return this.searchedChildren().filter(x => x.present === true).length;
+  })
+
+  groupAbsent = computed(() => {
+    return this.searchedChildren().length - this.groupAttendance();
+  })
 
   private attendanceService = inject(AttendanceService);
   private childService = inject(ChildService);
@@ -65,6 +77,26 @@ export class ChildList {
         this.children.set(data);
       }
     });
+  }
+
+  showAllChildren() {
+    this.childService.getChildren().subscribe({
+      next: (data) => {
+        this.children.set(data);
+      }
+    });
+  }
+
+  handleSelection(value: groupResponse) {
+    console.log(value);
+    if(value.name === 'alla') {
+      this.contentSignal.set('homeView');
+      this.showAllChildren();
+      return;
+    }
+
+    this.groupSignal.set(value);
+    this.contentSignal.set('groupView');
   }
 
   handleWebsocketMessage(message: WsAttendanceMessage) {

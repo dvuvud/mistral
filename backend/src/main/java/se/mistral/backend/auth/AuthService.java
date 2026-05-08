@@ -1,6 +1,9 @@
 package se.mistral.backend.auth;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.Random;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +28,8 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    private static final Random RANDOM = new Random();
+
     /**
      * Register a new user.
      *
@@ -41,6 +46,7 @@ public class AuthService {
             .email(request.email())
             .password(passwordEncoder.encode(request.password()))
             .role(Role.TEACHER)
+            .color(randomColor())
             .build();
         userRepository.save(user);
         
@@ -57,5 +63,13 @@ public class AuthService {
         User user = userRepository.findByEmail(request.email())
             .orElseThrow(() -> new NotFoundException("User not found"));
         return new AuthResponse(jwtService.generateToken(user), user.getId());
+    }
+
+    /**
+     * Generates a random HEX color string
+     * @return the color as a String
+     */
+    private String randomColor() {
+        return String.format("#%06X", RANDOM.nextInt(0x1000000));
     }
 }

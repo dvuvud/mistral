@@ -53,6 +53,10 @@ public class User implements UserDetails {
     @Builder.Default
     private boolean active = false;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private String color = "#0b8de3";
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));

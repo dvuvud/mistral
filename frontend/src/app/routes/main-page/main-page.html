@@ -2,6 +2,7 @@
   <mat-toolbar color="mat-sys-primary">
     <span>KîndGuard</span>
     <button matButton="tonal" class="mina-sidor-button" (click)="minaSidor()">Mina sidor</button>
+    <button matButton="tonal" (click)="hem()">Hem</button>
     <span class="example-spacer"></span>
     <button matButton="tonal" class="logout-button" (click)="logout()">Logout</button>
   </mat-toolbar>
@@ -9,22 +10,9 @@
 
 <div class="main-body">
   <div class="main-panel-container">
-    <mat-tab-group mat-stretch-tabs="false" 
-                   mat-align-tabs="start" 
-                   dynamicHeight (selectedTabChange)="onTabChange($event)"
-                   [preserveContent]="true">
-      
-      @for (group of allGroups(); track group.id) {
-        <mat-tab label="{{group.name}}">
-        
-            <main-panel 
-              (attendanceChangeEvent)="wsUpdateAttendance($event)" 
-              [groupSignal]="group"
-              [(contentSignal)]="contentSignal">
-            </main-panel>
-
-        </mat-tab>
-      } 
-    </mat-tab-group>
+      <main-panel 
+        (attendanceChangeEvent)="wsUpdateAttendance($event)" 
+        [(contentSignal)]="contentSignal">
+      </main-panel>
   </div>
 </div>

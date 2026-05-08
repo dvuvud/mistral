@@ -1,14 +1,13 @@
-import { Component, OnDestroy, signal, inject, viewChild, ElementRef, model, computed, effect } from '@angular/core';
+import { Component, OnDestroy, signal, inject, viewChild, ElementRef, model, computed, OnInit, OnChanges } from '@angular/core';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { FormsModule } from '@angular/forms';
-import { WsJournalWriteOperation, WebsocketService, WsJournalMessage, WsJournalResponse } from '../../../core/websocket/websocket.service';
+import { WsJournalWriteOperation, WebsocketService, WsJournalMessage, WsJournalResponse, WsMailbox } from '../../../core/websocket/websocket.service';
 import { Child } from '../../../core/child/child.service';
 import { textDiff, Diff } from './text-diff';
 import { operationalTransformation } from './operational-transformation';
 import { JournalService } from '../../../core/journal/journal.service';
-import { environment } from '../../../../environments/environment';
 import { localDateToday } from '../../../core/utils/date-utils';
 import { groupResponse } from '../../../core/groups/group.service';
 
@@ -18,11 +17,8 @@ import { groupResponse } from '../../../core/groups/group.service';
   templateUrl: './main-live-journal.html',
   styleUrl: './main-live-journal.scss',
 })
-export class MainLiveJournal implements OnDestroy {
-
-  private initialized = false;
-  
-  private journalSocket = new WebsocketService;
+export class MainLiveJournal implements OnDestroy, OnInit, OnChanges {
+  private journalSocket = inject(WebsocketService);
   private differ = new textDiff();
   private operationalTransformer = new operationalTransformation();
   private journalService = inject(JournalService);
@@ -43,11 +39,12 @@ export class MainLiveJournal implements OnDestroy {
     }
   })
 
-  constructor() {
-    this.journalSocket.getMessages().subscribe(data => {
+  async ngOnInit() {
+    await this.journalSocket.ensureConnected();
+    this.journalSocket.getMessages(WsMailbox.journal).subscribe(data => {
       const response = data as WsJournalResponse;
       let incoming = response.operation;
-      
+
       if (this.isMyOwnAck(response)) {
         this.inFlight.shift();
       } else {
@@ -58,19 +55,13 @@ export class MainLiveJournal implements OnDestroy {
       }
       this.serverRevision = response.serverRevision;
     });
+    this.loadJournal();
+  }
 
-    effect(() => {
-      
-      this.loadJournal();
-      const roomDest = this.getRoom();
-
-      if (!this.initialized) {
-        this.journalSocket.connect(`${environment.wsUrl}/ws`, roomDest);
-        this.initialized = true;
-      } else {
-        this.journalSocket.changeRoom(roomDest); 
-      }
-    });
+  ngOnChanges() {
+    const roomDest = this.getRoom();
+    this.journalSocket.setJournalRoom(roomDest);
+    this.loadJournal();
   }
 
   text = signal('');
@@ -92,7 +83,7 @@ export class MainLiveJournal implements OnDestroy {
   }
 
   isMyOwnAck(msg: WsJournalResponse): boolean {
-    return msg.userId.toString() === localStorage.getItem('UserId') && this.inFlight.length > 0;
+    return msg.userId.toString() === sessionStorage.getItem('UserId') && this.inFlight.length > 0;
   }
 
   loadJournal() {
@@ -117,7 +108,7 @@ export class MainLiveJournal implements OnDestroy {
         break;
       case 'DELETE':
         //this.text.set(text.slice(0, pos) + text.slice(pos + 1, text.length));
-        this.textArea().nativeElement.setRangeText("", pos, pos + 1, "preserve");
+        this.textArea().nativeElement.setRangeText("", pos, pos + incoming.length, "preserve");
         break;
     }
 
@@ -126,15 +117,20 @@ export class MainLiveJournal implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.journalSocket.disconnect();
+    this.journalSocket.leaveJournalRoom();
   }
 
   onInput(event: Event) {
     this.sequence++;
+    // hämta information om textytan
+    const textarea = event.target as HTMLTextAreaElement;
 
-    const newValue = (event.target as HTMLTextAreaElement).value;
+    // hämta senaste verisionen och uppdatera föregående
+    const newValue = textarea.value;
     this.prevText = this.text();
-    const diff: Diff = this.differ.getDiff(this.prevText, newValue);
+    const idx = textarea.selectionStart;
+    console.log("indexet här är:", idx);
+    const diff: Diff = this.differ.getDiff(this.prevText, newValue, idx);
     this.text.set(newValue);
     let operation: WsJournalWriteOperation;
     switch (diff.operation) {
@@ -142,7 +138,7 @@ export class MainLiveJournal implements OnDestroy {
         operation = {
           type: 'DELETE',
           position: diff.idx,
-          length: 1
+          length: diff.length
         }
         break;
       case 'INSERT':
@@ -152,8 +148,26 @@ export class MainLiveJournal implements OnDestroy {
           text: diff.value
         }
         break;
+      case 'REPLACEMENT':
+        operation = {
+          type: 'DELETE',
+          position: diff.idx,
+          length: diff.length
+        }
+        this.sendOperation(operation);
+        this.sequence++;
+        operation = {
+          type: 'INSERT',
+          position: diff.idx,
+          text: diff.value
+        }
+        break;
     }
 
+    this.sendOperation(operation);
+  }
+
+  sendOperation(operation: WsJournalWriteOperation) {
     const message: WsJournalMessage = {
       clientRevision: this.serverRevision,
       operation: operation,

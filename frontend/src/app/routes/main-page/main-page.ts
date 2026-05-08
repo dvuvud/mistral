@@ -4,12 +4,13 @@ import { Router } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTab, MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
-import { WebsocketService, WsAttendanceMessage } from '../../core/websocket/websocket.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { WebsocketService, WsAttendanceMessage, WsMailbox } from '../../core/websocket/websocket.service';
 import { environment } from '../../../environments/environment';
-import { groupResponse, groupService } from '../../core/groups/group.service';
+import { groupResponse } from '../../core/groups/group.service';
+import { Presence } from '../../core/presence/presence.service';
 
-type displayedContent = 'childview' | 'groupView' | 'teacherView' | '';
+type displayedContent = 'childview' | 'groupView' | 'teacherView' | 'homeView' | '';
 
 @Component({
   selector: 'main-page',
@@ -18,8 +19,6 @@ type displayedContent = 'childview' | 'groupView' | 'teacherView' | '';
     MainPanel,
     MatSidenavModule,
     MatButtonModule,
-    MatTabGroup,
-    MatTab
   ],
   encapsulation: ViewEncapsulation.Emulated,
 
@@ -28,42 +27,32 @@ type displayedContent = 'childview' | 'groupView' | 'teacherView' | '';
 })
 
 export class MainPage implements OnInit, OnDestroy {
-  
   groupSignal = signal<groupResponse>({name: '', id: 0});
   allGroups = signal<groupResponse[]>([]);
   contentSignal = signal<displayedContent>('');
-
   private router = inject(Router);
+  private presence = inject(Presence);
   private socketService = inject(WebsocketService);
-  private groupService = inject(groupService);
   mainPanel = viewChild.required(MainPanel);
 
-  ngOnInit() {
-    this.socketService.connect(`${environment.wsUrl}/ws`, "group=Nyckelpigorna");
-    this.loadGroups();
-    this.socketService.getMessages().subscribe((message) => {
+  async ngOnInit() {
+    this.contentSignal.set('homeView')
+    this.socketService.connect(`${environment.wsUrl}/ws`);
+    await this.socketService.ensureConnected();
+    this.socketService.setAttendanceRoom("group=Nyckelpigorna");
+    this.presence.init();
+    this.socketService.getMessages(WsMailbox.attendance).subscribe((message) => {
       if (!("childId" in message)) {
         console.error("Attendance message with incorrect body!");
         return;
       }
-      const msg: WsAttendanceMessage = message;
-      this.handleWebsocketMessage(msg);
+      console.log(message as WsAttendanceMessage);
+      this.handleWebsocketMessage(message as WsAttendanceMessage);
     });
   }
 
   ngOnDestroy() {
-    this.socketService.disconnect();
-  }
-
-  loadGroups() {
-    this.groupService.getGroups().subscribe({
-      next: (data) => {
-        this.allGroups.set(data);
-        if (data.length > 0) {
-          this.groupSignal.set(data[0]);
-        }
-      }
-    });
+    this.socketService.leaveJournalRoom();
   }
 
   handleWebsocketMessage(message: WsAttendanceMessage) {
@@ -78,16 +67,23 @@ export class MainPage implements OnInit, OnDestroy {
     const clickedIndex = event.index;
     const currentGroup = this.allGroups()[clickedIndex];
     this.contentSignal.set('groupView');
-    this.groupSignal.set(currentGroup); 
+    this.groupSignal.set(currentGroup);
+    this.presence.spoofTeacherUpdate();
   }
 
   logout() {
     document.cookie = 'jwtToken=""';
     localStorage.removeItem('token');
-    this.router.navigateByUrl('/');
+    sessionStorage.removeItem('UserId');
+    this.socketService.disconnect();
+    window.location.reload();
   }
 
   minaSidor() {
     this.contentSignal.set('teacherView');
+  }
+
+  hem() {
+    this.contentSignal.set('homeView');
   }
 }

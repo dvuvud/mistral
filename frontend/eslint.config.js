@@ -17,6 +17,8 @@ module.exports = defineConfig([
     rules: {
       "indent": ["error", 2, { "SwitchCase": 1 }],
 
+      "no-case-declarations" : "off",
+
       "@angular-eslint/directive-selector": [
         "error",
         {

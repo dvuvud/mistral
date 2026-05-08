@@ -11,6 +11,7 @@
   flex-direction: column;
   min-height: 0;
   height: 100%;
+  overflow: hidden;
 }
 
 .mat-mdc-action-list {
@@ -36,12 +37,48 @@
   overflow-y: auto;
 }
 
-mat-form-field { 
+mat-form-field {
   width: 100%;
 }
 
-mat-form-field { 
+.list-topper { //squashd av liten ruta FIX
+  display: flex;
+  flex-direction: column;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.stats {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: var(--mat-sys-surface-variant);
+  color: var(--mat-sys-on-surface-variant);
+  flex: 1;
+  padding: 0.5em;
+}
+
+.stats::after {
+  content: "";
+}
+
+.stats::before {
+  content: "";
+}
+
+.stats p {
+  padding: 0;
+  margin: 0.1em;
+}
+
+.pick-class {
   width: 100%;
+}
+
+.stats-text {
+  margin: 1em;
+  font: var(--mat-sys-title-small);
+  color: var(--mat-sys-on-secondary-container);
 }
 
 mat-form-field { 
