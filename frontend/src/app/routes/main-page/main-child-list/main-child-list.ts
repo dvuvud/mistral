@@ -41,7 +41,7 @@ export class ChildList {
   });
 
   groupAttendance = computed(() => {
-    return this.searchedChildren().filter(x => x.status === 'CHECKED_IN' || x.status === 'CHECKED_OUT').length;
+    return this.searchedChildren().filter(x => x.status === 'CHECKED_IN').length;
   })
 
   groupAbsent = computed(() => {
