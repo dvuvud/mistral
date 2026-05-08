@@ -3,3 +3,8 @@
     font-size: 16px;
     position: absolute;
 }
+
+mat-form-field {
+    --mat-form-field-container-height: 32px;
+    --mat-form-field-container-vertical-padding: 6px;
+}
