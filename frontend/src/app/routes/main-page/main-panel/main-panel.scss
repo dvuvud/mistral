@@ -53,14 +53,14 @@ mat-card-header {
 }
 
 .childDisplay {
+  box-shadow: var(--mat-sys-level1);
   display: flex;
   flex-direction: row;
-  flex: 0.9;
-  background-color: var(--mat-sys-primary-container);
+  justify-content: center;
+  align-items: center;
+  background: var(--mat-sys-primary-container);
   color: var(--mat-sys-on-primary-container);
   border-radius: 12px;
-  height: auto;
-  flex: 1;
 }
 
 main-live-journal {
@@ -77,10 +77,23 @@ main-live-journal {
 }
 
 .title {
+  text-wrap: nowrap;
   margin-bottom: 1em;
   align-items: center;
 }
 
 main-presence-container {
   margin-left: 1em;
+}
+
+
+.mini-spacer {
+  margin: 1em;
+}
+
+.sub-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }

@@ -98,9 +98,9 @@ export class ChildList {
   }
 
   handleSelection(value: groupResponse) {
-    console.log(value);
     if(value.name === 'alla') {
       this.contentSignal.set('homeView');
+      this.groupSignal.set({name:'', id: 0});
       this.showAllChildren();
       return;
     }
