@@ -22,7 +22,7 @@ export class Presence {
 
   spoofTeacherUpdate() {
     console.log("Spoofing teacher");
-    this._teacherUpdates.next({ name: "Spoof", id: -1, room: "Spoof", color: "#ffffff"});
+    this._teacherUpdates.next({ name: "Spoof", userId: -1, room: "Spoof", color: "#ffffff"});
   }
 
   /**
@@ -53,9 +53,9 @@ export class Presence {
     if (!msg.room)
       console.error("Incorrectly formatted leave message in presence service: ", msg);
 
-    const msgTeacher = { id: msg.userId, name: msg.name, room: msg.room!, color: msg.color};
+    const msgTeacher = { userId: msg.userId, name: msg.name, room: msg.room!, color: msg.color};
     const updated = this.connectedTeachers().filter((teacher: User) => {
-      return teacher.id != msg.userId;
+      return teacher.userId != msg.userId;
     });
     this.connectedTeachers.set(updated);
     console.log("Someone left, new status: ", this.connectedTeachers());
@@ -71,10 +71,10 @@ export class Presence {
       console.error("Incorrectly formatted join message in presence service: ", msg);
 
     const index = this.connectedTeachers().findIndex((teacher: User) => {
-      return teacher.id == msg.userId;
+      return teacher.userId == msg.userId;
     });
 
-    const msgTeacher: User = { id: msg.userId, name: msg.name, room: msg.room!, color: msg.color};
+    const msgTeacher: User = { userId: msg.userId, name: msg.name, room: msg.room!, color: msg.color};
 
     if (index == -1) {
       const updated = this.connectedTeachers();
