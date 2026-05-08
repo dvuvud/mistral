@@ -14,10 +14,17 @@
             <child-display (attendanceChangeEvent)="wsUpdateAttendance($event)" [(childSignal)]="childSignal"></child-display>
           </div>
         </div>
-        <main-live-journal [childSignal]="childSignal()"
+        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+          <mat-tab label="Information">
+            <information></information>
+          </mat-tab>
+          <mat-tab label={{reportTitle()}}>
+            <main-live-journal [childSignal]="childSignal()"
                           [groupSignal]="groupSignal()"
                           [contentSignal]="contentSignal()" >
-        </main-live-journal>
+            </main-live-journal>
+          </mat-tab>
+        </mat-tab-group>
       }
 
       @if (contentSignal() === 'groupView') {
@@ -25,10 +32,14 @@
         <span>{{groupSignal().name}}</span>
         <main-presence-container isGroup="yes" filter={{groupSignal().id}}></main-presence-container>
       </mat-card-header>
-        <main-live-journal [childSignal]="childSignal()"
+        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+          <mat-tab label={{reportTitle()}}>
+            <main-live-journal [childSignal]="childSignal()"
                           [groupSignal]="groupSignal()"
                           [contentSignal]="contentSignal()" >
-        </main-live-journal>
+            </main-live-journal>
+          </mat-tab>
+        </mat-tab-group>
       }
 
       @if (contentSignal() === 'teacherView') {

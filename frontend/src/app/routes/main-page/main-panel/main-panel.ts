@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, model, OnInit, Output, signal, viewChild } from '@angular/core';
+import { Component, computed, EventEmitter, inject, model, OnInit, Output, signal, viewChild } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { ChildDisplay } from "../child-display/child-display";
 import { Child } from '../../../core/child/child.service';
@@ -10,10 +10,13 @@ import { groupResponse, groupService } from '../../../core/groups/group.service'
 import { AccountPage } from '../account-page/account-page';
 import { MainPresenceContainer } from "../main-presence-container/main-presence-container";
 import { Presence } from '../../../core/presence/presence.service';
+import { MatTab, MatTabGroup } from "@angular/material/tabs";
+import { MatFormField } from "@angular/material/form-field";
+import { Information } from '../information/information';
 
 @Component({
   selector: 'main-panel',
-  imports: [ChildList, MatDividerModule, ChildDisplay, MatCard, MatCardHeader, MatCardContent, MainLiveJournal, AccountPage, MainPresenceContainer],
+  imports: [ChildList, MatDividerModule, ChildDisplay, MatCard, MatCardHeader, MatCardContent, MainLiveJournal, AccountPage, MainPresenceContainer, MatTab, MatFormField, MatTabGroup, Information],
   templateUrl: './main-panel.html',
   styleUrl: './main-panel.scss',
 })
@@ -30,6 +33,17 @@ export class MainPanel implements OnInit{
   ngOnInit() {
     this.loadGroups();
   }
+
+  reportTitle = computed(() => {
+      switch(this.contentSignal()) {
+        case('childView'):
+          return this.childSignal().name + 's' + ' dagsrapport';
+        case('groupView'):
+          return this.groupSignal().name + 's' + ' dagsrapport';
+        default:
+          return 'ERROR'
+      }
+  })
 
   loadGroups() {
     this.groupService.getGroups().subscribe({
