@@ -17,12 +17,17 @@ export interface User {
 
 export class userService {
   private url = `${environment.apiUrl}/api/user/teacher`;
-  private colorUrl = `${environment.apiUrl}/api/user/color`
+  private teachersUrl = `${environment.apiUrl}/api/user/teachers`;
+  private colorUrl = `${environment.apiUrl}/api/user/color`;
   private http = inject(HttpClient);
 
   getUser(teacherId: number): Observable<User> {
     const params = new HttpParams().set('teacherId', teacherId);
     return this.http.get<User>(this.url, {params});
+  }
+
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.teachersUrl);
   }
 
   updateColor(color: string) {
