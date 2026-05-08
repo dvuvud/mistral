@@ -16,7 +16,7 @@
         </div>
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
           <mat-tab label="Information">
-            <information></information>
+            <information [childSignal]="childSignal()"></information>
           </mat-tab>
           <mat-tab label={{reportTitle()}}>
             <main-live-journal [childSignal]="childSignal()"

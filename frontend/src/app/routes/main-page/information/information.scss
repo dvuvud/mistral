@@ -1,0 +1,44 @@
+.layout {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+    gap: 1em;
+}
+
+.top-card {
+    border-top-left-radius:  0% !important;
+}
+.subrow {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    justify-content: center;
+    height: 100%;
+    gap: 1em;
+
+}
+mat-card-header{
+    display: flex;
+    justify-content: center;
+    border: 2px;
+    font: var(--mat-sys-headline-small);
+}
+
+mat-form-field {
+  margin: 1em;
+  box-shadow: var(--mat-sys-level1);
+}
+
+textarea {
+  min-height: 20vh;
+  margin-bottom: 1em;
+  resize: none;
+  overflow-y: scroll;
+}
+
+mat-card {
+    box-shadow: var(--mat-sys-level1);
+    flex: 1;
+    background-color: var(--mat-sys-primary-container);
+}
