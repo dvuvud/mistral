@@ -5,10 +5,12 @@ import { WsAttendanceMessage } from '../../../core/websocket/websocket.service';
 import { localDateToday } from '../../../core/utils/date-utils';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { ConfirmationDialog } from "../confirmation-dialog/confirmation-dialog";
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'attendance-box',
-  imports: [MatSelectModule, MatFormFieldModule],
+  imports: [MatSelectModule, MatFormFieldModule, ConfirmationDialog],
   templateUrl: './attendance-box.html',
   styleUrl: './attendance-box.scss',
 })
@@ -16,6 +18,8 @@ export class AttendanceBox {
   childSignal = model.required<Child>();
   disabled = input<boolean>();
   errorMessage = '';
+  showConfirmation = false;
+  dialog = inject(MatDialog)
 
   readonly statusOptions: { value: AttendanceStatus; label: string }[] = [
     { value: 'NOT_SET',     label: '—'         },
@@ -51,6 +55,16 @@ export class AttendanceBox {
     const sig = this.attendanceService.getSignal(this.childSignal().id, localDateToday());
     const previousStatus = sig();
     sig.set(newStatus);
+
+    if(previousStatus === 'CHECKED_IN' && newStatus === 'CHECKED_OUT') {
+      const dialogRef = this.dialog.open(ConfirmationDialog)
+      dialogRef.afterClosed().subscribe((result: boolean) => {
+        if(!result) {
+          sig.set(previousStatus);
+          return
+        }
+      })
+    }
 
     this.attendanceService.setAttendance(this.childSignal().id, localDateToday(), newStatus).subscribe({
       next: (data) => sig.set(data.status),
