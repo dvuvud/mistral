@@ -13,11 +13,6 @@
                         (click)="handleSelection({name: 'alla', id: 0})">Alla elever</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-card-content class="stats">
-          <p class="stats-text">Närvarande: {{groupAttendance()}}</p>
-          <p class="stats-text">Icke närvarande: {{groupAbsent()}}</p>
-          <p class="stats-text">Antal elever: {{children().length}}</p>
-        </mat-card-content>
     </mat-card>
     <mat-divider></mat-divider>
       <mat-form-field subscriptSizing="dynamic">
@@ -44,4 +39,12 @@
       }
     }
   </mat-action-list>
+  <mat-divider></mat-divider>
+  <mat-card class="stats-card">
+    <mat-card-content class="stats">
+      <p class="stats-text">Närvarande: {{groupAttendance()}}</p>
+      <p class="stats-text">Icke närvarande: {{groupAbsent()}}</p>
+      <p class="stats-text">Antal elever: {{children().length}}</p>
+    </mat-card-content>
+  </mat-card>
 </div>

@@ -40,7 +40,6 @@ export class MainPage implements OnInit, OnDestroy {
     this.contentSignal.set('homeView')
     this.socketService.connect(`${environment.wsUrl}/ws`);
     await this.socketService.ensureConnected();
-    this.socketService.setAttendanceRoom("group=Nyckelpigorna");
     this.presence.init();
     this.socketService.getMessages(WsMailbox.attendance).subscribe((message) => {
       if (!("childId" in message)) {

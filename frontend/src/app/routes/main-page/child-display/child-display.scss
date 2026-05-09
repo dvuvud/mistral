@@ -9,29 +9,7 @@
     flex: 1;
     gap: 1em;
     margin: 1em;
-}
-
-.basic-mat-card {
-    flex: 1;
-    margin-top: 2px;
-}
-
-mat-card-title  {
-    font: var(--mat-sys-body-large);
-}
-
-.attendance-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-}
-
-.sub-row {
-    display: flex;
-    flex-direction: row;
-    align-items: baseline;
-    gap: 12px;
 }
 
 p {
