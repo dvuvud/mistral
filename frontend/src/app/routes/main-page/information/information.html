@@ -3,6 +3,20 @@
         <mat-card-header class="header-text">
             Information
         </mat-card-header>
+        <mat-card class="info-subcard">
+            <div class="flex-div">
+                <mat-card-content>
+                    <p>Address: {{childSignal().name.split(/\s+/)[1]}}gatan 10</p>
+                    <p>Exempel</p>
+                </mat-card-content>
+            </div>
+            <div class="flex-div">
+                <mat-card-content>
+                    <p>Exempel</p>
+                    <p>Exempel</p>
+                </mat-card-content>
+            </div>
+        </mat-card>
     </mat-card>
     <div class="subrow">
         <mat-card>
@@ -15,8 +29,22 @@
         </mat-card>
         <mat-card>
             <mat-card-header class="header-text">
-                kontaktinformation
+                Kontaktinformation
             </mat-card-header>
+            <mat-card class="subcard">
+                <mat-card-content>
+                    <p>Namn: Vårdnadshavare Exempelsson</p>
+                    <p>Telefonnummer: 072-555-83-34</p>
+                    <p>Mejl: Vårdnadshavare.Exempelsson@outlook.se</p>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="subcard">
+                <mat-card-content>
+                    <p>Namn: Vårdnad Exempelsson</p>
+                    <p>Telefonnummer: 072-365-555-34</p>
+                    <p>Mejl: Vårdnadshavare.Exempelsson@outlook.se</p>
+                </mat-card-content>
+            </mat-card>
         </mat-card>
     </div>
 </div>

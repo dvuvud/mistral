@@ -26,19 +26,40 @@ mat-card-header{
 }
 
 mat-form-field {
+  flex: 1;
   margin: 1em;
   box-shadow: var(--mat-sys-level1);
 }
 
 textarea {
   min-height: 20vh;
-  margin-bottom: 1em;
   resize: none;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 mat-card {
     box-shadow: var(--mat-sys-level1);
     flex: 1;
     background-color: var(--mat-sys-primary-container);
+    gap: 0.5em;
+}
+
+.subcard {
+    box-shadow: var(--mat-sys-level1);
+    background-color: var(--mat-sys-surface-container);
+    flex: 1;
+    margin: 1em;
+}
+
+.info-subcard {
+    box-shadow: var(--mat-sys-level1);
+    background-color: var(--mat-sys-surface-container);
+    flex: 1;
+    margin: 1em;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.flex-div {
+    flex: 1;
 }

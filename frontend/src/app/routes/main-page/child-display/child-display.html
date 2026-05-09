@@ -1,7 +1,7 @@
-<div class="columnise">
+
+<div class="rowise">
     <p>{{getDate()}}</p>
-    <div class="rowise">
-        Närvaro:
-        <attendance-box (attendanceChangeEvent)="wsUpdateAttendance($event)" [childSignal]="childSignal()"></attendance-box>
-    </div>
+    Närvaro:
+    <attendance-box (attendanceChangeEvent)="wsUpdateAttendance($event)" [childSignal]="childSignal()"></attendance-box>
 </div>
+
