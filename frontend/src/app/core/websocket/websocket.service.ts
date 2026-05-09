@@ -109,7 +109,7 @@ export class WebsocketService {
 
   connect(url: string): void {
     this.observedSocket = new ReplaySubject<WebSocket>(1);
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     const socket = new WebSocket(`${url}?token=${token}`);
 
     socket.onmessage = (event) => {
