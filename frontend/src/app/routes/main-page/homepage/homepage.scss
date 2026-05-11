@@ -17,12 +17,10 @@
 }
 
 .school-title {
-    background: linear-gradient(
-      90deg,
-      var(--mat-sys-primary) 30%,
-      var(--mat-sys-tertiary) 100%
-    );
-    color: var(--mat-sys-on-primary);
+    background: var(--mat-sys-inverse-primary);
+    font: var(--mat-sys-title-large);
+    font-weight: 400;
+    font-size:xx-large;
     display: flex;
     justify-content: center;
 }
@@ -30,7 +28,7 @@
 .main-body {
     display: flex;
     flex-direction: row;
-    background: var(--mat-sys-primary-container);
+    background-color: var(--mat-sys-surface-dim);
     gap: 1em;
     flex: 1;
     min-height: 0;
@@ -61,13 +59,11 @@ mat-card {
 .news-header {
     flex-shrink: 0;
     justify-content: center;
-    padding-bottom: 1em;
+    align-items: center;
     display: flex;
-    background: linear-gradient(
-      to bottom,
-      var(--mat-sys-surface-variant) 30%,
-      var(--mat-sys-surface-bright) 100%
-    );
+    background: var(--mat-sys-surface-variant);
+    font-weight: 400 !important;
+    font-size: x-large;
 }
 
 .mock-news-boxes {

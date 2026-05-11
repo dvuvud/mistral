@@ -2,6 +2,7 @@
 
 .top-card {
     border-top-left-radius:  0% !important;
+    background: var(--mat-sys-inverse-primary);
 }
 .subrow {
     display: flex;
@@ -34,14 +35,11 @@ mat-card {
     
     box-shadow: var(--mat-sys-level2);
     flex: 1;
-    background-color: var(--mat-sys-primary-container);
     gap: 0.5em;
 }
 
 .color {
-    background: linear-gradient(90deg, 
-                                 var(--mat-sys-tertiary)1%,
-                                 var(--mat-sys-primary) 150%);
+    background: var(--mat-sys-inverse-primary);
 }
 
 .subcard {
@@ -71,12 +69,10 @@ mat-card {
 }
 
 .header-text {
-    color: var(--mat-sys-on-primary);
+    font-weight: 400;
 }
 
 .left-card {
-    background: linear-gradient(90deg, 
-                                 var(--mat-sys-primary)1%,
-                                 var(--mat-sys-tertiary) 150%);
+    background: var(--mat-sys-inverse-primary);
     border-top-left-radius: 0% !important;
 }

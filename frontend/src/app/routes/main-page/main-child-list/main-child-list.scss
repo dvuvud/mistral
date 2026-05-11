@@ -38,56 +38,39 @@
   overflow-y: auto;
 }
 
+
+
 :host ::ng-deep .child-list-container {
-
-  // --- Outline border ---
-  .mdc-notched-outline__leading,
-  .mdc-notched-outline__notch,
-  .mdc-notched-outline__trailing {
-    border-color: var(--mat-sys-tertiary) !important;
+  .pick-class {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: var(--mat-sys-inverse-primary) !important;
+    }
+    .mat-mdc-text-field-wrapper {
+      background-color: var(--mat-sys-inverse-primary) !important;
+    }
+    
   }
 
-  // Background of the field
-  .mat-mdc-text-field-wrapper {
-    background: linear-gradient(90deg, 
-                                 var(--mat-sys-tertiary)1%,
-                                 var(--mat-sys-primary) 150%);
-    border-top-right-radius: 0% !important;
-    border-top-left-radius: 0% !important;
-  }
-
-  // The notched outline background (fills the area inside the border)
-  .mdc-notched-outline__leading,
-  .mdc-notched-outline__notch,
-  .mdc-notched-outline__trailing {
-    background-color: var(--mat-sys-tertiary) !important;
-    border-color: var(--mat-sys-tertiary) !important;
-  }
-
-  // --- Label and icon text ---
-  .mdc-floating-label,
-  .mat-mdc-floating-label,
-  .mat-icon {
-    color: var(--mat-sys-on-primary) !important;
-  }
-
-  // --- Input typed text ---
-  .mat-mdc-input-element {
-    color: var(--mat-sys-on-primary) !important;
-    caret-color: var(--mat-sys-on-primary) !important;
-  }
-
-  // --- Select value text and arrow ---
-  .mat-mdc-select-value,
-  .mat-mdc-select-arrow {
-    color: var(--mat-sys-on-primary) !important;
+  
+  mat-form-field:not(.pick-class) {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: var(--mat-sys-inverse-primary) !important;  
+    }
+    
+    .mat-mdc-text-field-wrapper {
+      background-color: var(--mat-sys-inverse-primary) !important;
+    }
   }
 }
 
 
 .list-topper { //squashd av liten ruta FIX
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 }
@@ -97,9 +80,7 @@
   flex-direction: row;
   justify-content: space-between;
   gap: 1em;
-  background: linear-gradient(to left top, 
-                                 var(--mat-sys-primary)20%,
-                                 var(--mat-sys-tertiary) 100%);
+  background: var(--mat-sys-inverse-primary);
   flex: 1;
   padding: 0.5em;
 }
@@ -113,13 +94,17 @@
 }
 
 .stats p {
-  color: var(--mat-sys-on-primary);
+  font-weight: 500;
   padding: 0;
   margin: 0.1em;
 }
 
 .pick-class {
-  width: 100%;
+  flex: 0.5;
+}
+
+.search {
+  flex: 1;
 }
 
 .stats-text {

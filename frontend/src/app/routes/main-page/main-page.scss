@@ -10,7 +10,7 @@
 mat-toolbar {
     background: linear-gradient(
       90deg,
-      var(--mat-sys-primary) 30%,
+      var(--mat-sys-inverse-primary) 30%,
       var(--mat-sys-tertiary) 100%
     );
     color: var(--mat-sys-primary-on-surface);

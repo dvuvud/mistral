@@ -2,6 +2,9 @@
 <div class="rowise">
     <p>{{dateSignal()}}</p>
     <p>Närvaro:</p>
-    <attendance-box (attendanceChangeEvent)="wsUpdateAttendance($event)" [childSignal]="childSignal()"></attendance-box>
+    <attendance-box (attendanceChangeEvent)="wsUpdateAttendance($event)" 
+                    [childSignal]="childSignal()"
+                    class="attendance-box">
+    </attendance-box>
 </div>
 
