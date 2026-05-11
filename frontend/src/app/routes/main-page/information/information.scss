@@ -38,6 +38,12 @@ mat-card {
     gap: 0.5em;
 }
 
+.color {
+    background: linear-gradient(90deg, 
+                                 var(--mat-sys-tertiary)1%,
+                                 var(--mat-sys-primary) 150%);
+}
+
 .subcard {
     box-shadow: var(--mat-sys-level2);
     background-color: var(--mat-sys-surface-variant);
@@ -64,6 +70,13 @@ mat-card {
     justify-self: center;
 }
 
-.cornerize {
+.header-text {
+    color: var(--mat-sys-on-primary);
+}
+
+.left-card {
+    background: linear-gradient(90deg, 
+                                 var(--mat-sys-primary)1%,
+                                 var(--mat-sys-tertiary) 150%);
     border-top-left-radius: 0% !important;
 }
