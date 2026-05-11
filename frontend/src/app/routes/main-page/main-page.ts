@@ -75,6 +75,7 @@ export class MainPage implements OnInit, OnDestroy {
     document.cookie = 'jwtToken=""';
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('UserId');
+    sessionStorage.removeItem('role');
     this.socketService.disconnect();
     window.location.reload();
   }

@@ -20,10 +20,6 @@ interface AuthResponse {
   role: 'ADMIN' | 'TEACHER' | 'PARENT';
 }
 
-interface ValidateResponse {
-  role: 'ADMIN' | 'TEACHER' | 'PARENT';
-}
-
 interface RegisterResponse {
   message: string;
 }
@@ -59,14 +55,7 @@ export class AuthService {
     return this.http.post<RegisterResponse>(`${this.baseUrl}/register`, data);
   }
 
-  async isAuthorized() {
-    const x = new Promise<string | null>((resolve) => {
-      this.http.get<ValidateResponse>(`${this.baseUrl}/validate`, {}).subscribe({
-        next: (response) => resolve(response.role),
-        error: () => resolve(null)
-      });
-    })
-    const t = await x;
-    return t;
+  getRole(): string | null {
+    return sessionStorage.getItem('role');
   }
 }
