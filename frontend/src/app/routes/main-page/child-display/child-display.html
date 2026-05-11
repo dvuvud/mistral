@@ -1,6 +1,6 @@
 
 <div class="rowise">
-    <p>{{getDate()}}</p>
+    <p>{{dateSignal()}}</p>
     Närvaro:
     <attendance-box (attendanceChangeEvent)="wsUpdateAttendance($event)" [childSignal]="childSignal()"></attendance-box>
 </div>
