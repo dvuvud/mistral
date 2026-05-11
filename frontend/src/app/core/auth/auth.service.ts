@@ -17,6 +17,7 @@ interface RegisterRequest {
 interface AuthResponse {
   token: string;
   id: number;
+  role: 'ADMIN' | 'TEACHER' | 'PARENT';
 }
 
 interface ValidateResponse {
@@ -44,6 +45,7 @@ export class AuthService {
       .pipe(tap((response) => {
         sessionStorage.setItem('token', response.token);
         sessionStorage.setItem('UserId', response.id.toString());
+        sessionStorage.setItem('role', response.role);
       }));
   }
 

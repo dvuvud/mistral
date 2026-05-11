@@ -25,8 +25,17 @@ export class LoginPage {
       error: (err) => {
         this.errorMessage.set(err.error.error);
       },
-      next: () => {
-        this.router.navigate(['/app']);
+      next: (response) => {
+        switch (response.role) {
+          case 'ADMIN':
+            this.router.navigate(['/admin']);
+            break;
+          case 'TEACHER':
+            this.router.navigate(['/app']);
+            break;
+          default:
+            this.router.navigate(['/']); // 'PARENT'
+        }
       }
     });
   }
