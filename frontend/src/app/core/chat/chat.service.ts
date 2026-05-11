@@ -23,6 +23,7 @@ export interface ChatMessage {
  */
 export class ChatService {
   private baseUrl = `${environment.apiUrl}/api/chat`;
+  private historyUrl = `${this.baseUrl}/history`;
   private http = inject(HttpClient);
 
 /**
@@ -36,6 +37,6 @@ export class ChatService {
     const params = new HttpParams()
       .set('senderId', senderId)
       .set('recipientId', recipientId);
-    return this.http.get<ChatMessage[]>(`${this.baseUrl}/history`, { params });
+    return this.http.get<ChatMessage[]>(this.historyUrl, { params });
   }
 }
