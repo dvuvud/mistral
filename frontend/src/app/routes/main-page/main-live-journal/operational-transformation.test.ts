@@ -68,7 +68,7 @@ describe('Operational transformation', () => {
 
   describe('INSERT - DELETE', () => {
 
-    it('should shift left, single char - single char', () => {
+    it('should shift right, single char - single char', () => {
       const inOp: InsertOperation = {type: 'INSERT', position: 2, text: 'A'};
       const flightOp: DeleteOperation = {type: 'DELETE', position: 1, length: 1};
 
@@ -81,7 +81,7 @@ describe('Operational transformation', () => {
       }
     });
 
-    it('should shift left, single char - multi char', () => {
+    it('should shift right, single char - multi char', () => {
       const inOp: InsertOperation = {type: 'INSERT', position: 5, text: 'A'};
       const flightOp: DeleteOperation = {type: 'DELETE', position: 1, length: 3};
 
@@ -94,7 +94,7 @@ describe('Operational transformation', () => {
       }
     });
 
-    it('should shift left, multi char - single char', () => {
+    it('should shift right, multi char - single char', () => {
       const inOp: InsertOperation = {type: 'INSERT', position: 5, text: 'ABC'};
       const flightOp: DeleteOperation = {type: 'DELETE', position: 1, length: 1};
 
@@ -107,7 +107,7 @@ describe('Operational transformation', () => {
       }
     });
 
-    it('should shift left, multi char - multi char', () => {
+    it('should shift right, multi char - multi char', () => {
       const inOp: InsertOperation = {type: 'INSERT', position: 5, text: 'ABC'};
       const flightOp: DeleteOperation = {type: 'DELETE', position: 1, length: 3};
 
@@ -170,6 +170,61 @@ describe('Operational transformation', () => {
 
       expect(resOp.type).toBe('DELETE');
       expect(resOp.position).toBe(5 + flightOp.text.length);
+      if (resOp.type == 'DELETE') {
+        expect(resOp.length).toBe(3);
+      }
+    });
+  });
+
+  describe('DELETE - DELETE', () => {
+
+    it('should shift right, single char - single char', () => {
+      const inOp: DeleteOperation = {type: 'DELETE', position: 2, length: 1};
+      const flightOp: DeleteOperation = {type: 'DELETE', position: 1, length: 1};
+
+      const resOp = operationalTransformer.transformClient(inOp, flightOp);
+
+      expect(resOp.type).toBe('DELETE');
+      expect(resOp.position).toBe(2 - flightOp.length);
+      if (resOp.type == 'DELETE') {
+        expect(resOp.length).toBe(1);
+      }
+    });
+
+    it('should shift right, single char - multi char', () => {
+      const inOp: DeleteOperation = {type: 'DELETE', position: 5, length: 1};
+      const flightOp: DeleteOperation = {type: 'DELETE', position: 1, length: 3};
+
+      const resOp = operationalTransformer.transformClient(inOp, flightOp);
+
+      expect(resOp.type).toBe('DELETE');
+      expect(resOp.position).toBe(5 - flightOp.length);
+      if (resOp.type == 'DELETE') {
+        expect(resOp.length).toBe(1);
+      }
+    });
+
+    it('should shift right, multi char - single char', () => {
+      const inOp: DeleteOperation = {type: 'DELETE', position: 5, length: 3};
+      const flightOp: DeleteOperation = {type: 'DELETE', position: 1, length: 1};
+
+      const resOp = operationalTransformer.transformClient(inOp, flightOp);
+
+      expect(resOp.type).toBe('DELETE');
+      expect(resOp.position).toBe(5 - flightOp.length);
+      if (resOp.type == 'DELETE') {
+        expect(resOp.length).toBe(3);
+      }
+    });
+
+    it('should shift right, multi char - multi char', () => {
+      const inOp: DeleteOperation = {type: 'DELETE', position: 5, length: 3};
+      const flightOp: DeleteOperation = {type: 'DELETE', position: 1, length: 3};
+
+      const resOp = operationalTransformer.transformClient(inOp, flightOp);
+
+      expect(resOp.type).toBe('DELETE');
+      expect(resOp.position).toBe(5 - flightOp.length);
       if (resOp.type == 'DELETE') {
         expect(resOp.length).toBe(3);
       }
