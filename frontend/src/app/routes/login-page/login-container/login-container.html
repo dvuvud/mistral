@@ -1,106 +1,154 @@
-<div class="login-container">
-  <mat-card id="logincard" class="login-container-card" appearance="outlined">
-    <mat-tab-group dynamicHeight (selectedIndexChange)="clearError()">
-      <mat-tab label="Logga in">
-        <mat-card-header class="login-container-header">
-          <mat-card-title>Välkommen tillbaka till <b>KîndGuard</b></mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="login-container-card-content">
-          <div class="login-container-fields">
-            <!-- Här är det simpla fältet för email-->
-            <mat-form-field>
-              <mat-label>E-post adress</mat-label>
-              <!-- Notera hur vi binder vår required model email (från login-container.ts) till [(ngModel)].
-              Det innebär att när en föränding sker i fältet så uppdateras vår email model direkt.
-              Vi gör exakt samma för password -->
-              <input matInput [(ngModel)]="email" (keydown.enter)="submitLogin()" />
-            </mat-form-field>
-            <!-- Här är det lite mer invecklade fältet för lösenord,
-            notera att majoriteten av koden bara är för styling-->
-            <mat-form-field>
-              <mat-label>Lösenord</mat-label>
-              <input matInput [(ngModel)]="password"
-                [type]="hide() ? 'password' : 'text'"
-                (keydown.enter)="submitLogin()" />
-              <button
-                matIconButton
-                matSuffix
-                (click)="clickEvent($event)"
-                [attr.aria-label]="'Hide password'"
-                [attr.aria-pressed]="hide()"
-              >
-                <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
-              </button>
-            </mat-form-field>
-          </div>
-          @if(errorMessage() !== "") {
-            <div class="login-container-error">
-              <mat-error>{{errorMessage()}}</mat-error>
-            </div>
-          }
-          <!-- Och här är det simpla fältet för login-knappen -->
-          <div class="login-container-buttons">
-            <!-- Notera här hur vi binder (click) eventet till submitLogin() (från login-container.ts) -->
-            <button class="login-container-button" matButton="elevated" (click)="submitLogin()">
-              Logga in
-            </button>
-          </div>
-        </mat-card-content>
-      </mat-tab>
-      <mat-tab label="Registrera användare">
-        <mat-card-header class="login-container-header">
-          <mat-card-title>Välkommen till <b>KîndGuard</b></mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="login-container-card-content">
-          <div class="login-container-fields">
-            <mat-form-field>
-              <mat-label>Förnamn</mat-label>
-              <input matInput [(ngModel)]="name" (keydown.enter)="submitRegister()" />
-            </mat-form-field>
-            <mat-form-field>
-              <mat-label>Efternamn</mat-label>
-              <input matInput [(ngModel)]="lastName" (keydown.enter)="submitRegister()" />
-            </mat-form-field>
-          </div>
-          <div class="login-container-fields">
-            <mat-form-field>
-              <mat-label>E-post adress</mat-label>
-              <input matInput [(ngModel)]="email" (keydown.enter)="submitRegister()" />
-            </mat-form-field>
-            <mat-form-field>
-              <mat-label>Lösenord</mat-label>
-              <input matInput [(ngModel)]="password"
-                [type]="hide() ? 'password' : 'text'"
-                (keydown.enter)="submitRegister()" />
-              <button
-                matIconButton
-                matSuffix
-                (click)="clickEvent($event)"
-                [attr.aria-label]="'Hide password'"
-                [attr.aria-pressed]="hide()"
-              >
-                <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
-              </button>
-            </mat-form-field>
-          </div>
-          @if(errorMessage() !== "") {
-            <div class="login-container-error">
-              <mat-error>{{errorMessage()}}</mat-error>
-            </div>
-          }
-          @if(successMessage() !== "") {
-            <div class="login-container-success">
-              <p>{{successMessage()}}</p>
-            </div>
-          }
-          <div class="login-container-buttons">
-            <button class="login-container-button" matButton="elevated" (click)="submitRegister()">
-              Registrera
-            </button>
-          </div>
-        </mat-card-content>
-      </mat-tab>
-    </mat-tab-group>
+<mat-card class="login-card" appearance="outlined">
+  <mat-tab-group
+      mat-stretch-tabs="false"
+      mat-align-tabs="center"
+      dynamicHeight
+      animationDuration="200ms"
+      (selectedIndexChange)="clearError()">
 
-  </mat-card>
-</div>
+    <!-- login -->
+    <mat-tab label="Logga in">
+      <div class="tab-content">
+
+        <div class="tab-header">
+          <div class="tab-icon-wrap">
+            <mat-icon class="tab-icon">login</mat-icon>
+          </div>
+          <h2 class="tab-title">Välkommen tillbaka</h2>
+          <p class="tab-subtitle">Logga in på <strong>KîndGuard</strong></p>
+        </div>
+
+        <div class="form-fields">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>E-postadress</mat-label>
+            <mat-icon matPrefix class="field-prefix-icon">mail_outline</mat-icon>
+            <input
+                matInput
+                type="email"
+                [(ngModel)]="email"
+                (keydown.enter)="submitLogin()"
+                autocomplete="email" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Lösenord</mat-label>
+            <mat-icon matPrefix class="field-prefix-icon">lock_outline</mat-icon>
+            <input
+                matInput
+                [(ngModel)]="password"
+                [type]="hide() ? 'password' : 'text'"
+                (keydown.enter)="submitLogin()"
+                autocomplete="current-password" />
+            <button
+                matIconButton
+                matSuffix
+                (click)="clickEvent($event)"
+                [attr.aria-label]="'Visa/dölj lösenord'"
+                [attr.aria-pressed]="hide()">
+              <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+
+        @if (errorMessage() !== "") {
+        <div class="form-message form-message--error" role="alert">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ errorMessage() }}</span>
+        </div>
+        }
+
+        <button mat-flat-button class="submit-button" (click)="submitLogin()">
+          Logga in
+          <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+        </button>
+
+      </div>
+    </mat-tab>
+
+    <!-- register -->
+    <mat-tab label="Registrera">
+      <div class="tab-content">
+
+        <div class="tab-header">
+          <div class="tab-icon-wrap">
+            <mat-icon class="tab-icon">person_add</mat-icon>
+          </div>
+          <h2 class="tab-title">Skapa konto</h2>
+          <p class="tab-subtitle">Kom igång med <strong>KîndGuard</strong></p>
+        </div>
+
+        <div class="form-fields">
+          <div class="name-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Förnamn</mat-label>
+              <input
+                  matInput
+                  [(ngModel)]="name"
+                  (keydown.enter)="submitRegister()"
+                  autocomplete="given-name" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Efternamn</mat-label>
+              <input
+                  matInput
+                  [(ngModel)]="lastName"
+                  (keydown.enter)="submitRegister()"
+                  autocomplete="family-name" />
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>E-postadress</mat-label>
+            <mat-icon matPrefix class="field-prefix-icon">mail_outline</mat-icon>
+            <input
+                matInput
+                type="email"
+                [(ngModel)]="email"
+                (keydown.enter)="submitRegister()"
+                autocomplete="email" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Lösenord</mat-label>
+            <mat-icon matPrefix class="field-prefix-icon">lock_outline</mat-icon>
+            <input
+                matInput
+                [(ngModel)]="password"
+                [type]="hide() ? 'password' : 'text'"
+                (keydown.enter)="submitRegister()"
+                autocomplete="new-password" />
+            <button
+                matIconButton
+                matSuffix
+                (click)="clickEvent($event)"
+                [attr.aria-label]="'Visa/dölj lösenord'"
+                [attr.aria-pressed]="hide()">
+              <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+
+        @if (errorMessage() !== "") {
+        <div class="form-message form-message--error" role="alert">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ errorMessage() }}</span>
+        </div>
+        }
+
+        @if (successMessage() !== "") {
+        <div class="form-message form-message--success" role="status">
+          <mat-icon>check_circle_outline</mat-icon>
+          <span>{{ successMessage() }}</span>
+        </div>
+        }
+
+        <button mat-flat-button class="submit-button" (click)="submitRegister()">
+          Registrera konto
+          <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+        </button>
+
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+</mat-card>
