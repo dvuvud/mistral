@@ -85,7 +85,7 @@ public class JournalServiceTests {
     }
 
     @Test
-    void getOrCreateIsIdempotent() {
+    void getOrCreateReturnsSameInstanceOnMultipleCalls() {
         final JournalDto first = journalService.getOrCreate(CHILD, DATE);
         final JournalDto second = journalService.getOrCreate(CHILD, DATE);
 
