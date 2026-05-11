@@ -50,17 +50,17 @@
     .mat-mdc-text-field-wrapper {
       background-color: var(--mat-sys-inverse-primary) !important;
     }
-    
+
   }
 
-  
+
   mat-form-field:not(.pick-class) {
     .mdc-notched-outline__leading,
     .mdc-notched-outline__notch,
     .mdc-notched-outline__trailing {
-      border-color: var(--mat-sys-inverse-primary) !important;  
+      border-color: var(--mat-sys-inverse-primary) !important;
     }
-    
+
     .mat-mdc-text-field-wrapper {
       background-color: var(--mat-sys-inverse-primary) !important;
     }
@@ -116,4 +116,9 @@
 .cornerize {
   border-top-right-radius: 0% !important;
   border-top-left-radius: 0% !important;
+}
+
+::ng-deep mat-card > mat-form-field > div:nth-child(1) {
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
 }
