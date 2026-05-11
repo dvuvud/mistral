@@ -16,7 +16,7 @@ export interface User {
 
 @Injectable({ providedIn: 'root' })
 
-export class userService {
+export class UserService {
   private url = `${environment.apiUrl}/api/user/teacher`;
   private teachersUrl = `${environment.apiUrl}/api/user/teachers`;
   private colorUrl = `${environment.apiUrl}/api/user/color`;
