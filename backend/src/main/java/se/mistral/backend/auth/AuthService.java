@@ -17,7 +17,6 @@ import se.mistral.backend.user.Role;
 import se.mistral.backend.user.User;
 import se.mistral.backend.user.UserRepository;
 
-
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -40,33 +39,37 @@ public class AuthService {
         if (userRepository.existsByEmail(request.email())) {
             throw new IllegalArgumentException("Email already in use: " + request.email());
         }
-        /* TODO: don't default to making new users teachers (maybe add a Role field to the RegisterRequest or similar). */
         User user = User.builder()
-            .name(request.name())
-            .email(request.email())
-            .password(passwordEncoder.encode(request.password()))
-            .role(Role.TEACHER)
-            .color(randomColor())
-            .build();
+                .name(request.name())
+                .email(request.email())
+                .password(passwordEncoder.encode(request.password()))
+                .role(Role.TEACHER)
+                .color(randomColor())
+                .build();
         userRepository.save(user);
-        
+
         return new RegisterResponse("Registration successful, your account is pending activation by an admin");
     }
 
     /**
      * Login attempt validation
+     * 
      * @param request the request
      * @return the authentication response
      */
     public AuthResponse login(LoginRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.password()));
+        authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.password()));
+
         User user = userRepository.findByEmail(request.email())
-            .orElseThrow(() -> new NotFoundException("User not found"));
-        return new AuthResponse(jwtService.generateToken(user), user.getId());
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        return new AuthResponse(jwtService.generateToken(user), user.getId(), user.getRole());
     }
 
     /**
      * Generates a random HEX color string
+     * 
      * @return the color as a String
      */
     private String randomColor() {
