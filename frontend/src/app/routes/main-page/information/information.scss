@@ -1,9 +1,3 @@
-
-
-.top-card {
-    border-top-left-radius:  0% !important;
-    background: var(--mat-sys-inverse-primary);
-}
 .subrow {
     display: flex;
     flex-direction: row;
@@ -32,7 +26,6 @@ textarea {
 }
 
 mat-card {
-    
     box-shadow: var(--mat-sys-level2);
     flex: 1;
     gap: 0.5em;
@@ -72,7 +65,7 @@ mat-card {
     font-weight: 400;
 }
 
-.left-card {
+#left-card {
     background: var(--mat-sys-inverse-primary);
-    border-top-left-radius: 0% !important;
+    border-top-left-radius: 0%;
 }
