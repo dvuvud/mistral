@@ -23,7 +23,7 @@ import { Homepage } from "../homepage/homepage";
 })
 export class MainPanel implements OnInit{
   presence = inject(Presence);
-  childSignal = signal<Child>({ name: '', id: 0, date: "", status: "NOT_SET" });
+  childSignal = signal<Child>({ name: '', id: 0, date: "", status: "NOT_SET", present: null });
   contentSignal = model.required<string>();
   groupSignal = signal<groupResponse>({name: '', id: 0});
   allGroups = signal<groupResponse[]>([]);
