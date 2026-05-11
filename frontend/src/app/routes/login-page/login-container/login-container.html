@@ -13,13 +13,15 @@
               <!-- Notera hur vi binder vår required model email (från login-container.ts) till [(ngModel)].
               Det innebär att när en föränding sker i fältet så uppdateras vår email model direkt.
               Vi gör exakt samma för password -->
-              <input matInput [(ngModel)]="email"/>
+              <input matInput [(ngModel)]="email" (keydown.enter)="submitLogin()" />
             </mat-form-field>
             <!-- Här är det lite mer invecklade fältet för lösenord,
             notera att majoriteten av koden bara är för styling-->
             <mat-form-field>
               <mat-label>Lösenord</mat-label>
-              <input matInput [(ngModel)]="password" [type]="hide() ? 'password' : 'text'" />
+              <input matInput [(ngModel)]="password"
+                [type]="hide() ? 'password' : 'text'"
+                (keydown.enter)="submitLogin()" />
               <button
                 matIconButton
                 matSuffix
@@ -53,21 +55,23 @@
           <div class="login-container-fields">
             <mat-form-field>
               <mat-label>Förnamn</mat-label>
-              <input matInput [(ngModel)]="name"/>
+              <input matInput [(ngModel)]="name" (keydown.enter)="submitRegister()" />
             </mat-form-field>
             <mat-form-field>
               <mat-label>Efternamn</mat-label>
-              <input matInput [(ngModel)]="lastName"/>
+              <input matInput [(ngModel)]="lastName" (keydown.enter)="submitRegister()" />
             </mat-form-field>
           </div>
           <div class="login-container-fields">
             <mat-form-field>
               <mat-label>E-post adress</mat-label>
-              <input matInput [(ngModel)]="email"/>
+              <input matInput [(ngModel)]="email" (keydown.enter)="submitRegister()" />
             </mat-form-field>
             <mat-form-field>
               <mat-label>Lösenord</mat-label>
-              <input matInput [(ngModel)]="password" [type]="hide() ? 'password' : 'text'" />
+              <input matInput [(ngModel)]="password"
+                [type]="hide() ? 'password' : 'text'"
+                (keydown.enter)="submitRegister()" />
               <button
                 matIconButton
                 matSuffix
