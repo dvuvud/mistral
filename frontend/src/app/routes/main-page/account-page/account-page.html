@@ -2,8 +2,10 @@
     <mat-card-header>
       <div class="card-header-segment card-header-left">
         <div mat-card-avatar class="icon-display"><mat-icon>person</mat-icon></div>
-        <mat-card-title>{{(currentUser | async)?.name}}</mat-card-title>
-        <mat-card-subtitle>{{(currentUser | async)?.role}}</mat-card-subtitle>
+        <div class="hamburger">
+          <mat-card-title>{{(currentUser | async)?.name}}</mat-card-title>
+          <mat-card-subtitle>{{(currentUser | async)?.role}}</mat-card-subtitle>
+        </div>
       </div>
       <div class="card-header-segment card-header-right">
         <h2>Din färg</h2>
