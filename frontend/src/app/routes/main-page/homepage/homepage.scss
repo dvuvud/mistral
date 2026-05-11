@@ -83,9 +83,9 @@ mat-card {
     display: flex;
     flex-direction: column;
     flex: 1;
-    min-height: 0; 
+    min-height: 0;
     overflow-y: auto;
-    margin: 0; 
+    margin: 0;
     padding: 0 0.5em;
     margin-bottom: 1em;
 }
@@ -107,5 +107,3 @@ mat-icon {
 .namn {
     font: var(--mat-sys-body-large);
 }
-
-
