@@ -19,8 +19,11 @@ export class MainPresenceContainer implements OnInit {
   ngOnInit(): void {
     this.presence.teacherUpdates.subscribe(() => {
       this.teachers.set(this.presence.connectedTeachers().filter((element: User) => {
-        const searchString = this.isGroup() == "" ? "child:" + this.filter() : "group:" + this.filter();
-        return element.room.includes(searchString);
+        const parts = element.room.split(":");
+        const type = parts[1];
+        const id = parts[2];
+        const typeMatch = (this.isGroup() !== "" && type === "group") || (this.isGroup() === "" && type === "child");
+        return typeMatch && id === this.filter();
       }));
     })
     this.teachers.set(this.presence.connectedTeachers().filter((element: User) => {
