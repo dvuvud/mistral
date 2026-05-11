@@ -30,8 +30,14 @@ export class MainPanel implements OnInit{
   private groupService = inject(groupService);
   childList = viewChild.required(ChildList);
   teachers = [{}]
+  dateSignal = signal<string>('');
+
+  months = ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti",
+    "September", "Oktober", "November", "December"];
+  days = ["Söndag", "Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag"];
 
   ngOnInit() {
+    this.dateSignal.set(this.getDate())
     this.loadGroups();
   }
 
@@ -45,6 +51,11 @@ export class MainPanel implements OnInit{
           return 'ERROR'
       }
   })
+
+  getDate() {
+    const d = new Date();
+    return `${this.days[d.getDay()]} ${d.getDate()} ${this.months[d.getMonth()]} ${d.getFullYear()}`
+  }
 
   loadGroups() {
     this.groupService.getGroups().subscribe({

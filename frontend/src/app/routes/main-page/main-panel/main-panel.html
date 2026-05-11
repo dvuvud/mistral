@@ -11,7 +11,10 @@
               <main-presence-container filter={{childSignal().id}}></main-presence-container>
           </mat-card-header>
           <div class="childDisplay">
-            <child-display (attendanceChangeEvent)="wsUpdateAttendance($event)" [(childSignal)]="childSignal"></child-display>
+            <child-display (attendanceChangeEvent)="wsUpdateAttendance($event)" 
+                           [(childSignal)]="childSignal"
+                           [(dateSignal)]="dateSignal">
+            </child-display>
           </div>
         </div>
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
@@ -30,6 +33,7 @@
       @if (contentSignal() === 'groupView') {
         <mat-card-header class="title">
         <span>{{groupSignal().name}}</span>
+        <p class="mini-spacer">{{dateSignal()}}</p>
         <main-presence-container isGroup="yes" filter={{groupSignal().id}}></main-presence-container>
       </mat-card-header>
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
