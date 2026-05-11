@@ -7,13 +7,29 @@ export const authGuard: CanActivateFn = async (
   const url: string = route.url.join('');
   const router = inject(Router);
   const authService = inject(AuthService);
-  const isAuthed: boolean = await authService.isAuthorized();
+  const role = await authService.isAuthorized();
 
   switch (url) {
     case '': // Redirect users already signed in from login page to /app
-      return isAuthed ? router.parseUrl("/app") : true;
+      if (!role) return true;
+      if (role === 'ADMIN') return router.parseUrl('/admin');
+      return router.parseUrl('/app');
     case 'app': // Redirect non-authorized clients from /app to login page
-      return isAuthed ? true : router.parseUrl("/");
+      if (!role) {
+        return router.parseUrl('/');
+      }
+      if (role === 'ADMIN') {
+        return router.parseUrl('/admin');
+      }
+      return true;
+    case 'admin':
+      if (!role) {
+        return router.parseUrl('/');
+      }
+      if (role !== 'ADMIN') {
+        return router.parseUrl('/app');
+      }
+      return true;
     default:
       return false;
   }
