@@ -1,5 +1,5 @@
 import { textDiff } from './text-diff';
-// npm test -- --watch=false --include='**/text-diff.test.ts'
+// npm test -- --watch=false --include='**/main-live-journal/*.test.ts'
 // ^^Denna rad körs i terminalen från mistral/frontend^^
 
 describe('textDiff', () => {
