@@ -42,14 +42,14 @@ export class MainPanel implements OnInit{
   }
 
   reportTitle = computed(() => {
-      switch(this.contentSignal()) {
-        case('childView'):
-          return this.childSignal().name + 's' + ' dagsrapport';
-        case('groupView'):
-          return this.groupSignal().name + 's' + ' dagsrapport';
-        default:
-          return 'ERROR'
-      }
+    switch(this.contentSignal()) {
+      case('childView'):
+        return this.childSignal().name + 's' + ' dagsrapport';
+      case('groupView'):
+        return this.groupSignal().name + 's' + ' dagsrapport';
+      default:
+        return 'ERROR'
+    }
   })
 
   getDate() {

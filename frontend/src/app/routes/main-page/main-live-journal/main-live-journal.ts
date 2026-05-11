@@ -1,7 +1,6 @@
-import { Component, OnDestroy, signal, inject, viewChild, ElementRef, model, computed, OnInit, OnChanges } from '@angular/core';
+import { Component, OnDestroy, signal, inject, viewChild, ElementRef, model, OnInit, OnChanges } from '@angular/core';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { MatTabGroup, MatTab } from "@angular/material/tabs";
 import { FormsModule } from '@angular/forms';
 import { WsJournalWriteOperation, WebsocketService, WsJournalMessage, WsJournalResponse, WsMailbox } from '../../../core/websocket/websocket.service';
 import { Child } from '../../../core/child/child.service';
