@@ -19,9 +19,38 @@
   position: relative;
   overflow: hidden;
   padding: 3rem;
+}
 
-  @media (max-width: 860px) {
+#login-page-banner {
+  background: var(--mat-sys-primary);
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  padding: 4.5rem;
+  display: none;
+  width: 100%;
+  top: 0;
+  left: 0;
+  height: 7em;
+  min-height: fit-content;
+
+  img {
+    filter: brightness(0) invert(1); // tvinga färgen att vara vit så den syns mot bakgrunden
+    opacity: 0.95;
+    width: auto;
+    min-height: 5rem;
+    max-height: 8rem;
+  }
+}
+
+@media (max-width: 1050px) {
+  .login-page-left-panel {
     display: none; // göm på mindre skärmar
+  }
+
+  #login-page-banner {
+    display: flex;
   }
 }
 
@@ -43,6 +72,20 @@
     height: 260px;
     top: -60px;
     left: -60px;
+  }
+
+  &--3 {
+    width: 260px;
+    height: 260px;
+    right: 0;
+    bottom: 0;
+  }
+
+  &--4 {
+    width: 130px;
+    height: 130px;
+    left: 0;
+    top: 0;
   }
 }
 
