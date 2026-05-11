@@ -1,6 +1,5 @@
 import { Component, inject, signal, ViewEncapsulation, viewChild, OnDestroy, OnInit } from '@angular/core';
 import { MainPanel } from './main-panel/main-panel';
-import { Router } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
@@ -31,7 +30,6 @@ export class MainPage implements OnInit, OnDestroy {
   groupSignal = signal<groupResponse>({name: '', id: 0});
   allGroups = signal<groupResponse[]>([]);
   contentSignal = signal<displayedContent>('');
-  private router = inject(Router);
   private presence = inject(Presence);
   private socketService = inject(WebsocketService);
   mainPanel = viewChild.required(MainPanel);
@@ -41,6 +39,7 @@ export class MainPage implements OnInit, OnDestroy {
     this.socketService.connect(`${environment.wsUrl}/ws`);
     await this.socketService.ensureConnected();
     this.presence.init();
+    this.socketService.setAttendanceRoom("ALL");
     this.socketService.getMessages(WsMailbox.attendance).subscribe((message) => {
       if (!("childId" in message)) {
         console.error("Attendance message with incorrect body!");
