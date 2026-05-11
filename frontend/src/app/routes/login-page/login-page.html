@@ -1,18 +1,37 @@
-<!--
-  [(denna)] syntax är för 2-vägsbindning. Vi binder email från login-page.ts till email från login-container.ts
-  (event)=callback() syntax lysnar efter ett event och anropar callback() från .ts filen.
--->
-<div>
-  <img width="auto" height="150px" alt="Kindguard logo" src="Kindguardlogo.png">
-</div>
+<div class="login-page-wrapper">
 
-<login-container class="login-page-container"
-  [(email)]="email"
-  [(password)]="password"
-  [(name)]="name"
-  [(lastName)]="lastName"
-  [(errorMessage)]="errorMessage"
-  [(successMessage)]="successMessage"
-  (loginSubmitEvent)="onLoginSubmit()"
-  (registerSubmitEvent)="onRegisterSubmit()">
-</login-container>
+  <div class="login-page-left-panel">
+    <div class="blob blob--1"></div>
+    <div class="blob blob--2"></div>
+    <div class="content">
+      <img width="auto" height="120px" alt="KindGuard logo" src="Kindguardlogo.png">
+      <h1 class="headline">Skapa tillsammans,<br>helt utan gränser.</h1>
+      <p class="body">Glöm låsta filer och versionskaos. Se ändringar direkt när de sker, så att fokus hamnar på lärandet i stället för tekniken.</p>
+      <div class="badge-divider"></div>
+      <div class="badges">
+        <span class="badge">
+          <mat-icon>groups</mat-icon> Kollaborativ journalskrivning
+        </span>
+        <span class="badge">
+          <mat-icon>history</mat-icon> Optimistisk versionshantering
+        </span>
+        <span class="badge">
+          <mat-icon>psychology_alt</mat-icon> Flexibelt lärande
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-page-form">
+    <login-container class="login-page-container"
+                     [(email)]="email"
+                     [(password)]="password"
+                     [(name)]="name"
+                     [(lastName)]="lastName"
+                     [(errorMessage)]="errorMessage"
+                     [(successMessage)]="successMessage"
+                     (loginSubmitEvent)="onLoginSubmit()"
+                     (registerSubmitEvent)="onRegisterSubmit()">
+    </login-container>
+  </div>
+</div>

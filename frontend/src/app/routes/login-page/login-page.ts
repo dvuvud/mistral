@@ -2,10 +2,11 @@ import { Component, signal, inject } from '@angular/core';
 import { LoginContainer } from './login-container/login-container';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'login-page',
-  imports: [LoginContainer],
+  imports: [LoginContainer, MatIcon],
   templateUrl: './login-page.html',
   styleUrl: './login-page.scss',
 })
