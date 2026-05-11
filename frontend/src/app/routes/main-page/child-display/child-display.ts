@@ -1,4 +1,4 @@
-import { Component, EventEmitter, input, model, Output } from '@angular/core';
+import { Component, EventEmitter, model, Output } from '@angular/core';
 import { Child } from '../../../core/child/child.service';
 import { AttendanceBox } from "../attendance-box/attendance-box";
 import { WsAttendanceMessage } from '../../../core/websocket/websocket.service';

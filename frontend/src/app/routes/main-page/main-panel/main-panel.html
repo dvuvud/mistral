@@ -5,7 +5,7 @@
         <div class="sub-row">
             <mat-card-header class="title">
             <span>{{childSignal().name}}</span>
-            @if (groupSignal().name != 'alla') {
+            @if (groupSignal().name !== 'alla') {
               <p class="mini-spacer">{{groupSignal().name}}</p>
             }
               <main-presence-container filter={{childSignal().id}}></main-presence-container>
