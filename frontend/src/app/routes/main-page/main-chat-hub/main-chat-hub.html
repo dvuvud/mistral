@@ -1,0 +1,21 @@
+<mat-card appearance="outlined">
+  @if (viewState() == "overview") {
+    <mat-action-list class="list-class">
+      <button mat-list-item (click)="onSelectAll()">
+        <span matListItemTitle>Alla</span>
+      </button>
+      @for (teacher of (teacherList | async); track teacher.name) {
+        <button mat-list-item (click)="onSelectTeacher(teacher)">
+          <span matListItemTitle>{{teacher.name}} </span>
+        </button>
+      }
+    </mat-action-list>
+  }
+  @else if (viewState() == "chat") {
+  <button matIconButton="button" (click)="returnToOverview()">Back</button>
+  <mat-form-field>
+    <input matInput [(ngModel)]="newMessage" type="text">
+  </mat-form-field>
+  <button matInput type="button" (click)="submitMessage()">Send</button>
+  }
+</mat-card>

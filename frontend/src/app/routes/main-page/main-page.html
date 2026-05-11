@@ -9,9 +9,10 @@
 </div>
 
 <div class="main-body">
+  <main-chat-hub></main-chat-hub>
   <div class="main-panel-container">
-      <main-panel 
-        (attendanceChangeEvent)="wsUpdateAttendance($event)" 
+      <main-panel
+        (attendanceChangeEvent)="wsUpdateAttendance($event)"
         [(contentSignal)]="contentSignal">
       </main-panel>
   </div>

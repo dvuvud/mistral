@@ -229,7 +229,6 @@ export class WebsocketService {
     this.sendMessage("DOC_OPERATION", message);
   }
 
-<<<<<<< HEAD
   setChatRoom(newRoom: string): void {
     this.setRoom("chat", newRoom);
   }
@@ -242,14 +241,5 @@ export class WebsocketService {
 
   getMessages(mailbox: WsMailbox): Observable<WsMessageContent> {
     return this.mailboxes[mailbox].asObservable();
-=======
-  sendChatMessage(room: string, message: WsChatMessage): void {
-    const payload= JSON.stringify({type: "CHAT_MESSAGE", room, message})
-    this.socket?.send(payload);
-  }
-
-  getMessages(): Observable<WsMessageContent> {
-    return this.messages.asObservable();
->>>>>>> 3d6a475 (lagt till chatttyper i WebsocketService)
   }
 }

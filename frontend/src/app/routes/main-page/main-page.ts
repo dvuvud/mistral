@@ -9,6 +9,7 @@ import { WebsocketService, WsAttendanceMessage, WsMailbox } from '../../core/web
 import { environment } from '../../../environments/environment';
 import { groupResponse } from '../../core/groups/group.service';
 import { Presence } from '../../core/presence/presence.service';
+import { MainChatHub } from "./main-chat-hub/main-chat-hub";
 
 type displayedContent = 'childview' | 'groupView' | 'teacherView' | 'homeView' | '';
 
@@ -19,7 +20,8 @@ type displayedContent = 'childview' | 'groupView' | 'teacherView' | 'homeView' |
     MainPanel,
     MatSidenavModule,
     MatButtonModule,
-  ],
+    MainChatHub
+],
   encapsulation: ViewEncapsulation.Emulated,
 
   templateUrl: './main-page.html',
