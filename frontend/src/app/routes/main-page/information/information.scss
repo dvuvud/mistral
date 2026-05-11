@@ -28,7 +28,7 @@ mat-card-header{
 mat-form-field {
   flex: 1;
   margin: 1em;
-  box-shadow: var(--mat-sys-level1);
+  box-shadow: var(--mat-sys-level2);
 }
 
 textarea {
@@ -38,21 +38,23 @@ textarea {
 }
 
 mat-card {
-    box-shadow: var(--mat-sys-level1);
+    
+    box-shadow: var(--mat-sys-level2);
     flex: 1;
     background-color: var(--mat-sys-primary-container);
     gap: 0.5em;
 }
 
 .subcard {
-    box-shadow: var(--mat-sys-level1);
+    box-shadow: var(--mat-sys-level2);
     background-color: var(--mat-sys-surface-container);
     flex: 1;
     margin: 1em;
+    border-radius: 0%;
 }
 
 .info-subcard {
-    box-shadow: var(--mat-sys-level1);
+    box-shadow: var(--mat-sys-level2);
     background-color: var(--mat-sys-surface-container);
     flex: 1;
     margin: 1em;
@@ -62,4 +64,13 @@ mat-card {
 
 .flex-div {
     flex: 1;
+}
+
+.kontakt {
+    font: var(--mat-sys-label-large);
+    justify-self: center;
+}
+
+.cornerize {
+    border-top-left-radius: 0% !important;
 }
