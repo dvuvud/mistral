@@ -19,6 +19,10 @@ interface AuthResponse {
   id: number;
 }
 
+interface ValidateResponse {
+  role: 'ADMIN' | 'TEACHER' | 'PARENT';
+}
+
 interface RegisterResponse {
   message: string;
 }
@@ -54,10 +58,10 @@ export class AuthService {
   }
 
   async isAuthorized() {
-    const x = new Promise<boolean>((resolve) => {
-      this.http.get<boolean>(`${this.baseUrl}/validate`, {}).subscribe({
-        error: () => resolve(false),
-        complete: () => resolve(true)
+    const x = new Promise<string | null>((resolve) => {
+      this.http.get<ValidateResponse>(`${this.baseUrl}/validate`, {}).subscribe({
+        next: (response) => resolve(response.role),
+        error: () => resolve(null)
       });
     })
     const t = await x;
