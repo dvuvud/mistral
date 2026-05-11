@@ -58,10 +58,7 @@ mat-card-header {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(90deg, 
-                                 var(--mat-sys-tertiary)1%,
-                                 var(--mat-sys-primary) 150%);
-  color: var(--mat-sys-on-primary-container);
+  background: var(--mat-sys-inverse-primary);
   border-radius: 12px;
 }
 
