@@ -13,10 +13,11 @@ import { Presence } from '../../../core/presence/presence.service';
 import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import { MatFormField } from "@angular/material/form-field";
 import { Information } from '../information/information';
+import { Homepage } from "../homepage/homepage";
 
 @Component({
   selector: 'main-panel',
-  imports: [ChildList, MatDividerModule, ChildDisplay, MatCard, MatCardHeader, MatCardContent, MainLiveJournal, AccountPage, MainPresenceContainer, MatTab, MatFormField, MatTabGroup, Information],
+  imports: [ChildList, MatDividerModule, ChildDisplay, MatCard, MatCardHeader, MatCardContent, MainLiveJournal, AccountPage, MainPresenceContainer, MatTab, MatFormField, MatTabGroup, Information, Homepage],
   templateUrl: './main-panel.html',
   styleUrl: './main-panel.scss',
 })

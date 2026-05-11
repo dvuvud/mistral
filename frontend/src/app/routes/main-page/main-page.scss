@@ -64,11 +64,4 @@ mat-tab {
   margin: 2em;
 }
 
-button {
-  transform: translateY(0) rotateY(0deg);
-  transition: 0.6s;
-}
 
-button:hover {
-  transform: translateY(15px) rotateY(360deg) scale(2);
-}

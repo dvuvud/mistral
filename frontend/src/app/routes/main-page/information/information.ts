@@ -3,10 +3,11 @@ import { Child } from '../../../core/child/child.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCard, MatCardHeader, MatCardContent } from "@angular/material/card";
 import { MatInput, MatFormField } from "@angular/material/input";
+import { MatDivider } from "@angular/material/divider";
 
 @Component({
   selector: 'information',
-  imports: [MatTabsModule, MatCard, MatInput, MatFormField, MatCardHeader, MatCardContent],
+  imports: [MatTabsModule, MatCard, MatInput, MatFormField, MatCardHeader, MatCardContent, MatDivider],
   templateUrl: './information.html',
   styleUrl: './information.scss',
 })
