@@ -1,9 +1,113 @@
 :host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.login-page-wrapper {
   display: flex;
   width: 100%;
-  height: 80%;
+  min-height: 100vh;
+}
+
+.login-page-left-panel {
+  flex: 1.1;
+  background: var(--mat-sys-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 3rem;
+
+  @media (max-width: 860px) {
+    display: none; // göm på mindre skärmar
+  }
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--mat-sys-on-primary);
+  opacity: 0.06;
+
+  &--1 {
+    width: 480px;
+    height: 480px;
+    bottom: -140px;
+    right: -100px;
+  }
+
+  &--2 {
+    width: 260px;
+    height: 260px;
+    top: -60px;
+    left: -60px;
+  }
+}
+
+.content {
+  display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+
+  img {
+    filter: brightness(0) invert(1); // tvinga färgen att vara vit så den syns mot bakgrunden
+    opacity: 0.95;
+    margin-left: -11px; // eftersom bilden har lite tomt utrymme till vänster
+  }
+}
+
+.headline {
+  font: var(--mat-sys-display-small);
+  color: var(--mat-sys-on-primary);
+  margin: 0;
+  line-height: 1.15;
+}
+
+.body {
+  font: var(--mat-sys-body-large);
+  color: var(--mat-sys-on-primary);
+  opacity: 0.82;
+  margin: 0;
+  max-width: 320px;
+  line-height: 1.6;
+}
+
+.badge-divider {
+  width: 40px;
+  height: 3px;
+  background: var(--mat-sys-on-primary);
+  opacity: 0.35;
+}
+
+.badges {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font: var(--mat-sys-label-large);
+  color: var(--mat-sys-on-primary);
+  opacity: 0.75;
+
+  mat-icon {
+    font-size: 1.1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+}
+
+.login-page-form {
+  flex: 1;
+  display: flex;
   justify-content: center;
   align-items: center;
-  gap: 100px;
+  background: var(--mat-sys-surface);
+  padding: 2rem;
 }
