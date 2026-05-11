@@ -4,11 +4,13 @@ import { WebsocketService, WsMailbox, WsPresenceChangeMessage } from '../websock
 import { Subject } from 'rxjs';
 import { User } from '../user/user.service';
 
+const DEBUG = true;
+
 @Injectable({
   providedIn: 'root',
 })
 export class Presence {
-  socketService = inject(WebsocketService);
+  private socketService = inject(WebsocketService);
   connectedTeachers = signal<User[]>([]);
   private _teacherUpdates = new Subject<User>();
   readonly teacherUpdates = this._teacherUpdates.asObservable();

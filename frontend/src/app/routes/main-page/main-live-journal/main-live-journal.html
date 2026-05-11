@@ -1,8 +1,12 @@
 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
   <mat-tab label={{reportTitle()}}>
+    <!--
     <mat-form-field>
       <textarea #journalContent matInput [ngModel]="text()" (input)="onInput($event)"></textarea>
     </mat-form-field>
+     -->
+     <div id="caret-1" class="caret visible"></div>
+     <quill-editor (onEditorCreated)="loadQuill($event)" (onContentChanged)="onInput($event)"></quill-editor>
 
   </mat-tab>
   <mat-tab class="main-journal-historik" label="Historik">

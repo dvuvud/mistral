@@ -10,10 +10,12 @@ import { operationalTransformation } from './operational-transformation';
 import { JournalService } from '../../../core/journal/journal.service';
 import { localDateToday } from '../../../core/utils/date-utils';
 import { groupResponse } from '../../../core/groups/group.service';
+import Quill, { QuillOptions } from 'quill';
+import { ContentChange, QuillModule } from 'ngx-quill'
 
 @Component({
   selector: 'main-live-journal',
-  imports: [MatFormField, MatInput, MatTabGroup, MatTab, FormsModule],
+  imports: [MatFormField, MatInput, MatTabGroup, MatTab, FormsModule, QuillModule],
   templateUrl: './main-live-journal.html',
   styleUrl: './main-live-journal.scss',
 })
@@ -22,7 +24,22 @@ export class MainLiveJournal implements OnDestroy, OnInit, OnChanges {
   private differ = new textDiff();
   private operationalTransformer = new operationalTransformation();
   private journalService = inject(JournalService);
-  private textArea = viewChild.required<ElementRef<HTMLTextAreaElement>>("journalContent");
+  private _textArea = viewChild.required<ElementRef<HTMLTextAreaElement>>("journalContent");
+  private cont = viewChild.required<ElementRef<HTMLDivElement>>("editor");
+  private textArea?: Quill = undefined;
+  private quillConfig: QuillOptions = {
+    debug: 'info',
+    modules: {
+      toolbar: "#toolbar"
+    },
+    placeholder: 'Compose an epic...',
+    theme: 'snow'
+  };
+
+  loadQuill(data: Quill) {
+    this.textArea = data;
+    console.log(data);
+  }
 
   childSignal = model.required<Child>();
   contentSignal = model.required<string>();
@@ -103,15 +120,19 @@ export class MainLiveJournal implements OnDestroy, OnInit, OnChanges {
     switch(incoming.type) {
       case 'INSERT':
         //this.text.set(text.slice(0, pos) + incoming.text + text.slice(pos, text.length));
-        this.textArea().nativeElement.setRangeText(incoming.text, pos, pos, "preserve");
+        //this.textArea().nativeElement.setRangeText(incoming.text, pos, pos, "preserve");
+        //delta = { ops: [{ retain: pos }, {insert: incoming.text}]}
+        this.textArea?.insertText(pos, incoming.text, "silent");
         break;
       case 'DELETE':
         //this.text.set(text.slice(0, pos) + text.slice(pos + 1, text.length));
-        this.textArea().nativeElement.setRangeText("", pos, pos + incoming.length, "preserve");
+        //delta = { ops: [{ retain: pos }, {delete: 1 }]}
+        //this.textArea().nativeElement.setRangeText("", pos, pos + incoming.length, "preserve");
+        this.textArea?.deleteText(pos, incoming.length, "silent");
         break;
     }
 
-    this.text.set(this.textArea().nativeElement.value);
+    //this.text.set(this.textArea().nativeElement.value);
     this.prevText = this.text();
   }
 
@@ -119,16 +140,15 @@ export class MainLiveJournal implements OnDestroy, OnInit, OnChanges {
     this.journalSocket.leaveJournalRoom();
   }
 
-  onInput(event: Event) {
+  onInput(event: ContentChange) {
     this.sequence++;
     // hämta information om textytan
-    const textarea = event.target as HTMLTextAreaElement;
-
     // hämta senaste verisionen och uppdatera föregående
-    const newValue = textarea.value;
+    const newValue = event.text;
     this.prevText = this.text();
-    const idx = textarea.selectionStart;
-    const diff: Diff = this.differ.getDiff(this.prevText, newValue, idx);
+
+    const idx = this.textArea!.getSelection()?.index;
+    const diff: Diff = this.differ.getDiff(this.prevText, newValue, idx!);
     this.text.set(newValue);
     let operation: WsJournalWriteOperation;
     switch (diff.operation) {
@@ -161,7 +181,6 @@ export class MainLiveJournal implements OnDestroy, OnInit, OnChanges {
         }
         break;
     }
-
     this.sendOperation(operation);
   }
 

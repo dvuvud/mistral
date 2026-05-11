@@ -193,12 +193,12 @@ export class WebsocketService {
       return;
     }
 
-
     message.room = this.rooms[type == "ATTENDANCE"
       ? "attendance"
       : type == "CHAT"
         ? "chat"
         : "journal"];
+
     message.type = type;
     const msgAsString = JSON.stringify({ ...message });
     if (DEBUG) console.log("[Websocket] - Sending off: ", msgAsString);
