@@ -1,0 +1,26 @@
+.school-title {
+    background: linear-gradient(
+      90deg,
+      var(--mat-sys-primary) 30%,
+      var(--mat-sys-tertiary) 100%
+    );
+    color: var(--mat-sys-on-primary);
+    display: flex;
+    justify-content: center;
+    flex: 1;
+}
+
+.main-body {
+    display: flex;
+    height: 100%;
+    flex: 1;
+    flex-direction: row;
+}
+
+.news {
+    flex: 1;
+}
+
+.staff {
+    flex: 1;
+}
