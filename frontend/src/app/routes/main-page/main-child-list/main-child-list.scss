@@ -22,7 +22,7 @@
 
 .mdc-list-item {
   color: var(--mat-sys-on-primary-container);
-  background-color: var(--mat-sys-primary-container);
+  background-color: var(--mat-sys-surface-variant);
   box-shadow: var(--mat-sys-level1);
 }
 
@@ -33,12 +33,55 @@
 }
 
 .list-class {
+  background-color: var(--mat-sys-surface-dim);
   flex: 1;
   overflow-y: auto;
 }
 
-mat-form-field {
-  width: 100%;
+:host ::ng-deep .child-list-container {
+
+  // --- Outline border ---
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: var(--mat-sys-tertiary) !important;
+  }
+
+  // Background of the field
+  .mat-mdc-text-field-wrapper {
+    background: linear-gradient(90deg, 
+                                 var(--mat-sys-tertiary)1%,
+                                 var(--mat-sys-primary) 150%);
+    border-top-right-radius: 0% !important;
+    border-top-left-radius: 0% !important;
+  }
+
+  // The notched outline background (fills the area inside the border)
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    background-color: var(--mat-sys-tertiary) !important;
+    border-color: var(--mat-sys-tertiary) !important;
+  }
+
+  // --- Label and icon text ---
+  .mdc-floating-label,
+  .mat-mdc-floating-label,
+  .mat-icon {
+    color: var(--mat-sys-on-primary) !important;
+  }
+
+  // --- Input typed text ---
+  .mat-mdc-input-element {
+    color: var(--mat-sys-on-primary) !important;
+    caret-color: var(--mat-sys-on-primary) !important;
+  }
+
+  // --- Select value text and arrow ---
+  .mat-mdc-select-value,
+  .mat-mdc-select-arrow {
+    color: var(--mat-sys-on-primary) !important;
+  }
 }
 
 
@@ -54,8 +97,9 @@ mat-form-field {
   flex-direction: row;
   justify-content: space-between;
   gap: 1em;
-  background-color: var(--mat-sys-surface-variant);
-  color: var(--mat-sys-on-surface-variant);
+  background: linear-gradient(to left top, 
+                                 var(--mat-sys-primary)20%,
+                                 var(--mat-sys-tertiary) 100%);
   flex: 1;
   padding: 0.5em;
 }
@@ -69,6 +113,7 @@ mat-form-field {
 }
 
 .stats p {
+  color: var(--mat-sys-on-primary);
   padding: 0;
   margin: 0.1em;
 }
@@ -83,6 +128,7 @@ mat-form-field {
   color: var(--mat-sys-on-secondary-container);
 }
 
-mat-form-field { 
-  width: 100%;
+.cornerize {
+  border-top-right-radius: 0% !important;
+  border-top-left-radius: 0% !important;
 }

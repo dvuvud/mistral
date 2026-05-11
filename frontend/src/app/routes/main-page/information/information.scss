@@ -1,10 +1,4 @@
-.layout {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    height: 100%;
-    gap: 1em;
-}
+
 
 .top-card {
     border-top-left-radius:  0% !important;
@@ -16,7 +10,6 @@
     justify-content: center;
     height: 100%;
     gap: 1em;
-
 }
 mat-card-header{
     display: flex;
@@ -47,7 +40,7 @@ mat-card {
 
 .subcard {
     box-shadow: var(--mat-sys-level2);
-    background-color: var(--mat-sys-surface-container);
+    background-color: var(--mat-sys-surface-variant);
     flex: 1;
     margin: 1em;
     border-radius: 0%;
@@ -55,7 +48,7 @@ mat-card {
 
 .info-subcard {
     box-shadow: var(--mat-sys-level2);
-    background-color: var(--mat-sys-surface-container);
+    background-color: var(--mat-sys-surface-variant);
     flex: 1;
     margin: 1em;
     flex-direction: row;
