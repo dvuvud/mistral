@@ -1,38 +1,37 @@
-<div class="layout">
-    <div class="subrow">
-        <mat-card class="cornerize">
-            <mat-card-header class="header-text">
-                Specialbehov {{childSignal().name}}
-            </mat-card-header>
-            <mat-form-field>
-                <textarea #journalContent matInput></textarea>
-            </mat-form-field>
-        </mat-card>
-        <mat-card>
-            <mat-card-header class="header-text">
-                Kontaktinformation
-            </mat-card-header>
-            <mat-card class="subcard">
-                <mat-card-content>
-                    <p class="kontakt">Kontakt 1</p>
-                    <p>Namn: Vårdnadshavare Exempelsson</p>
-                    <mat-divider></mat-divider>
-                    <p>Telefonnummer: 072-555-83-34</p>
-                    <mat-divider></mat-divider>
-                    <p>Mejl: Vårdnadshavare.Exempelsson@outlook.se</p>
-                    <mat-divider></mat-divider>
+<div class="subrow">
+    <mat-card class="cornerize">
+        <mat-card-header class="header-text">
+            Specialbehov {{childSignal().name}}
+        </mat-card-header>
+        <mat-form-field>
+            <textarea #journalContent matInput></textarea>
+        </mat-form-field>
+    </mat-card>
+    <mat-card>
+        <mat-card-header class="header-text">
+            Kontaktinformation
+        </mat-card-header>
+        <mat-card class="subcard">
+            <mat-card-content class="gap">
+                <p class="kontakt">Kontakt 1</p>
+                <p>Namn: Vårdnadshavare Exempelsson</p>
+                <mat-divider></mat-divider>
+                <p>Telefonnummer: 072-555-83-34</p>
+                <mat-divider></mat-divider>
+                <p>Mejl: Vårdnadshavare.Exempelsson@outlook.se</p>
+                <mat-divider></mat-divider>
 
-                    <p class="kontakt">Kontakt 2</p>
-                    <p>Namn: Vårdnadnadshavare Exempelsson</p>
-                    <mat-divider></mat-divider>
-                    <p>Telefonnummer: 072-365-555-34</p>
-                    <mat-divider></mat-divider>
-                    <p>Mejl: Vårdnadshavare.Exempelsson@outlook.se</p>
-                    <mat-divider></mat-divider>
-                </mat-card-content>
-            </mat-card>
+                <p class="kontakt">Kontakt 2</p>
+                <p>Namn: Vårdnadnadshavare Exempelsson</p>
+                <mat-divider></mat-divider>
+                <p>Telefonnummer: 072-365-555-34</p>
+                <mat-divider></mat-divider>
+                <p>Mejl: Vårdnadshavare.Exempelsson@outlook.se</p>
+                <mat-divider></mat-divider>
+            </mat-card-content>
         </mat-card>
-    </div>
+    </mat-card>
 </div>
+
 
 

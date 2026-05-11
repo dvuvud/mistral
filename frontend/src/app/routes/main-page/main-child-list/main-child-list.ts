@@ -37,7 +37,7 @@ export class ChildList {
   searchedChildren = computed(() => {
     this.stupidFix();
     const sq = this.searchQuery();
-    return this.children().filter(x => x.name.toLowerCase().includes(sq));
+    return this.children().filter(x => x.name.toLowerCase().includes(sq)).sort();
   });
 
   groupAttendance = computed(() => {
