@@ -1,6 +1,5 @@
 import { DeleteOperation, InsertOperation } from '../../../core/websocket/websocket.service';
 import { operationalTransformation } from './operational-transformation';
-import { textDiff } from './text-diff';
 // npm test -- --watch=false --include='**/main-live-journal/*.test.ts'
 // ^^Denna rad körs i terminalen från mistral/frontend^^
 
@@ -64,6 +63,19 @@ describe('Operational transformation', () => {
         expect(resOp.text).toBe('ABC');
       }
     });
+
+    it('should not shift', () => {
+      const inOp: InsertOperation = {type: 'INSERT', position: 5, text: 'ABC'};
+      const flightOp: InsertOperation = {type: 'INSERT', position: 6, text: 'ABC'};
+
+      const resOp = operationalTransformer.transformClient(inOp, flightOp);
+
+      expect(resOp.type).toBe('INSERT');
+      expect(resOp.position).toBe(5);
+      if (resOp.type == 'INSERT') {
+        expect(resOp.text.length).toBe(3);
+      }
+    });
   }); 
 
   describe('INSERT - DELETE', () => {
@@ -117,6 +129,19 @@ describe('Operational transformation', () => {
       expect(resOp.position).toBe(5 - flightOp.length);
       if (resOp.type == 'INSERT') {
         expect(resOp.text).toBe('ABC');
+      }
+    });
+
+    it('should not shift, delete after insert position', () => {
+      const inOp: InsertOperation = {type: 'INSERT', position: 5, text: 'A'};
+      const flightOp: DeleteOperation = {type: 'DELETE', position: 5, length: 1};
+
+      const resOp = operationalTransformer.transformClient(inOp, flightOp);
+
+      expect(resOp.type).toBe('INSERT');
+      expect(resOp.position).toBe(5);
+      if (resOp.type == 'INSERT') {
+        expect(resOp.text).toBe('A');
       }
     });
   });
@@ -174,6 +199,32 @@ describe('Operational transformation', () => {
         expect(resOp.length).toBe(3);
       }
     });
+
+    it('should not shift left', () => {
+      const inOp: DeleteOperation = {type: 'DELETE', position: 2, length: 3};
+      const flightOp: InsertOperation = {type: 'INSERT', position: 8, text: 'ABC'};
+
+      const resOp = operationalTransformer.transformClient(inOp, flightOp);
+
+      expect(resOp.type).toBe('DELETE');
+      expect(resOp.position).toBe(2);
+      if (resOp.type == 'DELETE') {
+        expect(resOp.length).toBe(3);
+      }
+    });
+
+    it('flightOp within inOp range', () => {
+      const inOp: DeleteOperation = {type: 'DELETE', position: 3, length: 3};
+      const flightOp: InsertOperation = {type: 'INSERT', position: 4, text: 'ABC'};
+
+      const resOp = operationalTransformer.transformClient(inOp, flightOp);
+
+      expect(resOp.type).toBe('DELETE');
+      expect(resOp.position).toBe(3);
+      if (resOp.type == 'DELETE') {
+        expect(resOp.length).toBe(3 + flightOp.text.length);
+      }
+    });
   });
 
   describe('DELETE - DELETE', () => {
@@ -227,6 +278,32 @@ describe('Operational transformation', () => {
       expect(resOp.position).toBe(5 - flightOp.length);
       if (resOp.type == 'DELETE') {
         expect(resOp.length).toBe(3);
+      }
+    });
+
+    it('flightOp within inOp range', () => {
+      const inOp: DeleteOperation = {type: 'DELETE', position: 3, length: 3};
+      const flightOp: DeleteOperation = {type: 'DELETE', position: 4, length: 3};
+
+      const resOp = operationalTransformer.transformClient(inOp, flightOp);
+
+      expect(resOp.type).toBe('DELETE');
+      expect(resOp.position).toBe(3);
+      if (resOp.type == 'DELETE') {
+        expect(resOp.length).toBe(1);
+      }
+    });
+
+    it('should not shift (no-op), delete after incoming delete range', () => {
+      const inOp: DeleteOperation = {type: 'DELETE', position: 3, length: 2};
+      const flightOp: DeleteOperation = {type: 'DELETE', position: 6, length: 1};
+
+      const resOp = operationalTransformer.transformClient(inOp, flightOp);
+
+      expect(resOp.type).toBe('DELETE');
+      expect(resOp.position).toBe(3);
+      if (resOp.type == 'DELETE') {
+        expect(resOp.length).toBe(2);
       }
     });
   });
