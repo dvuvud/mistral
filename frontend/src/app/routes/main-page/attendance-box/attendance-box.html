@@ -4,8 +4,15 @@
   } @else {
     <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <mat-select [value]="currentStatus" (selectionChange)="onStatusChange($event.value)">
-        @for (option of statusOptions; track option.value) {
-          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        @if (currentStatus === 'CHECKED_IN') {
+          @for (option of statusOptions; track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        }
+        @else {
+          @for (option of statusOptions.filter((x) => x.value != 'CHECKED_OUT'); track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
         }
       </mat-select>
     </mat-form-field>
