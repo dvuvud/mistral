@@ -31,7 +31,7 @@ mat-card {
   width: 100%;
   height: 100%;
   padding-right: 5%;
-  overflow-y: hidden;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   flex: 1.5;
@@ -119,5 +119,9 @@ main-presence-container {
 
 .home-card {
   display: flex;
+  flex: 1;
+}
+
+.account-page {
   flex: 1;
 }
