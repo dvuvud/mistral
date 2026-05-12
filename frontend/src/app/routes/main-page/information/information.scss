@@ -1,3 +1,6 @@
+:host {
+  display: flex;
+}
 .subrow {
     display: flex;
     flex-direction: row;
@@ -6,6 +9,17 @@
     height: 100%;
     gap: 1em;
 }
+
+.subrow > mat-card {
+  margin-bottom: 0.5em;
+  max-height: calc(100% - 3em);
+}
+
+.subrow > mat-card > mat-card {
+
+  overflow-y: scroll;
+}
+
 mat-card-header{
     display: flex;
     justify-content: center;

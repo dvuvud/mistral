@@ -1,7 +1,9 @@
 :host {
-  display: flex; 
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
   height: 100%;
+  max-width: fit-content;
 }
 
 .rowise {
@@ -14,4 +16,7 @@
 
 p {
     font: var(--mat-sys-body-large);
+    margin-bottom: 0;
+    margin-left: 1em;
+    //color: var(--matsys));
 }
