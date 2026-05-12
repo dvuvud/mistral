@@ -2,7 +2,7 @@ import { Component, inject, model, OnDestroy, OnInit, signal } from '@angular/co
 import { Subscription } from 'rxjs';
 import { User, UserService } from '../../../core/user/user.service';
 import { ChatMessage, ChatService } from '../../../core/chat/chat.service';
-import { WebsocketService, WsChatMessage } from '../../../core/websocket/websocket.service';
+import { WebsocketService, WsChatMessage, WsMailbox } from '../../../core/websocket/websocket.service';
 import { AsyncPipe } from '@angular/common';
 import { MatActionList } from "@angular/material/list";
 import { MatIconButton } from '@angular/material/button';
@@ -10,10 +10,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
   selector: 'main-chat-hub',
-  imports: [AsyncPipe, MatActionList, MatIconButton, MatInputModule, FormsModule, MatFormFieldModule, MatCardModule],
+  imports: [AsyncPipe, MatActionList, MatIconButton, MatInputModule, FormsModule, MatFormFieldModule, MatCardModule, MatIconModule],
   templateUrl: './main-chat-hub.html',
   styleUrl: './main-chat-hub.scss',
 })
@@ -42,6 +43,12 @@ export class MainChatHub implements OnInit, OnDestroy {
         this.users.set(users);
       })
     );
+    this.subs.add(
+      this.websocketService.getMessages(WsMailbox.chat).subscribe((message) => {
+        //TODO: Kanske liten validitetscheck?
+        this.handleMessage(message as WsChatMessage)
+      })
+    )
   }
   ngOnDestroy(): void {
     // Rensa alla subscriptions när komponenten förstörs
@@ -51,6 +58,8 @@ export class MainChatHub implements OnInit, OnDestroy {
   onSelectTeacher(teacher: User) {
     this.selectedTeacher.set(teacher);
     this.viewState.set("chat");
+    const newRoom = `${this.userId}:${this.selectedTeacher()?.id}`;
+    this.websocketService.setChatRoom(newRoom);
     console.log(teacher);
   }
 
@@ -63,13 +72,28 @@ export class MainChatHub implements OnInit, OnDestroy {
   }
 
   submitMessage() {
+    const selected = this.selectedTeacher();
+    if (selected == null || selected == undefined || this.newMessage() == "") {
+      return;
+    }
+
     const msg: WsChatMessage = {
       senderId: this.userId,
-      recipientId: this.selectedTeacher()?.id ?? this.selectedTeacher().,
-      chatMessage: string,
-      timestamp: string
+      recipientId: selected.id ?? selected.userId,
+      chatMessage: this.newMessage(),
+      timestamp: new Date().getTime().toString()
     }
-    this.websocketService.sendChatMessage()
+
+    this.websocketService.sendChatMessage(msg);
+    this.messages.update((current: ChatMessage[]): ChatMessage[] => {
+      current.push(msg);
+      return current;
+    })
+    this.newMessage.set("");
+  }
+
+  handleMessage(message: WsChatMessage) {
+    console.log(message);
   }
 
 }

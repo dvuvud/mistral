@@ -4,9 +4,9 @@
   flex-direction: column;
   background-color: var(--mat-sys-secondary);
   width: 30vw;
-  height: 30vh;
-  right: 0;
-  bottom: 0;
+  height: fit-content;
+  right: 30vw;
+  bottom: 20vh;
   z-index: 1000;
   border: 2px solid var(--mat-sys-on-secondary)
 }
@@ -35,4 +35,34 @@ input {
 
 button:hover{
   transform:scale(1.05);
+}
+
+#chatView {
+  display: flex;
+  width: 100%;
+  flex-direction: column
+}
+
+#chatView > * {
+}
+
+#chatViewHeader {
+  flex: 1;
+  flex-direction: row;
+  justify-content: center;
+}
+
+#chatViewDisplay {
+  flex: 5;
+  min-height: 30vh;
+}
+
+#chatViewFooter {
+  display: flex;
+  flex: 2;
+  flex-direction: row;
+}
+
+#chatViewFooter mat-form-field {
+
 }
