@@ -28,6 +28,6 @@
     },
     {
       "path": "./tsconfig.spec.json"
-    },
+    }
   ]
 }
