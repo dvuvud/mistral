@@ -50,7 +50,7 @@ public class AdminService {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
         user.setActive(false);
         User saved = userRepository.save(user);
-        return new UserResponse(saved.getId(), saved.getName(), saved.getRole(), saved.getEmail());
+        return new UserResponse(saved.getId(), saved.getName(), saved.getRole(), saved.getEmail(), saved.getColor());
     }
 
     public List<UserResponse> getAllInactiveUsers() {
