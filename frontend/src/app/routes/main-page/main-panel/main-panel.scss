@@ -60,6 +60,7 @@ mat-card-header {
   align-items: center;
   background: var(--mat-sys-inverse-primary);
   border-radius: 12px;
+  max-width: fit-content;
 }
 
 mat-tab-group {

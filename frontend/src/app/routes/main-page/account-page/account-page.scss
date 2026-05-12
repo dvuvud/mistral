@@ -1,9 +1,19 @@
+/*@keyframes rotation {
+  from {transform: scale3d(1, 1, 5) rotateY(0deg)}
+  to {transform: scale3d(1, 1, 5) rotateY(360deg)}
+  }*/
+
 :host {
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow: hidden;
   box-sizing: border-box;
+  /*animation: rotation 3s infinite linear;
+  perspective: 500px;
+  perspective-origin: 400% 600%;
+  transform: scale3d(1, 1, 1);*/
+
 }
 
 .icon-display {
