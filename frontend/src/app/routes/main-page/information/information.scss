@@ -1,0 +1,84 @@
+:host {
+  display: flex;
+}
+.subrow {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    justify-content: center;
+    height: 100%;
+    gap: 1em;
+}
+
+.subrow > mat-card {
+  margin-bottom: 0.5em;
+  max-height: calc(100% - 15.4vh);
+}
+
+.subrow > mat-card > mat-card {
+  overflow-y: scroll;
+}
+
+mat-card-header{
+    display: flex;
+    justify-content: center;
+    border: 2px;
+    font: var(--mat-sys-headline-small);
+}
+
+mat-form-field {
+  flex: 1;
+  margin: 1em;
+  box-shadow: var(--mat-sys-level2);
+}
+
+textarea {
+  min-height: 20vh;
+  resize: none;
+  overflow-y: auto;
+}
+
+mat-card {
+    box-shadow: var(--mat-sys-level2);
+    flex: 1;
+    gap: 0.5em;
+}
+
+.color {
+    background: var(--mat-sys-inverse-primary);
+}
+
+.subcard {
+    box-shadow: var(--mat-sys-level2);
+    background-color: var(--mat-sys-surface-variant);
+    flex: 1;
+    margin: 1em;
+    border-radius: 0%;
+}
+
+.info-subcard {
+    box-shadow: var(--mat-sys-level2);
+    background-color: var(--mat-sys-surface-variant);
+    flex: 1;
+    margin: 1em;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.flex-div {
+    flex: 1;
+}
+
+.kontakt {
+    font: var(--mat-sys-label-large);
+    justify-self: center;
+}
+
+.header-text {
+    font-weight: 400;
+}
+
+#left-card {
+    background: var(--mat-sys-inverse-primary);
+    border-top-left-radius: 0%;
+}
