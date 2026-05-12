@@ -45,7 +45,7 @@ export interface WsJournalResponse extends WsMessageContent {
   sequence: number
 }
 
-export interface WsChatMessage {
+export interface WsChatMessage extends WsMessageContent {
   senderId: number,
   recipientId: number,
   chatMessage: string,

@@ -12,10 +12,21 @@
     </mat-action-list>
   }
   @else if (viewState() == "chat") {
-  <button matIconButton="button" (click)="returnToOverview()">Back</button>
-  <mat-form-field>
-    <input matInput [(ngModel)]="newMessage" type="text">
-  </mat-form-field>
-  <button matInput type="button" (click)="submitMessage()">Send</button>
+  <mat-card id="chatView">
+    <mat-card-header id="chatViewHeader">
+      <mat-card-title><button matIconButton="button" (click)="returnToOverview()"><mat-icon>keyboard_return</mat-icon></button>{{selectedTeacher()?.name}}</mat-card-title>
+    </mat-card-header>
+    <mat-card id="chatViewDisplay">
+      @for (msg of messages(); track msg.chatMessage) {
+      <p>{{msg.chatMessage}}</p>
+      }
+    </mat-card>
+    <mat-card id="chatViewFooter">
+      <mat-form-field>
+        <input matInput [(ngModel)]="newMessage" type="text">
+      </mat-form-field>
+      <button matInput type="button" (click)="submitMessage()">Send</button>
+    </mat-card>
+  </mat-card>
   }
 </mat-card>
