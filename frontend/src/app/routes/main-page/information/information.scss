@@ -12,11 +12,10 @@
 
 .subrow > mat-card {
   margin-bottom: 0.5em;
-  max-height: calc(100% - 3em);
+  max-height: calc(100% - 15.4vh);
 }
 
 .subrow > mat-card > mat-card {
-
   overflow-y: scroll;
 }
 
