@@ -1,7 +1,6 @@
 package se.mistral.backend.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import se.mistral.backend.user.dto.BasicUserInformation;
 import se.mistral.backend.user.dto.UserResponse;
 
