@@ -87,7 +87,33 @@ export class WebsocketService {
     chat: ""
   };
 
+  private toChatMessage(payload: unknown): WsChatMessage | null {
+    if (typeof payload !== 'object' || payload === null) {
+      return null;
+    }
+    const obj = payload as Partial<WsChatMessage>;
+    if (
+      typeof obj.senderId !== 'number' ||
+      typeof obj.recipientId !== 'number' ||
+      typeof obj.chatMessage !== 'string' ||
+      typeof obj.timestamp !== 'string') {
+      return null;
+    }
+
+    return {
+      senderId: obj['senderId'],
+      recipientId: obj['recipientId'],
+      chatMessage: obj['chatMessage'],
+      timestamp: obj['timestamp']
+  };
+  }
+
   deliverMessage(msg: WsMessageContent) {
+    const directChat = this.toChatMessage(msg);
+    if (directChat) {
+      this.mailboxes[WsMailbox.chat].next(directChat);
+      return;
+    }
     switch (msg.type) {
       case "ATTENDANCE":
         this.mailboxes[WsMailbox.attendance].next(msg);
@@ -100,8 +126,12 @@ export class WebsocketService {
       case 'PRESENCE_STATE':
         this.mailboxes[WsMailbox.presence].next(msg);
         break;
+
       case "CHAT_MESSAGE":
-        this.mailboxes[WsMailbox.chat].next(msg);
+        const wrappedChat = this.toChatMessage(msg["message"]);
+        if (wrappedChat) {
+          this.mailboxes[WsMailbox.chat].next(wrappedChat);
+        }
         break;
     }
   }
@@ -177,6 +207,11 @@ export class WebsocketService {
     this.setRoom("journal", newRoom);
   }
 
+   setChatRoom(newRoom: string): void {
+    this.setRoom("chat", newRoom);
+  }
+
+
   private leaveRoom(socketRoom: string): void {
     if (this.connectedSocket == null) {
       console.error("[Websocket] - Tried to leave room on unconnected socket.");
@@ -229,13 +264,12 @@ export class WebsocketService {
     this.sendMessage("DOC_OPERATION", message);
   }
 
-  setChatRoom(newRoom: string): void {
-    this.setRoom("chat", newRoom);
-  }
-
   sendChatMessage(message: WsChatMessage): void {
-    const payload = JSON.stringify({ type: "CHAT_MESSAGE", room: this.rooms["chat"], message });
-    if (DEBUG) console.log("[Websocket] - Sending off: ", payload);
+    const payload = JSON.stringify({type: "CHAT_MESSAGE", room: this.rooms["chat"], message: message});
+
+    if (DEBUG){
+      console.log("[Websocket] - Sending off: ", payload);
+    }
     this.connectedSocket?.send(payload);
   }
 
