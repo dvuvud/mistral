@@ -1,6 +1,5 @@
 package se.mistral.backend.admin;
 
-
 import se.mistral.backend.child.ChildService;
 import se.mistral.backend.child.dto.ChildResponse;
 import se.mistral.backend.child.dto.ChildWithGroupResponse;
@@ -47,6 +46,17 @@ public class AdminService {
      *
      * @return the list of all children in a group
      */
+    public UserResponse setUserInactive(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+        user.setActive(false);
+        User saved = userRepository.save(user);
+        return new UserResponse(saved.getId(), saved.getName(), saved.getRole(), saved.getEmail(), saved.getColor());
+    }
+
+    public List<UserResponse> getAllInactiveUsers() {
+        return userRepository.findUserByActiveFalse();
+    }
+
     public List<ChildWithGroupResponse> getAllChildrenWithGroup() {
         return childService.getAllChildrenWithGroup();
     }

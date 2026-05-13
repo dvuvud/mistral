@@ -42,7 +42,7 @@ public class UserService {
     /**
      * Update a users color
      *
-     * @param userid the user's id
+     * @param userId the user's id
      * @param color  the new color
      */
     public void updateColor(Long userId, String color) {

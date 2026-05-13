@@ -9,6 +9,11 @@ export interface Child {
   name: string;
   date: string | null;
   status: AttendanceStatus | null;
+  present: boolean | null;
+  group?: {
+    id: number;
+    name: string;
+  } | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -16,6 +21,8 @@ export class ChildService {
 
   private url = `${environment.apiUrl}/api/children/attendance`;
   private urlPerGroup = `${environment.apiUrl}/api/children/attendance/group`;
+
+
 
   private http = inject(HttpClient);
 
@@ -30,4 +37,5 @@ export class ChildService {
     }
     return this.http.get<Child[]>(this.urlPerGroup, { params });
   }
+
 }

@@ -1,5 +1,7 @@
+@use '@angular/material' as mat;
+
 :host {
-  display: flex;
+  display: block;
   justify-content: center;
   align-items: center;
   width: 100vw;
@@ -7,8 +9,61 @@
   overflow-y: scroll;
 }
 
-.container {
-  width: 85%;
-  height: 80%;
-  background-color: --var(mat-sys-surface-container)
+
+.admin-top {
+  display: flex;
+  flex-direction: column;
+  width: 100;
+  height: 100;
+
+}
+
+
+.admin-container {
+  flex: 1;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: auto;
+  margin: 0 auto; //centrerat i mitten
+
+}
+
+h1 {
+  margin: 0 0 16px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+mat-toolbar {
+  background-color: var(--mat-sys-primary);
+  /* Magenta */
+  color: var(--mat-sys-on-primary);
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  max-width: 100%;
+}
+
+mat-card-title {
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+mat-card {
+  background-color: #fafafa;
+}
+
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #d32f2f;
+  border-bottom: 2px solid #d32f2f;
 }

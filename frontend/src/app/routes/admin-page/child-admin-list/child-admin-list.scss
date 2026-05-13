@@ -1,0 +1,31 @@
+.child-admin-list-container {
+    display: block;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #f5f5f5;
+    border-radius: 12px;
+
+}
+
+mat-list-item {
+    height: auto !important;
+}
+
+.example-spacer {
+    flex: 1 1 auto;
+}
+
+.move-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.move-symbol {
+    width: 200px;
+}
+
+.antal-barn {
+    font-weight: 500;
+    font-size: 20px;
+}

@@ -1,0 +1,20 @@
+<div class="inactive-users-container">
+    <mat-list>
+        @for (user of inactiveUsers(); track user.id; let last = $last) { <!--håller koll på id-->
+        <mat-list-item>
+            <span matListItemTitle>
+                {{user.name}} - {{user.email}} <!--safe -> ? ??-->
+            </span>
+            <button matListItemMeta mat-raised-button color="mat-sys-primary" (click)="activateUser(user.id)">
+                <mat-icon>check</mat-icon>
+                Aktivera
+            </button>
+        </mat-list-item>
+        @if (!last) {
+        <mat-divider></mat-divider>
+        }
+        }
+
+    </mat-list>
+
+</div>

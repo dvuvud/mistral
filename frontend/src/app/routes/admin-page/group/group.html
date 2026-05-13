@@ -1,0 +1,24 @@
+<div class="group-container">
+    <mat-list>
+        @for (group of groups(); track group.id; let last = $last) {
+        <mat-list-item>
+            <span matListItemTitle> {{group.name}} ({{childCount(group.id)}} barn)</span>
+        </mat-list-item>
+        @if (!last) {
+        <mat-divider></mat-divider>
+        }
+        }
+
+    </mat-list>
+</div>
+
+
+<form [formGroup]="form" (ngSubmit)="onCreateGroup()">
+    <mat-form-field>
+        <mat-label>Ny grupp</mat-label>
+        <input matInput formControlName="groupName">
+    </mat-form-field>
+
+    <button mat-raised-button color="mat-sys-primary" type="submit" [disabled]="form.invalid">
+        Skapa ny grupp
+    </button>

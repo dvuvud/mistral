@@ -1,0 +1,29 @@
+<span class="antal-barn">Antal barn: {{children().length}}</span>
+<div class="child-admin-list-container">
+    <mat-list>
+        @for (child of children(); track child.id; let last = $last) { <!--håller koll på id-->
+        <mat-list-item>
+            <span matListItemTitle>
+                {{child.name}} - {{child.group?.name ?? 'Ingen grupp'}} <!--safe -> ? ??-->
+            </span>
+            <div matListItemMeta class="move-container">
+                <mat-select #groupSelect="matSelect" class="move-symbol"
+                    (selectionChange)="onMove(child, $event.value, groupSelect)">
+                    @for (group of groups(); track group.id) {
+                    <mat-option [value]="group.id">{{group.name}}</mat-option>
+                    }
+
+                </mat-select>
+                <button matListItemMeta mat-icon-button color="warn" (click)="onDelete(child)">
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </div>
+        </mat-list-item>
+        @if (!last) {
+        <mat-divider></mat-divider>
+        }
+        }
+
+    </mat-list>
+
+</div>
