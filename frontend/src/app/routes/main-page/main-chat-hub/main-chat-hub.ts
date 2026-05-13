@@ -55,30 +55,9 @@ export class MainChatHub implements OnInit, OnDestroy {
     );
     this.subs.add(
       this.websocketService.getMessages(WsMailbox.chat).subscribe((message) => {
-        if (!this.isWsChatMessage(message)) {
-          return;
-        }
-        this.handleMessage(message);
+        this.handleMessage(message as WsChatMessage);
       })
     )
-  }
-
-  /**
-   * This type guard checks if the incoming message is a valid WsChatMessage by verifying its structure and types.
-   * This is important for safely handling incoming messages and preventing runtime errors when processing chat messages.
-   * 
-   * @param message The message to check.
-   * @returns True if the message is a valid WsChatMessage, false otherwise.
-   */
-  private isWsChatMessage(message: unknown): message is WsChatMessage {
-    if (message == null || typeof message !== 'object'){ 
-      return false;
-    }
-    const m = message as Partial<WsChatMessage>;
-    return typeof m.senderId === 'number'
-      && typeof m.recipientId === 'number'
-      && typeof m.chatMessage === 'string'
-      && typeof m.timestamp === 'string';
   }
 
   /**
@@ -96,8 +75,11 @@ export class MainChatHub implements OnInit, OnDestroy {
   onSelectTeacher(teacher: User) {
     this.selectedTeacher.set(teacher);
     this.viewState.set("chat");
-    const newRoom = `${this.userId}:${this.selectedTeacher()?.id}`;
-    this.websocketService.setChatRoom(newRoom);
+    const recipientId = teacher.id ?? teacher.userId;
+
+    this.websocketService.setChatRoom(
+      this.chatService.createChatRoomId(this.userId, recipientId)
+    );
     console.log(teacher);
   }
 
@@ -128,13 +110,11 @@ export class MainChatHub implements OnInit, OnDestroy {
       senderId: this.userId,
       recipientId: selected.id ?? selected.userId,
       chatMessage: this.newMessage(),
-      timestamp: new Date().getTime().toString()
+      timestamp: this.chatService.createLocalDateTime()
     }
 
     this.websocketService.sendChatMessage(msg);
-    this.messages.update((current: ChatMessage[]): ChatMessage[] => {
-      return [...current, msg];
-    });
+    this.messages.update(current => [...current, msg]);
     this.newMessage.set("");
   }
 
@@ -142,7 +122,8 @@ export class MainChatHub implements OnInit, OnDestroy {
    * Handle an incoming chat message.
    * @param message The incoming chat message.
    */
-  handleMessage(message: WsChatMessage) {
+  handleMessage(message: WsChatMessage): void {
+    this.messages.update(current => [...current, message]);
     console.log(message);
   }
 
