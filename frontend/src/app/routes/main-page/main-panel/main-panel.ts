@@ -10,13 +10,13 @@ import { groupResponse, groupService } from '../../../core/groups/group.service'
 import { AccountPage } from '../account-page/account-page';
 import { MainPresenceContainer } from "../main-presence-container/main-presence-container";
 import { Presence } from '../../../core/presence/presence.service';
+import { History } from '../history/history';
 import { MatTab, MatTabGroup, MatTabsModule } from "@angular/material/tabs";
 import { MatFormField } from "@angular/material/form-field";
 import { Information } from '../information/information';
 import { Homepage } from "../homepage/homepage";
 import { MatIconModule } from "@angular/material/icon";
 import {MatTooltipModule} from '@angular/material/tooltip';
-import { History } from '../history/history';
 
 @Component({
   selector: 'main-panel',
@@ -24,6 +24,7 @@ import { History } from '../history/history';
   templateUrl: './main-panel.html',
   styleUrl: './main-panel.scss',
 })
+
 export class MainPanel implements OnInit{
   presence = inject(Presence);
   childSignal = signal<Child>({ name: '', id: 0, date: "", status: "NOT_SET", present: null });

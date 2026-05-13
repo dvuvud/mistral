@@ -17,22 +17,6 @@
             </child-display>
           </div>
         </div>
-<<<<<<< HEAD
-        <nav mat-tab-nav-bar mat-stretch-tabs="false" mat-align-tabs="start">
-          @for (link of links(); track link) {
-            <a mat-tab-link
-              (click)="activeLink.set(link)"
-              [active]="activeLink() == link"> {{link}} </a>
-          }
-        </nav>
-        <div id="child-tab-content">
-          <information style="display:{{activeLink() == links()[0] ? 'flex' : 'none'}}" [childSignal]="childSignal()"></information>
-          <main-live-journal style="display:{{activeLink() == links()[0] ? 'none' : 'flex'}}" [childSignal]="childSignal()"
-                        [groupSignal]="groupSignal()"
-                        [contentSignal]="contentSignal()" >
-          </main-live-journal>
-        </div>
-=======
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
           <mat-tab label="Information">
             <information [childSignal]="childSignal()"></information>
@@ -48,7 +32,20 @@
               </history>
           </mat-tab>
         </mat-tab-group>
->>>>>>> 8545649 (basic logic för att fetcha ett barns journaler och en tab för history)
+        <nav mat-tab-nav-bar mat-stretch-tabs="false" mat-align-tabs="start">
+          @for (link of links(); track link) {
+            <a mat-tab-link
+              (click)="activeLink.set(link)"
+              [active]="activeLink() == link"> {{link}} </a>
+          }
+        </nav>
+        <div id="child-tab-content">
+          <information style="display:{{activeLink() == links()[0] ? 'flex' : 'none'}}" [childSignal]="childSignal()"></information>
+          <main-live-journal style="display:{{activeLink() == links()[0] ? 'none' : 'flex'}}" [childSignal]="childSignal()"
+                        [groupSignal]="groupSignal()"
+                        [contentSignal]="contentSignal()" >
+          </main-live-journal>
+        </div>
       }
 
       @if (contentSignal() === 'groupView') {
