@@ -12,12 +12,18 @@ import { FormsModule } from '@angular/forms';
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 
+/**
+ * MainChatHub component serves as the central hub for chat interactions in the application.
+ * It allows users to select a teacher to chat with, view chat history, and send new messages.
+ * The component manages WebSocket connections to receive real-time chat updates and handles user interactions for chatting.
+ */
 @Component({
   selector: 'main-chat-hub',
   imports: [AsyncPipe, MatActionList, MatIconButton, MatInputModule, FormsModule, MatFormFieldModule, MatCardModule, MatIconModule],
   templateUrl: './main-chat-hub.html',
   styleUrl: './main-chat-hub.scss',
 })
+
 export class MainChatHub implements OnInit, OnDestroy {
   userId = Number(sessionStorage.getItem('UserId'));
   users= signal<User[]>([]);
@@ -35,9 +41,13 @@ export class MainChatHub implements OnInit, OnDestroy {
   teacherList = this.userService.getUsers().pipe();
   viewState = signal<string>("overview");
 
+  /**
+   * On component initialization, to ensure the WebSocket connection is established
+   * and subscribe to incoming chat messages from the WebSocket service. 
+   */
   async ngOnInit(): Promise<void> {
     await this.websocketService.ensureConnected();
-    // load all teachers for connect list
+    // Load the list of users (teachers) for the chat
     this.subs.add(
       this.userService.getUsers().subscribe(users => {
         this.users.set(users);
@@ -52,6 +62,7 @@ export class MainChatHub implements OnInit, OnDestroy {
       })
     )
   }
+
   /**
    * This type guard checks if the incoming message is a valid WsChatMessage by verifying its structure and types.
    * This is important for safely handling incoming messages and preventing runtime errors when processing chat messages.
@@ -70,11 +81,18 @@ export class MainChatHub implements OnInit, OnDestroy {
       && typeof m.timestamp === 'string';
   }
 
+  /**
+   *  Unsubscribe from all subscriptions when the component is destroyed
+   * This prevents memory leaks and stops updates after the component is gone
+   */
   ngOnDestroy(): void {
-    // Rensa alla subscriptions när komponenten förstörs
     this.subs.unsubscribe();
   }
 
+  /**
+   * Select a teacher for the chat and set the chat room.
+   * @param teacher The teacher to select.
+   */
   onSelectTeacher(teacher: User) {
     this.selectedTeacher.set(teacher);
     this.viewState.set("chat");
@@ -83,14 +101,23 @@ export class MainChatHub implements OnInit, OnDestroy {
     console.log(teacher);
   }
 
+  /**
+   * Select all users for the chat.
+   */
   onSelectAll() {
     this.viewState.set("chat");
   }
 
+  /**
+   * Return to the overview state, which likely shows the list of teachers or chat options.
+   */
   returnToOverview() {
     this.viewState.set("overview");
   }
 
+  /**
+   * Submit a new chat message.
+   */
   submitMessage() {
     const selected = this.selectedTeacher();
     if (selected == null || selected == undefined || this.newMessage() == "") {
@@ -111,6 +138,10 @@ export class MainChatHub implements OnInit, OnDestroy {
     this.newMessage.set("");
   }
 
+  /**
+   * Handle an incoming chat message.
+   * @param message The incoming chat message.
+   */
   handleMessage(message: WsChatMessage) {
     console.log(message);
   }
