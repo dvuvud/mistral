@@ -41,7 +41,14 @@ export class ChatService {
       .set('recipientId', recipientId);
     return this.http.get<ChatMessage[]>(this.historyUrl, { params });
   }
-
+  
+  /**
+   * Creates a unique chat room identifier for two users based on their user IDs.
+   * 
+   * @param userIdA The ID of the first user.
+   * @param userIdB The ID of the second user.
+   * @returns A string representing the unique chat room identifier for the two users.
+   */
   createChatRoomId(userIdA: number, userIdB: number): string {
     const low = Math.min(userIdA, userIdB);
     const high = Math.max(userIdA, userIdB);
