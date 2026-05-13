@@ -1,6 +1,8 @@
 :host {
   display: flex;
+  width: 100%;
 }
+
 .subrow {
     display: flex;
     flex-direction: row;
@@ -12,11 +14,7 @@
 
 .subrow > mat-card {
   margin-bottom: 0.5em;
-  max-height: calc(100% - 15.4vh);
-}
-
-.subrow > mat-card > mat-card {
-  overflow-y: scroll;
+  flex: 1;
 }
 
 mat-card-header{
@@ -54,19 +52,15 @@ mat-card {
     flex: 1;
     margin: 1em;
     border-radius: 0%;
+    overflow-y: scroll;
 }
 
-.info-subcard {
-    box-shadow: var(--mat-sys-level2);
-    background-color: var(--mat-sys-surface-variant);
-    flex: 1;
-    margin: 1em;
-    flex-direction: row;
-    justify-content: center;
+.gap {
+  position: absolute;
 }
 
-.flex-div {
-    flex: 1;
+.gap > * {
+  display:flex;
 }
 
 .kontakt {

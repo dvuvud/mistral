@@ -31,7 +31,6 @@ mat-card {
   width: 100%;
   height: 100%;
   padding-right: 2%;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   flex: 1.5;
@@ -40,12 +39,68 @@ mat-card {
 .main-card-right {
   width: 100%;
   height: 100%;
-  overflow-y: hidden;
   min-width: fit-content;
   overflow-x: auto;
   display: flex;
   flex: 1;
   min-width: 30%;
+  transition: 0.5s;
+  overflow-x:visible;
+}
+
+.main-card-right-hide-button {
+  position: absolute;
+  z-index: 1001;
+  width: 3rem;
+  height: 3rem;
+  left: -4rem;
+  top: 3rem;
+  background-color: var(--mat-sys-primary-fixed-dim);
+  color: var(--mat-sys-on-primary);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: none;
+  cursor: pointer;
+  box-shadow: var(--mat-sys-level3);
+  border: 0px solid var(--mat-sys-primary-fixed);
+  box-sizing: border-box;
+  transition: 0.1s;
+}
+
+.main-card-right-hide-button:hover {
+  border: 2px solid var(--mat-sys-primary-fixed);
+}
+
+.main-card-right-hide-button > mat-icon {
+  font-size: 2rem;
+  width: fit-content;
+  height: fit-content;
+}
+
+@media(max-width: 1250px) {
+  .main-card-right {
+    height: 90%;
+    top: 5%;
+    position:fixed;
+    right: -30rem;
+    width: 30rem;
+    box-sizing: border-box;
+    z-index: 1000;
+    box-shadow: var(--mat-sys-level3);
+    border-radius: 1em;
+  }
+  .right-card-visible {
+    right: 0;
+  }
+  .main-card-right-hide-button {
+    display: flex;
+  }
+
+  .main-card-left {
+    padding-right: 0;
+  }
 }
 
 mat-card-header {
@@ -117,6 +172,13 @@ main-presence-container {
   align-items: center;
 }
 
+@media(max-width: 1250px) {
+  .sub-row {
+    flex-direction: column;
+    align-items: start;
+  }
+}
+
 .home-card {
   display: flex;
   flex: 1;
@@ -124,4 +186,10 @@ main-presence-container {
 
 .account-page {
   flex: 1;
+}
+
+#child-tab-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
 }

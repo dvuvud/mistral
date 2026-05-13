@@ -1,4 +1,4 @@
-import { Component, computed, EventEmitter, inject, model, OnInit, Output, signal, viewChild } from '@angular/core';
+import { Component, computed, effect, EventEmitter, inject, model, OnInit, Output, signal, viewChild } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { ChildDisplay } from "../child-display/child-display";
 import { Child } from '../../../core/child/child.service';
@@ -10,17 +10,20 @@ import { groupResponse, groupService } from '../../../core/groups/group.service'
 import { AccountPage } from '../account-page/account-page';
 import { MainPresenceContainer } from "../main-presence-container/main-presence-container";
 import { Presence } from '../../../core/presence/presence.service';
-import { MatTab, MatTabGroup } from "@angular/material/tabs";
+import { MatTab, MatTabGroup, MatTabsModule } from "@angular/material/tabs";
 import { MatFormField } from "@angular/material/form-field";
 import { Information } from '../information/information';
 import { Homepage } from "../homepage/homepage";
+import { MatIconModule } from "@angular/material/icon";
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @Component({
   selector: 'main-panel',
-  imports: [ChildList, MatDividerModule, ChildDisplay, MatCard, MatCardHeader, MatCardContent, MainLiveJournal, AccountPage, MainPresenceContainer, MatTab, MatFormField, MatTabGroup, Information, Homepage],
+  imports: [ChildList, MatDividerModule, ChildDisplay, MatCard, MatCardHeader, MatCardContent, MainLiveJournal, AccountPage, MainPresenceContainer, MatTab, MatFormField, MatTabGroup, Information, Homepage, MatTabsModule, MatIconModule, MatTooltipModule],
   templateUrl: './main-panel.html',
   styleUrl: './main-panel.scss',
 })
+
 export class MainPanel implements OnInit{
   presence = inject(Presence);
   childSignal = signal<Child>({ name: '', id: 0, date: "", status: "NOT_SET" });
@@ -31,6 +34,14 @@ export class MainPanel implements OnInit{
   childList = viewChild.required(ChildList);
   teachers = [{}]
   dateSignal = signal<string>('');
+  activeLink = signal<string>('Information');
+  links = signal<string[]>([
+    "Information",
+    this.childSignal().name + (this.childSignal().name.endsWith("s") ? "" : "s") + "dagsrapport"
+  ]);
+  detachedListVisible = signal<boolean>(false);
+
+  viewportWidth = signal<number>(window.innerWidth);
 
   months = ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti",
     "September", "Oktober", "November", "December"];
@@ -39,6 +50,21 @@ export class MainPanel implements OnInit{
   ngOnInit() {
     this.dateSignal.set(this.getDate())
     this.loadGroups();
+  }
+
+  constructor() {
+    effect(() => {
+      this.links.set([
+        "Information",
+        this.childSignal().name + (this.childSignal().name.endsWith("s") ? "" : "s") + " dagsrapport"
+      ]);
+    });
+    effect(() => {
+      this.contentSignal();
+      this.childSignal();
+      this.groupSignal();
+      this.activeLink.set("Information");
+    });
   }
 
   reportTitle = computed(() => {

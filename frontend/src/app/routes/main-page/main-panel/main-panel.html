@@ -11,23 +11,26 @@
               <main-presence-container filter={{childSignal().id}}></main-presence-container>
           </mat-card-header>
           <div class="childDisplay">
-            <child-display (attendanceChangeEvent)="wsUpdateAttendance($event)" 
+            <child-display (attendanceChangeEvent)="wsUpdateAttendance($event)"
                            [(childSignal)]="childSignal"
                            [(dateSignal)]="dateSignal">
             </child-display>
           </div>
         </div>
-        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-          <mat-tab label="Information">
-            <information [childSignal]="childSignal()"></information>
-          </mat-tab>
-          <mat-tab label={{reportTitle()}}>
-            <main-live-journal [childSignal]="childSignal()"
-                          [groupSignal]="groupSignal()"
-                          [contentSignal]="contentSignal()" >
-            </main-live-journal>
-          </mat-tab>
-        </mat-tab-group>
+        <nav mat-tab-nav-bar mat-stretch-tabs="false" mat-align-tabs="start">
+          @for (link of links(); track link) {
+            <a mat-tab-link
+              (click)="activeLink.set(link)"
+              [active]="activeLink() == link"> {{link}} </a>
+          }
+        </nav>
+        <div id="child-tab-content">
+          <information style="display:{{activeLink() == links()[0] ? 'flex' : 'none'}}" [childSignal]="childSignal()"></information>
+          <main-live-journal style="display:{{activeLink() == links()[0] ? 'none' : 'flex'}}" [childSignal]="childSignal()"
+                        [groupSignal]="groupSignal()"
+                        [contentSignal]="contentSignal()" >
+          </main-live-journal>
+        </div>
       }
 
       @if (contentSignal() === 'groupView') {
@@ -56,15 +59,22 @@
 
     </div>
 
-    <mat-card class="main-card-right">
-      <div class="main-card-right">
+    <mat-card [class.right-card-visible]="detachedListVisible()" class="main-card-right">
+      <div #tooltip="matTooltip" [matTooltip]="detachedListVisible() ? 'Göm närvarolista' : 'Visa närvarolista'" class="main-card-right-hide-button" (click)="detachedListVisible.set(!detachedListVisible())">
+        @if(detachedListVisible()) {
+          <mat-icon>arrow_forward_ios</mat-icon>
+        }
+        @else {
+          <mat-icon>format_list_bulleted</mat-icon>
+        }
+
+      </div>
         <main-child-list
           [(groupSignal)]="groupSignal"
           [(childSignal)]="childSignal"
           [(contentSignal)]="contentSignal"
           [(allGroups)]="allGroups">
-      </main-child-list>
-    </div>
+        </main-child-list>
     </mat-card>
   </mat-card-content>
 </mat-card>
