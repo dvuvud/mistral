@@ -25,7 +25,7 @@ export class MainChatHub implements OnInit, OnDestroy {
   messages = signal<ChatMessage[]>([]);
   newMessage = model<string>('');
 
-  // Samlar alla subscriptions för enkel cleanup i ngOnDestroy
+
   private subs = new Subscription();
 
   private chatService = inject(ChatService);
@@ -45,11 +45,31 @@ export class MainChatHub implements OnInit, OnDestroy {
     );
     this.subs.add(
       this.websocketService.getMessages(WsMailbox.chat).subscribe((message) => {
-        //TODO: Kanske liten validitetscheck?
-        this.handleMessage(message as WsChatMessage)
+        if (!this.isWsChatMessage(message)) {
+          return;
+        }
+        this.handleMessage(message);
       })
     )
   }
+  /**
+   * This type guard checks if the incoming message is a valid WsChatMessage by verifying its structure and types.
+   * This is important for safely handling incoming messages and preventing runtime errors when processing chat messages.
+   * 
+   * @param message The message to check.
+   * @returns True if the message is a valid WsChatMessage, false otherwise.
+   */
+  private isWsChatMessage(message: unknown): message is WsChatMessage {
+    if (message == null || typeof message !== 'object'){ 
+      return false;
+    }
+    const m = message as Partial<WsChatMessage>;
+    return typeof m.senderId === 'number'
+      && typeof m.recipientId === 'number'
+      && typeof m.chatMessage === 'string'
+      && typeof m.timestamp === 'string';
+  }
+
   ngOnDestroy(): void {
     // Rensa alla subscriptions när komponenten förstörs
     this.subs.unsubscribe();
@@ -86,9 +106,8 @@ export class MainChatHub implements OnInit, OnDestroy {
 
     this.websocketService.sendChatMessage(msg);
     this.messages.update((current: ChatMessage[]): ChatMessage[] => {
-      current.push(msg);
-      return current;
-    })
+      return [...current, msg];
+    });
     this.newMessage.set("");
   }
 
