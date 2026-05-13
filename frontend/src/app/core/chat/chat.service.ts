@@ -42,4 +42,9 @@ export class ChatService {
     return this.http.get<ChatMessage[]>(this.historyUrl, { params });
   }
 
+  createChatRoomId(userIdA: number, userIdB: number): string {
+    const low = Math.min(userIdA, userIdB);
+    const high = Math.max(userIdA, userIdB);
+    return `chat:${low}:${high}`;   
+  }
 }
