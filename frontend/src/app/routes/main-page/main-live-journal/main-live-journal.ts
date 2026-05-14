@@ -1,4 +1,4 @@
-import { Component, OnDestroy, signal, inject, viewChild, ElementRef, model, OnInit, OnChanges } from '@angular/core';
+import { Component, OnDestroy, signal, inject, viewChild, ElementRef, model, OnInit, OnChanges, effect } from '@angular/core';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
@@ -9,10 +9,11 @@ import { operationalTransformation } from './operational-transformation';
 import { JournalService } from '../../../core/journal/journal.service';
 import { localDateToday } from '../../../core/utils/date-utils';
 import { groupResponse } from '../../../core/groups/group.service';
+import { MainCaretTracker } from "./main-caret-tracker/main-caret-tracker";
 
 @Component({
   selector: 'main-live-journal',
-  imports: [MatFormField, MatInput, FormsModule],
+  imports: [MatFormField, MatInput, FormsModule, MainCaretTracker],
   templateUrl: './main-live-journal.html',
   styleUrl: './main-live-journal.scss',
 })
@@ -22,11 +23,16 @@ export class MainLiveJournal implements OnDestroy, OnInit, OnChanges {
   private operationalTransformer = new operationalTransformation();
   private journalService = inject(JournalService);
   private textArea = viewChild.required<ElementRef<HTMLTextAreaElement>>("journalContent");
+  private hidden = viewChild.required<ElementRef<HTMLDivElement>>("hidden");
+  hiddenPreSpan = signal<string>("");
+  hiddenSpan = viewChild.required<ElementRef<HTMLSpanElement>>("hiddenSpan");
+  hiddenPostSpan = signal<string>("");
+  private canvasElement = viewChild.required<ElementRef<HTMLCanvasElement>>("canvas");
+  mirrorContent = signal<string>("");
 
   childSignal = model.required<Child>();
   contentSignal = model.required<string>();
   groupSignal = model.required<groupResponse>();
-
 
   async ngOnInit() {
     await this.journalSocket.ensureConnected();
@@ -164,5 +170,35 @@ export class MainLiveJournal implements OnDestroy, OnInit, OnChanges {
     this.inFlight.push(operation);
 
     this.journalSocket.sendJournalUpdate(message);
+  }
+
+  findRelativeOrigin() {
+    const element: HTMLDivElement = this.hidden().nativeElement;
+    return {
+      x: element.getBoundingClientRect().x,
+      y: element.getBoundingClientRect().y + parseInt(window.getComputedStyle(element)['paddingTop'].replace("px", "")),
+    }
+  }
+
+  constructor() {
+    effect(() => {
+      const wholeText = this.text();
+      const firstPart = wholeText.substring(0, this.textArea().nativeElement.selectionStart)
+      const secondPart = wholeText.substring(this.textArea().nativeElement.selectionStart);
+      this.hiddenPreSpan.set(firstPart);
+      this.hiddenPostSpan.set(secondPart);
+      //this.hidden().nativeElement.innerHTML = firstPart;
+      //this.hiddenSpan().nativeElement.innerHTML = secondPart;
+      const canvasElement = this.canvasElement().nativeElement;
+      canvasElement.width = canvasElement.getBoundingClientRect().width;
+      canvasElement.height = canvasElement.getBoundingClientRect().height;
+      const em = parseFloat(getComputedStyle(this.textArea().nativeElement).fontSize);
+      const canvasContext = canvasElement.getContext("2d");
+      const spanElement = this.hiddenSpan().nativeElement;
+      canvasContext!.reset();
+      canvasContext!.fillStyle = "blue";
+      canvasContext!.fillRect(spanElement.offsetLeft, spanElement.offsetTop, 3, em)
+
+    })
   }
 }

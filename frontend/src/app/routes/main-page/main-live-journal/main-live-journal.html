@@ -1,3 +1,10 @@
 <mat-form-field>
+  <div #hidden id="hidden">
+      {{hiddenPreSpan()}}
+    <span #hiddenSpan class="caret-span" style="background-color: red;">
+      {{hiddenPostSpan()}}
+    </span>
+  </div>
+  <canvas #canvas id="canvas"></canvas>
   <textarea #journalContent matInput [ngModel]="text()" (input)="onInput($event)"></textarea>
 </mat-form-field>
