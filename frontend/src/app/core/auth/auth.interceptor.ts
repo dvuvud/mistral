@@ -3,18 +3,18 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/c
 import { Observable } from 'rxjs';
 
 /**
- * HTTP-interceptor som lägger till Authorization-header med JWT-token
- * på utgående requests när en token finns i localStorage.
+ * AuthInterceptor intercepts outgoing HTTP requests.
+ * Adds an Authorization header if a token is present in sessionStorage.
  */
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
 /**
-  * Interceptar en HTTP-request och lägger till auth-header om token finns.
+  * Intercepts an HTTP request and adds an Authorization header if a token is present.
   *
-  * @param req Den utgående HTTP-requesten.
-  * @param next Nästa handler i interceptor-kedjan.
-  * @returns En Observable med HTTP-händelser från den skickade requesten.
+  * @param req The outgoing HTTP request.
+  * @param next The next handler in the interceptor chain.
+  * @returns An Observable with HTTP events from the sent request.
   */
   intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const token = sessionStorage.getItem('token');
