@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 :host {
     display: flex;
     min-height: 0;
@@ -86,4 +87,8 @@
 .journal-text {
     font: var(--mat-sys-body-large);
     margin: 0.5em;
+=======
+.outer-container {
+    display: flex;
+>>>>>>> e2d4b87 (basic logic för att fetcha ett barns journaler och en tab för history)
 }

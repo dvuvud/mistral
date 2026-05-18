@@ -14,7 +14,7 @@ import { MatDivider } from "@angular/material/divider";
   templateUrl: './history.html',
   styleUrl: './history.scss',
 })
-export class History {  
+export class History {
 
   childSignal = model.required<Child>();
   journalService = inject(JournalService);
@@ -39,7 +39,7 @@ export class History {
 
 
 
-  
+
   constructor() {
 
     this.yesterday.setDate(this.yesterday.getDate() - 1);
@@ -50,13 +50,13 @@ export class History {
 
       if (!date) {
         this.currentJournal.set(null);
-        return; 
+        return;
       }
 
       this.dateLabel = `${this.days[date.getDay()]} ${date.getDate()} ${this.months[date.getMonth()]} ${date.getFullYear()}`
 
       const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0'); 
+      const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
 
       const dateToSearch = `${year}-${month}-${day}`;
