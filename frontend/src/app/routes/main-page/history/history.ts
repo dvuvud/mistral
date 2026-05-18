@@ -40,6 +40,8 @@ export class History {
   days = ["Söndag", "Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag"];
 
 
+
+  
   constructor() {
 
     this.yesterday.setDate(this.yesterday.getDate() - 1);

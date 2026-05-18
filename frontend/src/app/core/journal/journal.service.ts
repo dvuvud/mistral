@@ -31,7 +31,11 @@ export class JournalService {
   getJournalByDate(childId: number, date: string): Observable<JournalResponse> {
     let params = new HttpParams();
     params = params.set('childId', childId);
+<<<<<<< HEAD
     params = params.set('date', date);
+=======
+    params.set('date', date);
+>>>>>>> b964317 (förenklad date picker med basic styling fungerar möjligen men är otestad pga brist på tidigare journaler)
     return this.http.get<JournalResponse>(this.baseUrl, { params });
   }
 }
