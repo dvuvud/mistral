@@ -77,6 +77,14 @@ export class MainChatHub implements OnInit, OnDestroy {
     this.viewState.set("chat");
     const recipientId = teacher.id ?? teacher.userId;
 
+    this.messages.set([]);
+    this.subs.add(
+      this.chatService.getHistory(this.userId, recipientId).subscribe({
+        next: (history) => this.messages.set(history),
+        error: () => this.messages.set([])
+      })
+    );
+
     this.websocketService.setChatRoom(
       this.chatService.createChatRoomId(this.userId, recipientId)
     );
