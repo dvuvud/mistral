@@ -14,10 +14,11 @@ import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import { MatFormField } from "@angular/material/form-field";
 import { Information } from '../information/information';
 import { Homepage } from "../homepage/homepage";
+import { History } from '../history/history';
 
 @Component({
   selector: 'main-panel',
-  imports: [ChildList, MatDividerModule, ChildDisplay, MatCard, MatCardHeader, MatCardContent, MainLiveJournal, AccountPage, MainPresenceContainer, MatTab, MatFormField, MatTabGroup, Information, Homepage],
+  imports: [ChildList, MatDividerModule, ChildDisplay, MatCard, MatCardHeader, MatCardContent, MainLiveJournal, AccountPage, MainPresenceContainer, MatTab, MatTabGroup, Information, Homepage, History],
   templateUrl: './main-panel.html',
   styleUrl: './main-panel.scss',
 })
