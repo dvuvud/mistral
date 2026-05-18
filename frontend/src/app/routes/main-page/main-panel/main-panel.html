@@ -27,6 +27,10 @@
                           [contentSignal]="contentSignal()" >
             </main-live-journal>
           </mat-tab>
+          <mat-tab label="Rapporthistorik">
+              <history [(childSignal)]="childSignal">
+              </history>
+          </mat-tab>
         </mat-tab-group>
       }
 
