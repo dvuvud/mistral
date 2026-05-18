@@ -70,6 +70,65 @@ public class WebSocketHandlerTests {
     private String tokenA;
     private String tokenB;
 
+    private WebSocketSession mockSession(final String token) throws IOException {
+        final WebSocketSession session = mock(WebSocketSession.class);
+        final Map<String, Object> attributes = new HashMap<>();
+        if (token != null) {
+            attributes.put("token", token);
+        }
+        when(session.getAttributes()).thenReturn(attributes);
+        when(session.isOpen()).thenReturn(true);
+        return session;
+    }
+
+    private WebSocketSession openSession(final String token) throws Exception {
+        final WebSocketSession session = mockSession(token);
+        handler.afterConnectionEstablished(session);
+        return session;
+    }
+
+    private void subscribe(final WebSocketSession session, final String room) throws Exception {
+        final String payload = objectMapper.writeValueAsString(Map.of(
+                "type", "subscribe",
+                "room", room));
+        handler.handleTextMessage(session, new TextMessage(payload));
+    }
+
+    private void unsubscribe(final WebSocketSession session, final String room) throws Exception {
+        final String payload = objectMapper.writeValueAsString(Map.of(
+                "type", "unsubscribe",
+                "room", room));
+        handler.handleTextMessage(session, new TextMessage(payload));
+    }
+
+    private TextMessage docOperation(final String room, final int clientRevision, final Map<String, Object> operation,
+                                     final Integer sequence)
+            throws Exception {
+        final Map<String, Object> payload = new HashMap<>();
+        payload.put("type", "DOC_OPERATION");
+        payload.put("room", room);
+        payload.put("clientRevision", clientRevision);
+        payload.put("operation", operation);
+        if (sequence != null) {
+            payload.put("sequence", sequence);
+        }
+        return new TextMessage(objectMapper.writeValueAsString(payload));
+    }
+
+    private Map<String, Object> insertOp(final int position, final String text) {
+        return Map.of("type", "INSERT", "position", position, "text", text);
+    }
+
+    private Map<String, Object> deleteOp(final int position, final int length) {
+        return Map.of("type", "DELETE", "position", position, "length", length);
+    }
+
+    public record SocketMessage(
+            String type,
+            String room,
+            ChatMessage message) {
+    }
+
     @BeforeEach
     void setUp() {
         userA = userRepository.save(User.builder()
@@ -413,64 +472,5 @@ public class WebSocketHandlerTests {
 
         final JournalDto dto = journalService.getOrCreate(new JournalTarget.Child(child.id()), DATE);
         assertThat(dto.content()).isEqualTo("hello");
-    }
-
-    private WebSocketSession mockSession(final String token) throws IOException {
-        final WebSocketSession session = mock(WebSocketSession.class);
-        final Map<String, Object> attrs = new HashMap<>();
-        if (token != null) {
-            attrs.put("token", token);
-        }
-        when(session.getAttributes()).thenReturn(attrs);
-        when(session.isOpen()).thenReturn(true);
-        return session;
-    }
-
-    private WebSocketSession openSession(final String token) throws Exception {
-        final WebSocketSession session = mockSession(token);
-        handler.afterConnectionEstablished(session);
-        return session;
-    }
-
-    private void subscribe(final WebSocketSession session, final String room) throws Exception {
-        final String payload = objectMapper.writeValueAsString(Map.of(
-                "type", "subscribe",
-                "room", room));
-        handler.handleTextMessage(session, new TextMessage(payload));
-    }
-
-    private void unsubscribe(final WebSocketSession session, final String room) throws Exception {
-        final String payload = objectMapper.writeValueAsString(Map.of(
-                "type", "unsubscribe",
-                "room", room));
-        handler.handleTextMessage(session, new TextMessage(payload));
-    }
-
-    private TextMessage docOperation(final String room, final int clientRevision, final Map<String, Object> operation,
-            final Integer sequence)
-            throws Exception {
-        final Map<String, Object> payload = new HashMap<>();
-        payload.put("type", "DOC_OPERATION");
-        payload.put("room", room);
-        payload.put("clientRevision", clientRevision);
-        payload.put("operation", operation);
-        if (sequence != null) {
-            payload.put("sequence", sequence);
-        }
-        return new TextMessage(objectMapper.writeValueAsString(payload));
-    }
-
-    private Map<String, Object> insertOp(final int position, final String text) {
-        return Map.of("type", "INSERT", "position", position, "text", text);
-    }
-
-    private Map<String, Object> deleteOp(final int position, final int length) {
-        return Map.of("type", "DELETE", "position", position, "length", length);
-    }
-
-    public record SocketMessage(
-            String type,
-            String room,
-            ChatMessage message) {
     }
 }
