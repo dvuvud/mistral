@@ -13,6 +13,10 @@ export class Presence {
   private _teacherUpdates = new Subject<User>();
   readonly teacherUpdates = this._teacherUpdates.asObservable();
 
+  /**
+   * Initializes the presence service by ensuring a connection to the websocket and subscribing to presence messages.
+   * Presence messages are handled by the handleMessage function, which distributes them to their proper handlers based on message type.
+   */
   async init() {
     await this.socketService.ensureConnected();
     this.socketService.getMessages(WsMailbox.presence).subscribe((message) => {
@@ -20,6 +24,10 @@ export class Presence {
     })
   }
 
+  /**
+   * Spoofs a teacher update by sending a predefined message to the teacher updates subject. 
+   * Used for testing purposes.
+   */
   spoofTeacherUpdate() {
     console.log("Spoofing teacher");
     this._teacherUpdates.next({ name: "Spoof", userId: -1, room: "Spoof", color: "#ffffff"});
@@ -91,7 +99,7 @@ export class Presence {
   }
 
   /**
-   * State message handler. Lists all users currently connected to the presence sevice. Received on socket connection.
+   * State message handler. Lists all users currently connected to the presence service. Received on socket connection.
    * @param msg The state message body
    */
   private handleStateMessage(msg: WsPresenceChangeMessage) {
