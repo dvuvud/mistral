@@ -1,3 +1,16 @@
 <div class="outer-container">
+    <mat-card class="journal-display">
+        <mat-card-content class="text-area">
+            <p>{{currentJournal()?.content}}</p>
+        </mat-card-content>
+    </mat-card>
 
+    <div class="calendar-container">
+        <mat-card>
+            <mat-calendar class="calendar" 
+                          [(selected)]="selected"
+                          [maxDate]="yesterday">
+            </mat-calendar>
+        </mat-card>
+    </div>
 </div>
