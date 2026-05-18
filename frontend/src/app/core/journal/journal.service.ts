@@ -3,6 +3,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
+/**
+ * JournalResponse represents the response from the backend when fetching journal content.
+ * It includes the journal content and the server revision number.
+ */
 export interface JournalResponse {
   content: string;
   serverRevision: number;
@@ -13,6 +17,13 @@ export class JournalService {
   private baseUrl = `${environment.apiUrl}/api/journal`;
   private http = inject(HttpClient);
 
+  /**
+   * Gets the journal content for a specific child or group.
+   * @param childId The ID of the child.
+   * @param groupId The ID of the group.
+   * @param currentView The current view type ('childView' or 'groupView').
+   * @returns An Observable with the journal content and server revision number.
+   */
   getJournal(childId: number, groupId: number, currentView: string): Observable<JournalResponse> {
    
     let params = new HttpParams();
