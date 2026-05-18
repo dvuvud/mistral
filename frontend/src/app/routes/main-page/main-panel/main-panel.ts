@@ -16,14 +16,14 @@ import { Information } from '../information/information';
 import { Homepage } from "../homepage/homepage";
 import { MatIconModule } from "@angular/material/icon";
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { History } from '../history/history';
 
 @Component({
   selector: 'main-panel',
-  imports: [ChildList, MatDividerModule, ChildDisplay, MatCard, MatCardHeader, MatCardContent, MainLiveJournal, AccountPage, MainPresenceContainer, MatTab, MatFormField, MatTabGroup, Information, Homepage, MatTabsModule, MatIconModule, MatTooltipModule],
+  imports: [ChildList, MatDividerModule, ChildDisplay, MatCard, MatCardHeader, MatCardContent, MainLiveJournal, AccountPage, MainPresenceContainer, MatTab, MatFormField, MatTabGroup, Information, Homepage, History, MatTabsModule, MatIconModule, MatTooltipModule],
   templateUrl: './main-panel.html',
   styleUrl: './main-panel.scss',
 })
-
 export class MainPanel implements OnInit{
   presence = inject(Presence);
   childSignal = signal<Child>({ name: '', id: 0, date: "", status: "NOT_SET", present: null });
