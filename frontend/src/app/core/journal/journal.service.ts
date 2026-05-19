@@ -31,7 +31,7 @@ export class JournalService {
   getJournalByDate(childId: number, date: string): Observable<JournalResponse> {
     let params = new HttpParams();
     params = params.set('childId', childId);
-    params.set('date', date);
+    params = params.set('date', date);
     return this.http.get<JournalResponse>(this.baseUrl, { params });
   }
 }

@@ -8,7 +8,8 @@
     <div class="calendar-container">
         <mat-card>
             <mat-calendar class="calendar" 
-                          [(selected)]="selected"
+                          [selected]="selected()"
+                          (selectedChange)="selected.set($event)"
                           [maxDate]="yesterday">
             </mat-calendar>
         </mat-card>
