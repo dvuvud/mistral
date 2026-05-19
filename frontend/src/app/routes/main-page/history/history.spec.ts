@@ -10,11 +10,7 @@ describe('History', () => {
     await TestBed.configureTestingModule({
       imports: [History]
     })
-<<<<<<< HEAD
       .compileComponents();
-=======
-    .compileComponents();
->>>>>>> e2d4b87 (basic logic för att fetcha ett barns journaler och en tab för history)
 
     fixture = TestBed.createComponent(History);
     component = fixture.componentInstance;
