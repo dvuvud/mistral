@@ -13,6 +13,7 @@ import se.mistral.backend.child.dto.CreateChildRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import se.mistral.backend.user.UserService;
 import se.mistral.backend.user.dto.UserResponse;
 import se.mistral.backend.group.GroupService;
 import se.mistral.backend.group.dto.GroupResponse;
@@ -28,6 +29,7 @@ public class AdminController {
 
     private final AdminService adminService;
     private final GroupService groupService;
+    private final UserService userService;
 
     /**
      * Create a child.
@@ -57,6 +59,11 @@ public class AdminController {
      * @param request the request
      * @return the created group entity
      */
+    @PutMapping("/user/{id}/inactive")
+    public ResponseEntity<UserResponse> setUserInactive(@PathVariable Long id) {
+        return ResponseEntity.ok(adminService.setUserInactive(id));
+    }
+
     @PostMapping("/group")
     public ResponseEntity<GroupResponse> createGroup(@RequestBody CreateGroupRequest request) {
         return ResponseEntity.ok(groupService.createGroup(request));
@@ -100,6 +107,11 @@ public class AdminController {
      * @param childId the child id
      * @return an empty response entity to signify deletion
      */
+    @GetMapping("/users/inactive")
+    public ResponseEntity<List<UserResponse>> getAllInactiveUsers() {
+        return ResponseEntity.ok(adminService.getAllInactiveUsers());
+    }
+
     @DeleteMapping("/child/{childId}")
     public ResponseEntity<Void> deleteChild(@PathVariable Long childId) {
         adminService.deleteChild(childId);
