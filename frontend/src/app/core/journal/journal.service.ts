@@ -32,10 +32,14 @@ export class JournalService {
     let params = new HttpParams();
     params = params.set('childId', childId);
 <<<<<<< HEAD
+<<<<<<< HEAD
     params = params.set('date', date);
 =======
     params.set('date', date);
 >>>>>>> b964317 (förenklad date picker med basic styling fungerar möjligen men är otestad pga brist på tidigare journaler)
+=======
+    params = params.set('date', date);
+>>>>>>> f74f970 (fixade Http call och dålig signalhantering i history)
     return this.http.get<JournalResponse>(this.baseUrl, { params });
   }
 }
