@@ -38,6 +38,19 @@
   overflow-y: auto;
 }
 
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font: var(--mat-sys-label-large);
+  opacity: 0.75;
+
+  mat-icon {
+    font-size: 1.1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+}
 
 
 :host ::ng-deep .child-list-container {
