@@ -1,12 +1,17 @@
 <div class="outer-container">
     <mat-card class="journal-display">
         <mat-card-header class="journal-header">
-            @if(selected() != null) {
+            @if(selected() !== null) {
                 <p class="journal-title">
                     Dagsrapport för {{childSignal().name}} 
                 </p>
                 <p class="bold-label" >
                         {{dateLabel}}
+                </p>
+            }
+            @if(selected() === null) {
+                <p class="journal-title">
+                    Välj datum för att se närvaro och journal
                 </p>
             }
         </mat-card-header>
@@ -28,7 +33,7 @@
             @if(selected() === null) {
                 Välj datum för att se närvaro och journal
             }
-            @if(dateLabel != '') {
+            @if(dateLabel !== '') {
                 Närvaro
                 {{dateLabel}}
             }

@@ -1,11 +1,9 @@
-import { Component, computed, effect, inject, model, signal } from '@angular/core';
+import { Component, effect, inject, model, signal } from '@angular/core';
 import { JournalService, JournalResponse } from '../../../core/journal/journal.service';
 import { Child } from '../../../core/child/child.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { AttendanceStatus } from '../../../core/child/attendance.service';
-import { AttendanceBox } from '../attendance-box/attendance-box';
 import { AttendanceService } from '../../../core/child/attendance.service';
 import { MatDivider } from "@angular/material/divider";
 
@@ -64,7 +62,7 @@ export class History {
       const dateToSearch = `${year}-${month}-${day}`;
 
       const attendance = this.attendanceService.getSignal(this.childSignal().id, dateToSearch)() ?? 'NOT_SET';
-      this.currentChildAttendance = this.statusOptions.find(({value, label}) => value === attendance)?.label;
+      this.currentChildAttendance = this.statusOptions.find(({value}) => value === attendance)?.label;
 
       const journalSubscription = this.journalService.getJournalByDate(childId, dateToSearch).subscribe({
         next: (data) => {
@@ -73,7 +71,7 @@ export class History {
       });
 
       onCleanup(() => {
-          journalSubscription.unsubscribe();
+        journalSubscription.unsubscribe();
       });
 
     })
