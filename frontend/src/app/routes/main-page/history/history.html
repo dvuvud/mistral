@@ -1,7 +1,18 @@
 <div class="outer-container">
     <mat-card class="journal-display">
+        <mat-card-header class="journal-header">
+            @if(selected() != null) {
+                <p class="journal-title">
+                    Dagsrapport för {{childSignal().name}} 
+                </p>
+                <p class="bold-label" >
+                        {{dateLabel}}
+                </p>
+            }
+        </mat-card-header>
+        <mat-divider></mat-divider>
         <mat-card-content class="text-area">
-            <p>{{currentJournal()?.content}}</p>
+            <p class="journal-text">{{currentJournal()?.content}}</p>
         </mat-card-content>
     </mat-card>
 
@@ -13,5 +24,15 @@
                           [maxDate]="yesterday">
             </mat-calendar>
         </mat-card>
+        <p class="attendance-info">
+            @if(selected() === null) {
+                Välj datum för att se närvaro och journal
+            }
+            @if(dateLabel != '') {
+                Närvaro
+                {{dateLabel}}
+            }
+            <span class="bold-label">{{currentChildAttendance}}</span>
+        </p>
     </div>
 </div>
