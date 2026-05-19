@@ -16,6 +16,7 @@
 .journal-display {
     flex: 1;
     margin: 1em;
+    overflow: hidden;
     box-shadow: var(--mat-sys-level2);
 }
 
@@ -23,12 +24,42 @@
     background-color: var(--mat-sys-surface-variant);
     flex: 1;
     border-radius: 2%;
+    border-top-right-radius: 0%;
+    border-top-left-radius: 0%;
+}
+
+.journal-header {
+    display: flex;
+    font-weight: 400 !important;
+    font-size: large;
+    height: 10%;
+    background: var(--mat-sys-surface-dim);
+    flex-direction: row;
+    justify-content: center;
+    gap: 1em;
 }
 
 .calendar-container {
-    width: 30%;
+    width: 33%;
     margin: 1em;
+    justify-content: center;
     height: fit-content;
     box-shadow: var(--mat-sys-level2);
     border-radius: 3%;
+    background: var(--mat-sys-surface-dim);
+}
+
+.attendance-info {
+    display: flex;
+    justify-content: center;
+    font-weight: 400;
+    gap: 1em;
+}
+.bold-label {
+    font-weight: 500;
+}
+
+.journal-text {
+    font: var(--mat-sys-body-large);
+    margin: 0.5em;
 }
