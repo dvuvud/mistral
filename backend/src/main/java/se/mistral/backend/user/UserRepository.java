@@ -1,7 +1,6 @@
 package se.mistral.backend.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import se.mistral.backend.user.dto.BasicUserInformation;
 import se.mistral.backend.user.dto.UserResponse;
 
@@ -34,4 +33,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<BasicUserInformation> findUserByRole(Role role);
 
     UserResponse findUserById(Long id);
+
+
+//    @Query("SELECT new se.mistral.backend.user.dto.BasicUserInformation(user.id, user.name,user.color, user.active) " +
+//            "FROM User user WHERE user.role = TEACHER")
+//    List<BasicUserInformation> findUserByRole_Teacher();
+
+
+    List<UserResponse> findUserByActiveFalse();
 }
