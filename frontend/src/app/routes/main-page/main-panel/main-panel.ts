@@ -11,7 +11,6 @@ import { AccountPage } from '../account-page/account-page';
 import { MainPresenceContainer } from "../main-presence-container/main-presence-container";
 import { Presence } from '../../../core/presence/presence.service';
 import { MatTab, MatTabGroup } from "@angular/material/tabs";
-import { MatFormField } from "@angular/material/form-field";
 import { Information } from '../information/information';
 import { Homepage } from "../homepage/homepage";
 import { History } from '../history/history';
