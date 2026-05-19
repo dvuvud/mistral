@@ -72,3 +72,18 @@
     font: var(--mat-sys-body-large);
     margin: 0.5em;
 }
+
+.attendance-info {
+    display: flex;
+    justify-content: center;
+    font-weight: 400;
+    gap: 1em;
+}
+.bold-label {
+    font-weight: 500;
+}
+
+.journal-text {
+    font: var(--mat-sys-body-large);
+    margin: 0.5em;
+}
