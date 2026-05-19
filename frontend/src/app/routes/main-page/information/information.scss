@@ -1,5 +1,6 @@
 :host {
   display: flex;
+  height: 100%;
 }
 .subrow {
     display: flex;
@@ -12,11 +13,10 @@
 
 .subrow > mat-card {
   margin-bottom: 0.5em;
-  max-height: calc(100% - 3em);
+  max-height: 100%;
 }
 
 .subrow > mat-card > mat-card {
-
   overflow-y: scroll;
 }
 
