@@ -21,6 +21,11 @@
 .subrow > mat-card > mat-card {
   overflow-y: scroll;
   flex: 1;
+  //max-height: 100%;
+}
+
+.subrow > mat-card > mat-card {
+  overflow-y: scroll;
 }
 
 mat-card-header{
