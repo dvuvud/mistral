@@ -25,9 +25,10 @@ export class History {
 
     this.yesterday.setDate(this.yesterday.getDate() - 1);
 
-    effect(() => {
-
+    effect((onCleanup) => {
+      console.log(this.selected())
       const date = this.selected();
+      const childId = this.childSignal().id;
 
       if (!date) {
         this.currentJournal.set(null);
@@ -40,11 +41,16 @@ export class History {
 
       const dateToSearch = `${year}-${month}-${day}`;
 
-      this.journalService.getJournalByDate(this.childSignal().id, dateToSearch).subscribe({
-        next: (data) => {
-          this.currentJournal.set(data);
-        }
-      })
+      const subscription = this.journalService.getJournalByDate(childId, dateToSearch).subscribe({
+              next: (data) => {
+                this.currentJournal.set(data);
+              }
+            });
+
+      onCleanup(() => {
+          subscription.unsubscribe();
+      });
+
     })
   }
 }
