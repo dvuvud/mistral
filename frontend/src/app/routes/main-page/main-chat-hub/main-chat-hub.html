@@ -1,4 +1,4 @@
-<div #tooltip="matTooltip" [matTooltip]="chatVisible() ? 'Göm närvarolista' : 'Visa närvarolista'" class="chat-hide-button" (click)="chatVisible.set(!chatVisible())">
+<div #tooltip="matTooltip" [matTooltip]="chatVisible() ? 'Dölj chatt' : 'Visa chatt'" class="chat-hide-button" (click)="chatVisible.set(!chatVisible())">
   @if(chatVisible()) {
     <mat-icon>arrow_forward_ios</mat-icon>
   }

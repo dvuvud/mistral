@@ -11,7 +11,8 @@ export type WsJournalWriteOperation = InsertOperation | DeleteOperation;
 export enum WsMailbox {
   attendance = "attendanceMessages",
   presence = "presenceMessages",
-  journal = "journalMessages"
+  journal = "journalMessages",
+  chat = "chatMessages"
 }
 
 export interface WsMessageContent {
@@ -76,7 +77,8 @@ export class WebsocketService {
   private mailboxes: Record<string, Subject<any>> = {
     "attendanceMessages": new Subject<WsAttendanceMessage>(),
     "presenceMessages": new Subject<WsPresenceChangeMessage>(),
-    "journalMessages": new Subject<WsJournalMessage>()
+    "journalMessages": new Subject<WsJournalMessage>(),
+    "chatMessages": new Subject<WsChatMessage>()
   }
 
   private rooms: Record<string, string> = {
