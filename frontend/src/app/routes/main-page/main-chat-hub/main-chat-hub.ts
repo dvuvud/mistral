@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 /**
  * MainChatHub component serves as the central hub for chat interactions in the application.
@@ -19,14 +20,17 @@ import { MatIconModule } from "@angular/material/icon";
  */
 @Component({
   selector: 'main-chat-hub',
-  imports: [AsyncPipe, MatActionList, MatIconButton, MatInputModule, FormsModule, MatFormFieldModule, MatCardModule, MatIconModule],
+  imports: [AsyncPipe, MatActionList, MatIconButton, MatInputModule, FormsModule, MatFormFieldModule, MatCardModule, MatIconModule, MatTooltipModule],
   templateUrl: './main-chat-hub.html',
   styleUrl: './main-chat-hub.scss',
+  host: {
+    "[class.chat-visible]": "chatVisible()"
+  }
 })
 
 export class MainChatHub implements OnInit, OnDestroy {
   userId = Number(sessionStorage.getItem('UserId'));
-  users= signal<User[]>([]);
+  users = signal<User[]>([]);
   selectedTeacher = signal<User | null> (null);
   messages = signal<ChatMessage[]>([]);
   newMessage = model<string>('');
@@ -38,12 +42,14 @@ export class MainChatHub implements OnInit, OnDestroy {
   private websocketService = inject(WebsocketService);
   private userService = inject(UserService);
 
-  teacherList = this.userService.getUsers().pipe();
   viewState = signal<string>("overview");
+
+  enterClass = signal<string>("enter-animation");
+  chatVisible = signal<boolean>(false);
 
   /**
    * On component initialization, to ensure the WebSocket connection is established
-   * and subscribe to incoming chat messages from the WebSocket service. 
+   * and subscribe to incoming chat messages from the WebSocket service.
    */
   async ngOnInit(): Promise<void> {
     await this.websocketService.ensureConnected();
