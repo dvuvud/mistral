@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs';
 import { User, UserService } from '../../../core/user/user.service';
 import { ChatMessage, ChatService } from '../../../core/chat/chat.service';
 import { WebsocketService, WsChatMessage, WsMailbox } from '../../../core/websocket/websocket.service';
-import { AsyncPipe } from '@angular/common';
 import { MatActionList } from "@angular/material/list";
 import { MatIconButton } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,7 +19,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
  */
 @Component({
   selector: 'main-chat-hub',
-  imports: [AsyncPipe, MatActionList, MatIconButton, MatInputModule, FormsModule, MatFormFieldModule, MatCardModule, MatIconModule, MatTooltipModule],
+  imports: [MatActionList, MatIconButton, MatInputModule, FormsModule, MatFormFieldModule, MatCardModule, MatIconModule, MatTooltipModule],
   templateUrl: './main-chat-hub.html',
   styleUrl: './main-chat-hub.scss',
   host: {

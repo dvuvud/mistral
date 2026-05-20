@@ -65,9 +65,6 @@ button:hover{
   flex-direction: column
 }
 
-#chatView > * {
-}
-
 #chatViewTitleLeft, #chatViewTitleSpacer {
   flex: 1;
   height: 100%;
@@ -123,6 +120,7 @@ button:hover{
   display: flex;
   flex: 2;
   flex-direction: row;
+  overflow: clip;
 }
 
 #chatViewFooter mat-form-field {
