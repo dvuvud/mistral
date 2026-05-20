@@ -2,12 +2,8 @@ package se.mistral.backend;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.clearInvocations;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -24,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -473,4 +470,94 @@ public class WebSocketHandlerTests {
         final JournalDto dto = journalService.getOrCreate(new JournalTarget.Child(child.id()), DATE);
         assertThat(dto.content()).isEqualTo("hello");
     }
+
+    @Test
+    void handleTextMessageDefaultCase() throws Exception {
+        final WebSocketSession sessionA = openSession(tokenA);
+        final WebSocketSession sessionB = openSession(tokenB);
+
+        final String room = "default room";
+
+        subscribe(sessionA, room);
+        subscribe(sessionB, room);
+        clearInvocations(sessionA, sessionB);
+
+        final Map<String, Object> payload = new HashMap<>();
+        payload.put("type", "default");
+        payload.put("room", room);
+        payload.put("clientRevision", 0);
+
+        handler.handleTextMessage(sessionA, new TextMessage(objectMapper.writeValueAsString(payload)));
+
+        final ArgumentCaptor<TextMessage> captorB = ArgumentCaptor.forClass(TextMessage.class);
+        verify(sessionB, atLeastOnce()).sendMessage(captorB.capture());
+
+        assertThat(captorB.getValue().getPayload()).contains("default");
+    }
+
+    @Test
+    void sessionWithoutTokenShouldBeClosedQuietly() throws Exception {
+        final WebSocketSession session = mock(WebSocketSession.class);
+        final Map<String, Object> attributes = new HashMap<>();
+        when(session.getAttributes()).thenReturn(attributes);
+
+        handler.afterConnectionEstablished(session);
+
+        verify(session, atLeastOnce()).close(any(org.springframework.web.socket.CloseStatus.class));
+        assertThat(attributes.get("userId")).isNull();
+    }
+
+    @Test
+    void sessionWithInvalidTokenShouldBeClosedQuietly() throws Exception {
+        JwtService jwtSpy = spy(jwtService);
+        ReflectionTestUtils.setField(handler, "jwtService", jwtSpy);
+
+        try {
+            User teacherUser = userRepository.save(User.builder()
+                    .name("Teacher")
+                    .email("teacher@test.com")
+                    .password("ignored")
+                    .role(Role.TEACHER)
+                    .build());
+            String token = jwtService.generateToken(teacherUser);
+
+
+            doReturn(false).when(jwtSpy).isTokenValid(anyString(), any());
+
+            WebSocketSession session = mock(WebSocketSession.class);
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("token", token);
+            when(session.getAttributes()).thenReturn(attributes);
+
+            handler.afterConnectionEstablished(session);
+
+            verify(session).close(CloseStatus.NOT_ACCEPTABLE);
+        } finally {
+            ReflectionTestUtils.setField(handler, "jwtService", jwtService);
+        }
+    }
+
+    @Test
+    void sessionWithInvalidRoleShouldBeClosedQuietly() throws Exception {
+        User parentUser = userRepository.save(User.builder()
+                .name("Parent")
+                .email("parent@test.com")
+                .password("ignored")
+                .role(Role.PARENT)
+                .color("#00ff00")
+                .build());
+        String parentToken = jwtService.generateToken(parentUser);
+
+        final WebSocketSession session = mock(WebSocketSession.class);
+        final Map<String, Object> attributes = new HashMap<>();
+        attributes.put("token", parentToken);
+        when(session.getAttributes()).thenReturn(attributes);
+
+        handler.afterConnectionEstablished(session);
+
+        verify(session, atLeastOnce()).close(any(org.springframework.web.socket.CloseStatus.class));
+        assertThat(attributes.get("userId")).isNull();
+    }
+
+
 }
