@@ -1,10 +1,22 @@
+<div #tooltip="matTooltip" [matTooltip]="chatVisible() ? 'Göm närvarolista' : 'Visa närvarolista'" class="chat-hide-button" (click)="chatVisible.set(!chatVisible())">
+  @if(chatVisible()) {
+    <mat-icon>arrow_forward_ios</mat-icon>
+  }
+  @else {
+    <mat-icon>chat</mat-icon>
+  }
+</div>
+
 <mat-card appearance="outlined">
+  <mat-card-header id="chatHubHeader" class="cardHeader">
+    <mat-card-title><mat-icon>chat</mat-icon> Chatt</mat-card-title>
+  </mat-card-header>
   @if (viewState() == "overview") {
     <mat-action-list class="list-class">
       <button mat-list-item (click)="onSelectAll()">
         <span matListItemTitle>Alla</span>
       </button>
-      @for (teacher of (teacherList | async); track teacher.name) {
+      @for (teacher of (users()); track teacher.name) {
         <button mat-list-item (click)="onSelectTeacher(teacher)">
           <span matListItemTitle>{{teacher.name}} </span>
         </button>
@@ -12,9 +24,19 @@
     </mat-action-list>
   }
   @else if (viewState() == "chat") {
-  <mat-card id="chatView">
-    <mat-card-header id="chatViewHeader">
-      <mat-card-title><button matIconButton="button" (click)="returnToOverview()"><mat-icon>keyboard_return</mat-icon></button>{{selectedTeacher()?.name}}</mat-card-title>
+  <mat-card id="chatView" [animate.enter]="enterClass()">
+    <mat-card-header id="chatViewHeader" class="cardHeader">
+      <mat-card-title>
+        <div id="chatViewTitleLeft">
+          <button matIconButton="button" (click)="returnToOverview()">
+            <mat-icon>keyboard_return</mat-icon>
+          </button>
+        </div>
+        <div id="chatViewTitleRight">
+          {{selectedTeacher()?.name}}
+        </div>
+        <div id="chatViewTitleSpacer"></div>
+      </mat-card-title>
     </mat-card-header>
     <mat-card id="chatViewDisplay">
       @for (msg of messages(); track msg.chatMessage) {
@@ -23,7 +45,7 @@
     </mat-card>
     <mat-card id="chatViewFooter">
       <mat-form-field>
-        <input matInput [(ngModel)]="newMessage" type="text">
+        <input matInput [(ngModel)]="newMessage" type="text" (keyup.enter)="submitMessage()">
       </mat-form-field>
       <button matInput type="button" (click)="submitMessage()">Send</button>
     </mat-card>
