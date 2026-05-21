@@ -114,12 +114,13 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
      */
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-        Long userId = (Long) session.getAttributes().get("userId");
-        userSessions.remove(userId);
         Set<String> joined = sessionToRooms.remove(session);
         if (joined == null) {
             return;
         }
+
+        Long userId = (Long) session.getAttributes().get("userId");
+        userSessions.remove(userId);
 
         for (String room : joined) {
             leavePresence(session, room);
