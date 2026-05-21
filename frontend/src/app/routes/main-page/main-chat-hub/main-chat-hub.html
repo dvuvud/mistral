@@ -1,4 +1,13 @@
-<div #tooltip="matTooltip" (animationend)="doShakeAnimation.set(false)" [class.animShake]="doShakeAnimation()" [matTooltip]="chatVisible() ? 'Dölj chatt' : 'Visa chatt'" class="chat-hide-button" (click)="chatVisible.set(!chatVisible())">
+<div #tooltip="matTooltip"
+  (animationend)="doShakeAnimation.set(false)"
+  [class.animShake]="doShakeAnimation()"
+  [matTooltip]="chatVisible() ? 'Dölj chatt' : 'Visa chatt'"
+  class="chat-hide-button"
+  (click)="chatVisible.set(!chatVisible())"
+  tabindex="0"
+  (keydown.space)="chatVisible.set(!chatVisible())"
+  (keydown.enter)="chatVisible.set(!chatVisible())"
+>
   @if(chatVisible()) {
     <mat-icon>arrow_forward_ios</mat-icon>
   }
@@ -11,7 +20,7 @@
   <mat-card-header id="chatHubHeader" class="cardHeader">
     <mat-card-title><mat-icon>chat</mat-icon><span style="width: 0.5em"></span>Chatt</mat-card-title>
   </mat-card-header>
-  @if (viewState() == "overview") {
+  @if (viewState() === "overview") {
     <mat-action-list class="list-class">
       <button mat-list-item (click)="onSelectAll()">
         <span matListItemTitle>Alla</span>
@@ -33,7 +42,7 @@
       }
     </mat-action-list>
   }
-  @else if (viewState() == "chat") {
+  @else if (viewState() === "chat") {
   <mat-card id="chatView" [animate.enter]="enterClass()">
     <mat-card-header id="chatViewHeader" class="cardHeader">
       <mat-card-title>
@@ -50,14 +59,14 @@
     </mat-card-header>
     <div id="chatViewDisplay" #chatViewDisplay>
       @for (msg of messages(); track msg.timestamp; let idx = $index) {
-      <div class="chatMessageContainer" [class.msgSelf]="msg.senderId == userId">
-        @if (idx == 0 || (idx > 0 && messages()[idx - 1].senderId != msg.senderId)) {
-          <span class="chatMessageHeader" [class.msgSelf]="msg.senderId == userId">{{msg.senderId == userId ? "Du" : selectedTeacher()?.name}}</span>
+      <div class="chatMessageContainer" [class.msgSelf]="msg.senderId === userId">
+        @if (idx === 0 || (idx > 0 && messages()[idx - 1].senderId !== msg.senderId)) {
+          <span class="chatMessageHeader" [class.msgSelf]="msg.senderId === userId">{{msg.senderId === userId ? "Du" : selectedTeacher()?.name}}</span>
         }
-        @if ((idx == 0 || (idx > 0 && messages()[idx - 1].senderId != msg.senderId)) || (idx > 0 && deltaTimeMinutes(msg.timestamp, messages()[idx - 1].timestamp) > minutesBeforeNewDate)) {
-          <span class="chatMessageDate" [class.msgSelf]="msg.senderId == userId" style="font-size: 0.8em; font-weight: normal;">{{convertDate(msg.timestamp)}}</span>
+        @if ((idx === 0 || (idx > 0 && messages()[idx - 1].senderId !== msg.senderId)) || (idx > 0 && deltaTimeMinutes(msg.timestamp, messages()[idx - 1].timestamp) > minutesBeforeNewDate)) {
+          <span class="chatMessageDate" [class.msgSelf]="msg.senderId === userId" style="font-size: 0.8em; font-weight: normal;">{{convertDate(msg.timestamp)}}</span>
         }
-        <div class="chatMessage" [class.msgSelf]="msg.senderId == userId">
+        <div class="chatMessage" [class.msgSelf]="msg.senderId === userId">
           {{msg.chatMessage}}
         </div>
       </div>

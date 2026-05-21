@@ -20,7 +20,7 @@ type displayedContent = 'childview' | 'groupView' | 'teacherView' | 'homeView' |
     MatSidenavModule,
     MatButtonModule,
     MainChatHub
-],
+  ],
   encapsulation: ViewEncapsulation.Emulated,
 
   templateUrl: './main-page.html',

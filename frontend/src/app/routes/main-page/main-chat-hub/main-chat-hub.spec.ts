@@ -10,7 +10,7 @@ describe('MainChatHub', () => {
     await TestBed.configureTestingModule({
       imports: [MainChatHub]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(MainChatHub);
     component = fixture.componentInstance;
