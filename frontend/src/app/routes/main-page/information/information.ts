@@ -5,6 +5,10 @@ import { MatCard, MatCardHeader, MatCardContent } from "@angular/material/card";
 import { MatInput, MatFormField } from "@angular/material/input";
 import { MatDivider } from "@angular/material/divider";
 
+/**
+ * Information component renders vital information pertaining to the child, such as special dietary
+ * restrictions, and contact details to legal guardians.
+ */
 @Component({
   selector: 'information',
   imports: [MatTabsModule, MatCard, MatInput, MatFormField, MatCardHeader, MatCardContent, MatDivider],

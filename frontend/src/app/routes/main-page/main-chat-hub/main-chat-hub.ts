@@ -1,8 +1,8 @@
-import { Component, inject, model, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
+import { Component, contentChild, ContentChild, effect, ElementRef, inject, model, OnDestroy, OnInit, signal, ViewChild, viewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { User, UserService } from '../../../core/user/user.service';
 import { ChatMessage, ChatService } from '../../../core/chat/chat.service';
-import { WebsocketService, WsChatMessage, WsMailbox } from '../../../core/websocket/websocket.service';
+import { WebsocketService, WsChatMessage, WsChatNotification, WsMailbox } from '../../../core/websocket/websocket.service';
 import { MatActionList } from "@angular/material/list";
 import { MatIconButton } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,6 +11,8 @@ import { FormsModule } from '@angular/forms';
 import { MatCard, MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from '@angular/material/tooltip';
+
+const DEBUG = false;
 
 /**
  * MainChatHub component serves as the central hub for chat interactions in the application.
@@ -28,27 +30,38 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 
 export class MainChatHub implements OnInit, OnDestroy {
+  // Services
+  private chatService = inject(ChatService);
+  private websocketService = inject(WebsocketService);
+  private userService = inject(UserService);
+
+  private subs = new Subscription();
+
+  // View logic properties
   userId = Number(sessionStorage.getItem('UserId'));
   users = signal<User[]>([]);
   selectedTeacher = signal<User | null> (null);
   messages = signal<ChatMessage[]>([]);
   newMessage = model<string>('');
-
-  chatView = viewChild<MatCard>("chatViewDisplay");
-
-  private subs = new Subscription();
-
-  private chatService = inject(ChatService);
-  private websocketService = inject(WebsocketService);
-  private userService = inject(UserService);
-
+  minutesBeforeNewDate = 3;
   viewState = signal<string>("overview");
+  unread: WsChatNotification[] = [];
+  chatView: ElementRef<HTMLDivElement> | null = null;
 
+
+  @ViewChild("chatViewDisplay", { static: false }) set content(ref: ElementRef<HTMLDivElement>) {
+    console.log(ref);
+    this.chatView = ref;
+    this.chatView.nativeElement.scrollTop = this.chatView.nativeElement.scrollHeight;
+  }
+
+  // Assets
+  private messageNotificationSound = new Audio("message.ogg");
+
+  // Animation properties
   enterClass = signal<string>("enter-animation");
   chatVisible = signal<boolean>(false);
-  private messageNotificationSound = new Audio("message.ogg");
   doShakeAnimation = signal<boolean>(false);
-  minutesBeforeNewDate = 3;
 
   /**
    * On component initialization, to ensure the WebSocket connection is established
@@ -67,7 +80,12 @@ export class MainChatHub implements OnInit, OnDestroy {
       this.websocketService.getMessages(WsMailbox.chat).subscribe((message) => {
         this.handleMessage(message as WsChatMessage);
       })
-    )
+    );
+    this.subs.add(
+      this.websocketService.getMessages(WsMailbox.notifications).subscribe((message) => {
+        this.handleNotification(message as WsChatNotification);
+      })
+    );
   }
 
   /**
@@ -98,7 +116,10 @@ export class MainChatHub implements OnInit, OnDestroy {
     this.websocketService.setChatRoom(
       this.chatService.createChatRoomId(this.userId, recipientId)
     );
-    console.log(teacher);
+
+    if (this.chatView != null)
+      this.chatView.nativeElement.scrollTop = this.chatView.nativeElement.scrollHeight;
+    if (DEBUG) console.log(teacher);
   }
 
   /**
@@ -113,6 +134,7 @@ export class MainChatHub implements OnInit, OnDestroy {
    */
   returnToOverview() {
     this.viewState.set("overview");
+    this.selectedTeacher.set(null);
   }
 
   /**
@@ -142,21 +164,53 @@ export class MainChatHub implements OnInit, OnDestroy {
    */
   handleMessage(message: WsChatMessage): void {
     this.messages.update(current => [...current, message]);
-    this.doShakeAnimation.set(true);
-    this.messageNotificationSound.play();
-    console.log(message);
+    if (DEBUG) console.log(message);
   }
 
+  /**
+   * Handle a notification
+   * @param notification
+   */
+  handleNotification(notification: WsChatNotification): void {
+    console.log(notification.senderId, this.selectedTeacher()?.id);
+    if(notification.senderId !== this.selectedTeacher()?.id) {
+      this.unread.push(notification);
+      this.doShakeAnimation.set(true);
+      console.log("SHOULD ANIMATE");
+      this.messageNotificationSound.play();
+    }
+    else {
+      this.messageNotificationSound.play();
+    }
+  }
+
+  /**
+   * Given a UTC datestring, convert it to the correct timezone and locale.
+   * @param dateString the UTC datestring
+   * @returns A formatted string with client's timezone and locale.
+   */
   convertDate(dateString: string): string {
-    const d = new Date(dateString);
+    const utc = new Date(dateString);
+    const d = new Date(utc.getTime() - new Date().getTimezoneOffset() * 60000)
     return d.toLocaleString("sv-SE", { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit", year: "numeric" });
-    //return `${d.getHours()}:${d.getMinutes()} (${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()})`
   }
 
+  /**
+   * Given two UTC datestrings, calculate the absolute time in minutes between these.
+   * @param dateStringPrev Datestring 1
+   * @param dateStringNext Datestring 2
+   * @returns Delta time (in minutes)
+   */
   deltaTimeMinutes(dateStringPrev: string, dateStringNext: string) {
     const d1 = new Date(dateStringPrev);
     const d2 = new Date(dateStringNext);
     return Math.abs((d2.getTime() - d1.getTime()) / 60000);
+  }
+
+  inUnread(senderId: number): boolean {
+    console.log("InUnread", senderId, this.unread);
+    console.log(this.unread.find(n => n.senderId == senderId) != undefined);
+    return this.unread.find(n => n.senderId == senderId) != undefined;
   }
 
 }

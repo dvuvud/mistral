@@ -5,14 +5,15 @@ import { AttendanceStatus } from '../child/attendance.service';
 
 const DEBUG = true;
 
-type WsMessageType = "ATTENDANCE" | "DOC_OPERATION" | "PRESENCE_STATE" | "PRESENCE_LEAVE" | "PRESENCE_JOIN" | "CHAT_MESSAGE"
+type WsMessageType = "ATTENDANCE" | "DOC_OPERATION" | "PRESENCE_STATE" | "PRESENCE_LEAVE" | "PRESENCE_JOIN" | "CHAT_MESSAGE" | "NOTIFICATION"
 export type WsJournalWriteOperation = InsertOperation | DeleteOperation;
 
 export enum WsMailbox {
   attendance = "attendanceMessages",
   presence = "presenceMessages",
   journal = "journalMessages",
-  chat = "chatMessages"
+  chat = "chatMessages",
+  notifications = "notifications"
 }
 
 export interface WsMessageContent {
@@ -53,6 +54,10 @@ export interface WsChatMessage extends WsMessageContent {
   timestamp: string
 }
 
+export interface WsChatNotification extends WsMessageContent {
+  senderId: number
+}
+
 export interface InsertOperation {
   type: 'INSERT',
   position: number,
@@ -78,7 +83,8 @@ export class WebsocketService {
     "attendanceMessages": new Subject<WsAttendanceMessage>(),
     "presenceMessages": new Subject<WsPresenceChangeMessage>(),
     "journalMessages": new Subject<WsJournalMessage>(),
-    "chatMessages": new Subject<WsChatMessage>()
+    "chatMessages": new Subject<WsChatMessage>(),
+    "notifications": new Subject<WsChatNotification>()
   }
 
   private rooms: Record<string, string> = {
@@ -118,9 +124,11 @@ export class WebsocketService {
       case "ATTENDANCE":
         this.mailboxes[WsMailbox.attendance].next(msg);
         break;
+
       case "DOC_OPERATION":
         this.mailboxes[WsMailbox.journal].next(msg);
         break;
+
       case "PRESENCE_JOIN":
       case "PRESENCE_LEAVE":
       case 'PRESENCE_STATE':
@@ -132,6 +140,10 @@ export class WebsocketService {
         if (wrappedChat) {
           this.mailboxes[WsMailbox.chat].next(wrappedChat);
         }
+        break;
+
+      case "NOTIFICATION":
+        this.mailboxes[WsMailbox.notifications].next(msg);
         break;
     }
   }
