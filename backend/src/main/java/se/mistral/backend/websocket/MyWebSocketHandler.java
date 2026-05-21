@@ -22,6 +22,7 @@ import se.mistral.backend.journal.dto.BroadcastMessage;
 import se.mistral.backend.journal.ot.Operation;
 import se.mistral.backend.user.Role;
 import se.mistral.backend.user.User;
+import se.mistral.backend.websocket.dto.ChatNotification;
 import se.mistral.backend.websocket.dto.PresenceMessage;
 import se.mistral.backend.websocket.dto.PresenceStateMessage;
 import se.mistral.backend.websocket.dto.PresenceUser;
@@ -43,6 +44,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     private final Map<WebSocketSession, Set<String>> sessionToRooms = new ConcurrentHashMap<>(); // all rooms a given session is in
 
     private final Map<String, Map<Long, PresenceUser>> roomPresence = new ConcurrentHashMap<>(); // active members in a given room
+    private final Map<Long, WebSocketSession> userSessions = new ConcurrentHashMap<>();
 
     /**
      * Handle text message.
@@ -92,6 +94,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             session.getAttributes().put("userName", user.getName());
             session.getAttributes().put("userColor", user.getColor());
             sessionToRooms.putIfAbsent(session, ConcurrentHashMap.newKeySet());
+            userSessions.putIfAbsent(user.getId(), session);
 
             List<PresenceUser> allPresent = roomPresence.values().stream()
                 .flatMap(m -> m.values().stream())
@@ -111,6 +114,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
      */
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
+        Long userId = (Long) session.getAttributes().get("userId");
+        userSessions.remove(userId);
         Set<String> joined = sessionToRooms.remove(session);
         if (joined == null) {
             return;
@@ -143,7 +148,24 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         }
 
         chatService.saveMessage(message);
+        notify(message.recipientId(), message.senderId());
         broadcastToRoom(session, chat.toKey(), toTextMessage(message));
+    }
+
+    private void notify(long recipientId, long senderId) {
+        WebSocketSession session = userSessions.get(recipientId);
+
+        if (session == null || !session.isOpen()) {
+            return;
+        }
+
+        try {
+            session.sendMessage(
+                new TextMessage(objectMapper.writeValueAsString(
+                    new ChatNotification("NOTIFICATION", senderId)
+                ))
+            );
+        } catch (Exception ignored) { }
     }
 
     private void handleDocOperation(WebSocketSession session, String rawRoom, JsonNode json) {
