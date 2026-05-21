@@ -18,7 +18,17 @@
       </button>
       @for (teacher of (users()); track teacher.name) {
         <button mat-list-item (click)="onSelectTeacher(teacher)">
-          <span matListItemTitle>{{teacher.name}} </span>
+          @if(inUnread(teacher.id!)){
+            <span matListItemTitle>
+              <b>{{teacher.name}}</b>
+            </span>
+          }
+          @else {
+            <span matListItemTitle>
+              {{teacher.name}}
+            </span>
+          }
+
         </button>
       }
     </mat-action-list>
@@ -38,7 +48,7 @@
         <div id="chatViewTitleSpacer"></div>
       </mat-card-title>
     </mat-card-header>
-    <mat-card id="chatViewDisplay" #chatViewDisplay>
+    <div id="chatViewDisplay" #chatViewDisplay>
       @for (msg of messages(); track msg.timestamp; let idx = $index) {
       <div class="chatMessageContainer" [class.msgSelf]="msg.senderId == userId">
         @if (idx == 0 || (idx > 0 && messages()[idx - 1].senderId != msg.senderId)) {
@@ -53,7 +63,7 @@
       </div>
       }
       <div id="scrollAnchor"></div>
-    </mat-card>
+    </div>
     <mat-card id="chatViewFooter">
       <mat-form-field>
         <input matInput [(ngModel)]="newMessage" type="text" (keyup.enter)="submitMessage()">
