@@ -1,4 +1,4 @@
-import { Component, contentChild, ContentChild, effect, ElementRef, inject, model, OnDestroy, OnInit, signal, ViewChild, viewChild } from '@angular/core';
+import { Component, ElementRef, inject, model, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { User, UserService } from '../../../core/user/user.service';
 import { ChatMessage, ChatService } from '../../../core/chat/chat.service';
@@ -8,7 +8,7 @@ import { MatIconButton } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
-import { MatCard, MatCardModule } from "@angular/material/card";
+import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from '@angular/material/tooltip';
 
