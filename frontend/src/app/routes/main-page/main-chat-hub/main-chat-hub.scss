@@ -29,6 +29,8 @@ mat-action-list {
   width: 100%;
   height: 100%;
   min-height: 30vh;
+  max-height: 50vh;
+  overflow-y: scroll;
   transition: height 1s;
   background-color: var(--mat-sys-surface);
   box-shadow: 0;
@@ -43,7 +45,6 @@ mat-action-list > button {
   border-bottom: 2px solid var(--mat-sys-surface-container-highest);
   cursor: pointer;
   box-sizing: border-box;
-  //font-weight: 300;
 }
 
 mat-action-list > button:last-child {
@@ -69,6 +70,7 @@ button:hover{
   flex: 1;
   height: 100%;
   width: 100%;
+  font-size: 0.5rem;
 }
 
 #chatViewTitleRight {
@@ -77,6 +79,8 @@ button:hover{
   width: 100%;
   display: flex;
   justify-content: center;
+  font-size: 1rem;
+  text-wrap: nowrap;
 }
 
 .cardHeader {
@@ -98,6 +102,9 @@ button:hover{
   flex: 1;
   flex-direction: row;
   justify-content: center;
+  padding: 0;
+  background-color: var(--mat-sys-surface-container-highest);
+  margin: 0.1em;
 }
 
 ::ng-deep #chatViewHeader > .mat-mdc-card-header-text {
@@ -114,6 +121,8 @@ button:hover{
 #chatViewDisplay {
   flex: 5;
   min-height: 30vh;
+  max-height: 30vh;
+  overflow-y: scroll;
 }
 
 #chatViewFooter {
@@ -125,6 +134,74 @@ button:hover{
 
 #chatViewFooter mat-form-field {
   flex: 3;
+}
+
+.chatMessageContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.chatMessageContainer.msgSelf {
+  align-items: end;
+}
+
+.chatMessageHeader {
+  font-family: var(--mat-sys-body-small);
+  font-weight: 500;
+  margin-left: 0.75em;
+  margin-top: 0.5em;
+}
+
+.chatMessageHeader.msgSelf {
+  font-weight: normal;
+  margin-left: 0;
+  margin-right: 0.75em;
+  text-align: right;
+}
+
+.chatMessageDate {
+  font-family: var(--mat-sys-body-small);
+  font-weight: 300;
+  margin-left: 0.75em;
+  margin-top: 0;
+}
+
+.chatMessageDate.msgSelf {
+  margin-left: 0;
+  margin-right: 0.75em;
+  text-align: right;
+}
+
+.chatMessage {
+  background-color: var(--mat-sys-primary-container);
+  margin-left: 0.5em;
+  margin-right: 2.5em;
+  border-radius: var(--mat-sys-corner-medium);
+  padding: 0.5em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  width: fit-content;
+  max-width: 80%;
+  height: fit-content;
+  text-wrap: wrap;
+  word-wrap: break-word;
+}
+
+.chatMessage.msgSelf {
+  flex-direction: row-reverse;
+  text-align: right;
+  background-color: var(--mat-sys-tertiary-container);
+  margin-right: 0.5em;
+  margin-left: 2.5em;
+}
+
+#chatViewDisplay * {
+  overflow-anchor: none;
+}
+
+#chatViewDisplay #scrollAnchor {
+  overflow-anchor: auto;
+  height: 1em;
 }
 
 .chat-hide-button {
@@ -170,5 +247,36 @@ button:hover{
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+.animShake {
+  animation: shake 0.5s;
+}
+
+
+@keyframes shake {
+  0% {
+    transform: rotateZ(0deg) scale(1);
+  }
+
+  20% {
+    transform: rotateZ(-20deg) scale(1.1);
+  }
+
+  40% {
+    transform: rotateZ(20deg) scale(1.2);
+  }
+
+  60% {
+    transform: rotateZ(-45deg) scale(1.1);
+  }
+
+  80% {
+    transform: rotateZ(45deg) scale(1);
+  }
+
+  100% {
+    transform: rotateZ(0deg) scale(1);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, model, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, inject, model, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { User, UserService } from '../../../core/user/user.service';
 import { ChatMessage, ChatService } from '../../../core/chat/chat.service';
@@ -8,7 +8,7 @@ import { MatIconButton } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
-import { MatCardModule } from "@angular/material/card";
+import { MatCard, MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from '@angular/material/tooltip';
 
@@ -34,6 +34,7 @@ export class MainChatHub implements OnInit, OnDestroy {
   messages = signal<ChatMessage[]>([]);
   newMessage = model<string>('');
 
+  chatView = viewChild<MatCard>("chatViewDisplay");
 
   private subs = new Subscription();
 
@@ -45,12 +46,16 @@ export class MainChatHub implements OnInit, OnDestroy {
 
   enterClass = signal<string>("enter-animation");
   chatVisible = signal<boolean>(false);
+  private messageNotificationSound = new Audio("message.ogg");
+  doShakeAnimation = signal<boolean>(false);
+  minutesBeforeNewDate = 3;
 
   /**
    * On component initialization, to ensure the WebSocket connection is established
    * and subscribe to incoming chat messages from the WebSocket service.
    */
   async ngOnInit(): Promise<void> {
+    this.messageNotificationSound.load();
     await this.websocketService.ensureConnected();
     // Load the list of users (teachers) for the chat
     this.subs.add(
@@ -137,7 +142,21 @@ export class MainChatHub implements OnInit, OnDestroy {
    */
   handleMessage(message: WsChatMessage): void {
     this.messages.update(current => [...current, message]);
+    this.doShakeAnimation.set(true);
+    this.messageNotificationSound.play();
     console.log(message);
+  }
+
+  convertDate(dateString: string): string {
+    const d = new Date(dateString);
+    return d.toLocaleString("sv-SE", { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit", year: "numeric" });
+    //return `${d.getHours()}:${d.getMinutes()} (${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()})`
+  }
+
+  deltaTimeMinutes(dateStringPrev: string, dateStringNext: string) {
+    const d1 = new Date(dateStringPrev);
+    const d2 = new Date(dateStringNext);
+    return Math.abs((d2.getTime() - d1.getTime()) / 60000);
   }
 
 }
