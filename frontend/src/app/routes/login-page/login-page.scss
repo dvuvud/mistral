@@ -24,10 +24,8 @@
 #login-page-banner {
   background: var(--mat-sys-primary);
   box-sizing: border-box;
-  align-items: center;
   justify-content: center;
-  position: fixed;
-  padding: 4.5rem;
+  position: absolute;
   display: none;
   width: 100%;
   top: 0;
