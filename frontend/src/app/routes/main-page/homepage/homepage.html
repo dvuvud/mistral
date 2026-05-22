@@ -54,38 +54,12 @@
             </mat-card-header>
             <mat-divider></mat-divider>
             <mat-card-content class="news-content">
+              @for (teacher of users(); track teacher.id) {
                 <mat-card class="mock-teachers">
                     <mat-icon>face</mat-icon>
-                    <p class="namn" >Lärare Lärarsson</p>
+                    <p class="namn" >{{teacher.name}}</p>
                 </mat-card>
-                <mat-card class="mock-teachers">
-                    <mat-icon>face</mat-icon>
-                    <p class="namn" >Lärare Lärarsson</p>
-                </mat-card>
-                <mat-card class="mock-teachers">
-                    <mat-icon>face</mat-icon>
-                    <p class="namn" >Lärare Lärarsson</p>
-                </mat-card>
-                <mat-card class="mock-teachers">
-                    <mat-icon>face</mat-icon>
-                    <p class="namn" >Lärare Lärarsson</p>
-                </mat-card>
-                <mat-card class="mock-teachers">
-                    <mat-icon>face</mat-icon>
-                    <p class="namn" >Lärare Lärarsson</p>
-                </mat-card>
-                <mat-card class="mock-teachers">
-                    <mat-icon>face</mat-icon>
-                    <p class="namn" >Lärare Lärarsson</p>
-                </mat-card>
-                <mat-card class="mock-teachers">
-                    <mat-icon>face</mat-icon>
-                    <p class="namn" >Lärare Lärarsson</p>
-                </mat-card>
-                <mat-card class="mock-teachers">
-                    <mat-icon>face</mat-icon>
-                    <p class="namn" >Lärare Lärarsson</p>
-                </mat-card>
+              }
             </mat-card-content>
         </mat-card>
     </mat-card-content>
