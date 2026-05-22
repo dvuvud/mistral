@@ -113,12 +113,20 @@ export class MainChatHub implements OnInit, OnDestroy {
       })
     );
 
+    // Start listening to new chat room
     this.websocketService.setChatRoom(
       this.chatService.createChatRoomId(this.userId, recipientId)
     );
 
+    this.newMessage.set(this.selectedTeacher()?.storedMessage ?? "");
+
+    // Remove the unread message notification
+    this.unread = this.unread.filter(notification => notification.senderId !== recipientId);
+
+    // Ensure we scroll to the bottom (for most recent messages)
     if (this.chatView != null)
       this.chatView.nativeElement.scrollTop = this.chatView.nativeElement.scrollHeight;
+
     if (DEBUG) console.log(teacher);
   }
 
@@ -134,6 +142,12 @@ export class MainChatHub implements OnInit, OnDestroy {
    */
   returnToOverview() {
     this.viewState.set("overview");
+    if(this.selectedTeacher() != null) {
+      this.selectedTeacher.update((teacher) => {
+        teacher!.storedMessage = this.newMessage();
+        return teacher;
+      })
+    }
     this.selectedTeacher.set(null);
   }
 
