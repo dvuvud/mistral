@@ -12,6 +12,7 @@ export interface User {
   color: string,
   role?: string,
   email?: string,
+  storedMessage?: string,
 }
 
 @Injectable({ providedIn: 'root' })

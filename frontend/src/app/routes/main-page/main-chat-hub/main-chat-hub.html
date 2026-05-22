@@ -22,23 +22,29 @@
   </mat-card-header>
   @if (viewState() === "overview") {
     <mat-action-list class="list-class">
+      <!--- Borttaget för tillfället (inte planerat för 1.0)
       <button mat-list-item (click)="onSelectAll()">
         <span matListItemTitle>Alla</span>
       </button>
+      -->
       @for (teacher of (users()); track teacher.name) {
-        <button mat-list-item (click)="onSelectTeacher(teacher)">
-          @if(inUnread(teacher.id!)){
-            <span matListItemTitle>
-              <b>{{teacher.name}}</b>
-            </span>
-          }
-          @else {
-            <span matListItemTitle>
-              {{teacher.name}}
-            </span>
-          }
-
-        </button>
+        @if(teacher.id !== this.userId) {
+          <button mat-list-item (click)="onSelectTeacher(teacher)" class="teacherSelector">
+            <div class="chatAvatar" style="background-color: {{teacher.color}}">
+              {{teacher.name.substring(0, 1)}}
+            </div>
+            @if(inUnread(teacher.id!)){
+              <span matListItemTitle>
+                <b>{{teacher.name}}</b>
+              </span>
+            }
+            @else {
+              <span matListItemTitle>
+                {{teacher.name}}
+              </span>
+            }
+          </button>
+        }
       }
     </mat-action-list>
   }
@@ -47,7 +53,7 @@
     <mat-card-header id="chatViewHeader" class="cardHeader">
       <mat-card-title>
         <div id="chatViewTitleLeft">
-          <button matIconButton="button" (click)="returnToOverview()">
+          <button matIconButton="button" [matTooltip]="'Kontaktlista'" (click)="returnToOverview()">
             <mat-icon>keyboard_return</mat-icon>
           </button>
         </div>
@@ -77,7 +83,7 @@
       <mat-form-field>
         <input matInput [(ngModel)]="newMessage" type="text" (keyup.enter)="submitMessage()">
       </mat-form-field>
-      <button matInput type="button" (click)="submitMessage()">Send</button>
+      <button [matTooltip]="'Skicka meddelande'" matInput type="button" matIconButton="button" (click)="submitMessage()"><mat-icon>send</mat-icon></button>
     </mat-card>
   </mat-card>
   }
