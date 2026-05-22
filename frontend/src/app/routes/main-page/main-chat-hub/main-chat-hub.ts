@@ -52,7 +52,8 @@ export class MainChatHub implements OnInit, OnDestroy {
   @ViewChild("chatViewDisplay", { static: false }) set content(ref: ElementRef<HTMLDivElement>) {
     console.log(ref);
     this.chatView = ref;
-    this.chatView.nativeElement.scrollTop = this.chatView.nativeElement.scrollHeight;
+    if(this.chatView)
+      this.chatView.nativeElement.scrollTop = this.chatView.nativeElement.scrollHeight;
   }
 
   // Assets
