@@ -17,21 +17,6 @@
             </child-display>
           </div>
         </div>
-        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-          <mat-tab label="Information">
-            <information [childSignal]="childSignal()"></information>
-          </mat-tab>
-          <mat-tab label={{reportTitle()}}>
-            <main-live-journal [childSignal]="childSignal()"
-                          [groupSignal]="groupSignal()"
-                          [contentSignal]="contentSignal()" >
-            </main-live-journal>
-          </mat-tab>
-          <mat-tab label="Rapporthistorik">
-              <history [(childSignal)]="childSignal">
-              </history>
-          </mat-tab>
-        </mat-tab-group>
         <nav mat-tab-nav-bar mat-stretch-tabs="false" mat-align-tabs="start">
           @for (link of links(); track link) {
             <a mat-tab-link
@@ -41,10 +26,12 @@
         </nav>
         <div id="child-tab-content">
           <information style="display:{{activeLink() == links()[0] ? 'flex' : 'none'}}" [childSignal]="childSignal()"></information>
-          <main-live-journal style="display:{{activeLink() == links()[0] ? 'none' : 'flex'}}" [childSignal]="childSignal()"
+          <main-live-journal style="display:{{activeLink() == links()[1] ? 'flex' : 'none'}}" [childSignal]="childSignal()"
                         [groupSignal]="groupSignal()"
                         [contentSignal]="contentSignal()" >
           </main-live-journal>
+          <history style="display:{{activeLink() == links()[2] ? 'flex' : 'none'}}" [(childSignal)]="childSignal">
+          </history>
         </div>
       }
 

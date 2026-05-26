@@ -13,36 +13,14 @@
     </mat-card-header>
     <mat-divider></mat-divider>
         <mat-card-content class="news-content">
+          @for (number of [1, 2, 3, 4, 5]; track number) {
             <mat-card class="mock-news-boxes">
                 <p class="news-text">
                     <span class="news-title">CLICKBAIT TITEL</span>
-                    {{fakeNews}}
+                    {{number == 1 || number == 4 ? fakeNewsLong : fakeNews}}
                 </p>
             </mat-card>
-            <mat-card class="mock-news-boxes">
-                <p class="news-text">
-                    <span class="news-title">CLICKBAIT TITEL</span>
-                    {{fakeNewsLong}}
-                </p>
-            </mat-card>
-            <mat-card class="mock-news-boxes">
-                <p class="news-text">
-                    <span class="news-title">CLICKBAIT TITEL</span>
-                    {{fakeNews}}
-                </p>
-            </mat-card>
-            <mat-card class="mock-news-boxes">
-                <p class="news-text">
-                    <span class="news-title">CLICKBAIT TITEL</span>
-                    {{fakeNews}}
-                </p>
-            </mat-card>
-            <mat-card class="mock-news-boxes">
-                <p class="news-text">
-                    <span class="news-title">CLICKBAIT TITEL</span>
-                    {{fakeNewsLong}}
-                </p>
-            </mat-card>
+          }
         </mat-card-content>
         </mat-card>
         <mat-card class="staff">
