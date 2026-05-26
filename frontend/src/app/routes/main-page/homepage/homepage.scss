@@ -54,6 +54,14 @@ mat-card {
     flex-direction: column;
     min-height: 0;
     overflow: hidden;
+
+    @media (max-width: 740px) {
+      flex: 0.7;
+    }
+}
+
+.staff mat-card:last-child {
+  margin-bottom: 1em;
 }
 
 .news-header {
@@ -79,6 +87,7 @@ mat-card {
     font-size: medium;
     font-weight: bold;
 }
+
 .news-content {
     display: flex;
     flex-direction: column;
@@ -88,6 +97,10 @@ mat-card {
     margin: 0;
     padding: 0 0.5em;
     margin-bottom: 1em;
+}
+
+.news-content mat-card:last-child {
+  margin-bottom: 1em;
 }
 
 mat-icon {

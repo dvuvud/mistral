@@ -198,3 +198,7 @@ main-presence-container {
   height: 100%;
   display: flex;
 }
+
+.main-card-left a {
+  box-shadow: var(--mat-sys-level1);
+}

@@ -38,7 +38,8 @@ export class MainPanel implements OnInit{
   activeLink = signal<string>('Information');
   links = signal<string[]>([
     "Information",
-    this.childSignal().name + (this.childSignal().name.endsWith("s") ? "" : "s") + "dagsrapport"
+    this.childSignal().name + (this.childSignal().name.endsWith("s") ? "" : "s") + "dagsrapport",
+    "Historik"
   ]);
   detachedListVisible = signal<boolean>(false);
 
@@ -57,7 +58,8 @@ export class MainPanel implements OnInit{
     effect(() => {
       this.links.set([
         "Information",
-        this.childSignal().name + (this.childSignal().name.endsWith("s") ? "" : "s") + " dagsrapport"
+        this.childSignal().name + (this.childSignal().name.endsWith("s") ? "" : "s") + " dagsrapport",
+        "Historik"
       ]);
     });
     effect(() => {
