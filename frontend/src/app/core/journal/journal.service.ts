@@ -34,17 +34,4 @@ export class JournalService {
     params = params.set('date', date);
     return this.http.get<JournalResponse>(this.baseUrl, { params });
   }
-
-  getJournalHistory(childId: number, dates: string[]): Observable<JournalResponse[]> {
-    let params = new HttpParams();
-    params = params.set('childId', childId);
-
-
-    const requests = dates.map(date => {
-      const requestParams = params.set('date', date);
-      return this.http.get<JournalResponse>(this.baseUrl, { params: requestParams });
-    });
-
-    return forkJoin(requests);
-  }
 }
