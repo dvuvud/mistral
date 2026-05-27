@@ -1,10 +1,9 @@
 <div class="outer-container">
-<<<<<<< HEAD
     <mat-card class="journal-display">
         <mat-card-header class="journal-header">
             @if(selected() !== null) {
                 <p class="journal-title">
-                    Dagsrapport för {{childSignal().name}} 
+                    Dagsrapport för {{childSignal().name}}
                 </p>
                 <p class="bold-label" >
                         {{dateLabel}}
@@ -24,7 +23,7 @@
 
     <div class="calendar-container">
         <mat-card>
-            <mat-calendar class="calendar" 
+            <mat-calendar class="calendar"
                           [selected]="selected()"
                           (selectedChange)="selected.set($event)"
                           [maxDate]="yesterday">
@@ -41,7 +40,4 @@
             <span class="bold-label">{{currentChildAttendance}}</span>
         </p>
     </div>
-=======
-
->>>>>>> e2d4b87 (basic logic för att fetcha ett barns journaler och en tab för history)
 </div>

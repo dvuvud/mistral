@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 :host {
     display: flex;
     min-height: 0;
@@ -11,12 +10,12 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-    min-height: 0; 
+    min-height: 0;
     overflow: hidden;
     flex: 1;
     box-shadow: var(--mat-sys-level2);
-    box-sizing: border-box; 
-    padding: 1em; 
+    box-sizing: border-box;
+    padding: 1em;
     gap: 1em
 }
 
@@ -87,8 +86,8 @@
 .journal-text {
     font: var(--mat-sys-body-large);
     margin: 0.5em;
-=======
+}
+
 .outer-container {
     display: flex;
->>>>>>> e2d4b87 (basic logic för att fetcha ett barns journaler och en tab för history)
 }
