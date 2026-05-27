@@ -21,16 +21,18 @@
           @for (link of links(); track link) {
             <a mat-tab-link
               (click)="activeLink.set(link)"
-              [active]="activeLink() == link"> {{link}} </a>
+              (keypress.enter)="activeLink.set(link)"
+              tabindex="0"
+              [active]="activeLink() === link"> {{link}} </a>
           }
         </nav>
         <div id="child-tab-content">
-          <information style="display:{{activeLink() == links()[0] ? 'flex' : 'none'}}" [childSignal]="childSignal()"></information>
-          <main-live-journal style="display:{{activeLink() == links()[1] ? 'flex' : 'none'}}" [childSignal]="childSignal()"
+          <information style="display:{{activeLink() === links()[0] ? 'flex' : 'none'}}" [childSignal]="childSignal()"></information>
+          <main-live-journal style="display:{{activeLink() === links()[1] ? 'flex' : 'none'}}" [childSignal]="childSignal()"
                         [groupSignal]="groupSignal()"
                         [contentSignal]="contentSignal()" >
           </main-live-journal>
-          <history style="display:{{activeLink() == links()[2] ? 'flex' : 'none'}}" [(childSignal)]="childSignal">
+          <history style="display:{{activeLink() === links()[2] ? 'flex' : 'none'}}" [(childSignal)]="childSignal">
           </history>
         </div>
       }
@@ -62,7 +64,13 @@
     </div>
 
     <mat-card [class.right-card-visible]="detachedListVisible()" class="main-card-right">
-      <div #tooltip="matTooltip" [matTooltip]="detachedListVisible() ? 'Göm närvarolista' : 'Visa närvarolista'" class="main-card-right-hide-button" (click)="detachedListVisible.set(!detachedListVisible())">
+      <div #tooltip="matTooltip"
+        [matTooltip]="detachedListVisible() ? 'Göm närvarolista' : 'Visa närvarolista'"
+        class="main-card-right-hide-button"
+        (click)="detachedListVisible.set(!detachedListVisible())"
+        (keypress.enter)="detachedListVisible.set(!detachedListVisible())"
+        tabindex="0"
+      >
         @if(detachedListVisible()) {
           <mat-icon>arrow_forward_ios</mat-icon>
         }
