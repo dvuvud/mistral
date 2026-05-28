@@ -130,9 +130,27 @@ export class MainCaretTracker implements OnInit {
       const txt = user.usr.name;
       const nameMetrics = canvasContext!.measureText(txt);
       canvasContext.fillStyle = user.usr.color;
-      canvasContext.fillRect(user.rect.x - hPadding , user.rect.y - this.em, nameMetrics.width + hPadding * 2, this.em);
+      let adjustedX = user.rect.x;
+      let adjustedRectY, adjustedTextY;
+      if (user.rect.y - this.em < 0) {
+        adjustedRectY = user.rect.y + this.em;
+        adjustedTextY = user.rect.y + this.em * 1.8;
+      }
+      else {
+        adjustedRectY = user.rect.y - this.em;
+        adjustedTextY = user.rect.y - vPadding;
+      }
+
+      if (user.rect.x - hPadding < 0) {
+        adjustedX = user.rect.x + (user.rect.x - hPadding * -1);
+      }
+
+      if (user.rect.x + nameMetrics.width + hPadding * 2 > canvasContext.canvas.width) {
+        adjustedX = canvasContext.canvas.width - nameMetrics.width - hPadding * 2;
+      }
+      canvasContext.fillRect(adjustedX - hPadding, adjustedRectY, nameMetrics.width + hPadding * 2, this.em);
       canvasContext.fillStyle = "white";
-      canvasContext.fillText(txt, user.rect.x, user.rect.y - vPadding);
+      canvasContext.fillText(txt, adjustedX, adjustedTextY);
       //canvasContext.strokeStyle = "black";
       //canvasContext.strokeText(txt, user.rect.x, user.rect.y - nameMetrics.emHeightAscent);
     }
