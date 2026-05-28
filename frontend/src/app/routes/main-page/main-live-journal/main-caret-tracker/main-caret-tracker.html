@@ -1,5 +1,11 @@
-  <div #hidden id="hidden">
-    <span #hiddenSpan class="caret-span" style="background-color: red;">
+<div #hiddenContainer id="hiddenContainer">
+@for(User of presentTeachers() ; track User[1].usr.id) {
+  <div id="caret-{{User[1].usr.userId}}" #hiddenDivs class="ghost-text-area">
+      {{User[1].preSpan()}}
+    <span #hiddenSpan [scrollTop]="journalScrollTop()" class="caret-span" style="background-color:{{User[1].usr.color}}">
+      {{User[1].postSpan()}}
     </span>
   </div>
-  <canvas #canvas id="canvas"></canvas>
+}
+</div>
+<canvas #canvas id="canvas"></canvas>
