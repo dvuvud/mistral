@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -106,6 +107,20 @@ public class WebSocketHandlerTests {
         payload.put("room", room);
         payload.put("clientRevision", clientRevision);
         payload.put("operation", operation);
+        if (sequence != null) {
+            payload.put("sequence", sequence);
+        }
+        return new TextMessage(objectMapper.writeValueAsString(payload));
+    }
+
+    private TextMessage invalidDocOperation(final String room, final int clientRevision, final Map<String, Object> operation,
+                                            final Integer sequence)
+            throws Exception {
+        final Map<String, Object> payload = new HashMap<>();
+        payload.put("type", "DOC_OPERATION");
+        payload.put("room", room);
+        payload.put("clientRevision", clientRevision);
+        payload.put("operation", 2);
         if (sequence != null) {
             payload.put("sequence", sequence);
         }
@@ -559,5 +574,54 @@ public class WebSocketHandlerTests {
         assertThat(attributes.get("userId")).isNull();
     }
 
+    @Test
+    void foreignChatUserShouldBeClosedQuietly() throws Exception {
+        final WebSocketSession sessionA = openSession(tokenA);
+
+        final String payload = objectMapper.writeValueAsString(new SocketMessage(
+                "CHAT_MESSAGE",
+                "chat:" + userA.getId() + 100 + ":" + userB.getId() + 100,
+                new ChatMessage(
+                        userB.getId(),
+                        userA.getId() + 100,
+                        "hello",
+                        LocalDateTime.now())));
+
+        handler.handleTextMessage(sessionA, new TextMessage(payload));
+
+        verify(sessionA).close(CloseStatus.NOT_ACCEPTABLE);
+    }
+
+    @Test
+    void joinRoomWithUninitializedSessionShouldReturnEarly() throws Exception {
+        final WebSocketSession session = mock(WebSocketSession.class);
+        final Map<String, Object> attributes = new HashMap<>();
+        attributes.put("userId", 1L);
+        when(session.getAttributes()).thenReturn(attributes);
+
+        final String payload = objectMapper.writeValueAsString(Map.of(
+                "type", "subscribe",
+                "room", "unknown-room"
+        ));
+
+        handler.handleTextMessage(session, new TextMessage(payload));
+
+        verify(session, never()).close(any());
+    }
+
+
+    @Test
+    void invalidDocOperationFails() throws Exception {
+        final WebSocketSession sessionA = openSession(tokenA);
+
+        final ChildResponse child = childService.createChild(new CreateChildRequest("ws-test-child"));
+        final String room = "journal:child:" + child.id() + ":" + DATE;
+        subscribe(sessionA, room);
+
+        handler.handleTextMessage(sessionA, invalidDocOperation(room, 0, insertOp(0, "hello"), 1));
+
+        final JournalDto dto = journalService.getOrCreate(new JournalTarget.Child(child.id()), DATE);
+        assertThat(dto.content()).isEqualTo("");
+    }
 
 }
