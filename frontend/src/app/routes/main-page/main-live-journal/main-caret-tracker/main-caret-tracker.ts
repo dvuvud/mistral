@@ -1,7 +1,9 @@
 import { Component, effect, ElementRef, input, OnInit, signal, viewChild, inject, WritableSignal, viewChildren } from '@angular/core';
 import { User } from '../../../../core/user/user.service';
-import { WebsocketService, WsJournalResponse, WsMailbox, WsMessageContent } from '../../../../core/websocket/websocket.service';
+import { WebsocketService, WsJournalResponse, WsMailbox, WsMessageContent, WsPresenceChangeMessage } from '../../../../core/websocket/websocket.service';
 import { Presence } from '../../../../core/presence/presence.service';
+
+const DEBUG = false;
 
 interface UserCaretContext {
   usr: User,
@@ -11,7 +13,7 @@ interface UserCaretContext {
     width: number,
     height: number
   },
-  preSpan:  WritableSignal<string>,
+  preSpan: WritableSignal<string>,
   postSpan: WritableSignal<string>
 }
 
@@ -50,18 +52,27 @@ export class MainCaretTracker implements OnInit {
     this.socketService.getMessages(WsMailbox.journal).subscribe((next: WsMessageContent) => {
       this.handleIncomingChange(next as WsJournalResponse);
     })
-    this.socketService.getMessages(WsMailbox.presence).subscribe(() => {
-      this.initTeachers();
+    this.socketService.getMessages(WsMailbox.presence).subscribe((next) => {
+      const nextAs = next as WsPresenceChangeMessage;
+      if (nextAs.type == "PRESENCE_JOIN" || nextAs.type == "PRESENCE_STATE") {
+        this.initTeachers();
+      }
+      else if (next.type == "PRESENCE_LEAVE") {
+        this.presentTeachers.update((current) => {
+          current.delete(nextAs.userId);
+          return current;
+        });
+      }
     });
     this.initTeachers();
 
-    setInterval(() => { console.log("Now"); this.refitCarets() }, 1000);
+    setInterval(() => { this.refitCarets() }, 1000);
   }
 
   initTeachers() {
-    console.log("InitTeachers called");
+    if (DEBUG) console.log("InitTeachers called");
     const allTeachers = this.presenceService.connectedTeachers();
-    console.log(this.presenceService.connectedTeachers());
+    if (DEBUG) console.log(this.presenceService.connectedTeachers());
     const prev = this.presentTeachers();
     allTeachers.forEach((user: User) => {
       if (prev.get(user.userId) !== undefined) {
@@ -75,8 +86,8 @@ export class MainCaretTracker implements OnInit {
     });
 
     this.presentTeachers.set(prev);
-    console.log(this.presenceService.connectedTeachers());
-    console.log(this.presentTeachers());
+    if (DEBUG) console.log(this.presenceService.connectedTeachers());
+    if (DEBUG) console.log(this.presentTeachers());
   }
 
   isInRoom(usr: User) {
@@ -93,7 +104,7 @@ export class MainCaretTracker implements OnInit {
   }
 
   handleIncomingChange(msg: WsJournalResponse) {
-    console.log(msg.userId);
+    if (DEBUG) console.log(msg.userId);
   }
 
   drawCarets() {
@@ -109,7 +120,7 @@ export class MainCaretTracker implements OnInit {
       return;
     }
     canvasContext.reset();
-    console.log("From draw", this.presentTeachers());
+    if (DEBUG) console.log("From draw", this.presentTeachers());
     const emScaleMod = 0.8;
     const hPadding = 5;
     const vPadding = 5;
@@ -134,7 +145,7 @@ export class MainCaretTracker implements OnInit {
     const ctx = this.presentTeachers().get(userId);
     if (ctx === undefined) {
       console.error("Couldn't find caret context for that user id (" + userId + "), Local: [" + this.presentTeachers() + "] | Global:");
-      console.log(this.presenceService.connectedTeachers());
+      if (DEBUG) console.log(this.presenceService.connectedTeachers());
       return;
     }
     // Set the content of the mirrordiv
@@ -165,13 +176,12 @@ export class MainCaretTracker implements OnInit {
     }
     const spanElementRef = this.hidden().find((element) => parseInt(element.nativeElement.id.split("-")[1]) == userId);
     if (!spanElementRef) {
-      console.log(this.hidden());
       console.error("Refit: Couldn't find nativeElement for that caret id")
       return;
     }
     const spanElement: HTMLSpanElement | null = spanElementRef.nativeElement.firstElementChild as HTMLSpanElement;
     ctx.rect = { x: spanElement.offsetLeft, y: spanElement.offsetTop - this.journalScrollTop(), width: 3, height: this.em }
-    console.log("From refit: ", spanElement, ctx.rect);
+    if (DEBUG) console.log("From refit: ", spanElement, ctx.rect);
     this.presentTeachers.update((current) => {
       current.set(userId, ctx);
       return current;
@@ -182,6 +192,12 @@ export class MainCaretTracker implements OnInit {
     for (const userCaret of this.presentTeachers()) {
       this.refitCaret(userCaret[0]);
     }
+    this.drawCarets();
+  }
+
+  clearAndReset() {
+    this.canvasElement().nativeElement.getContext("2d")!.reset();
+    this.presentTeachers.set(new Map<number, UserCaretContext>());
     this.drawCarets();
   }
 
