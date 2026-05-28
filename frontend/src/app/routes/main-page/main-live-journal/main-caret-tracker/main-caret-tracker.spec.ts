@@ -9,8 +9,7 @@ describe('MainCaretTracker', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MainCaretTracker]
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MainCaretTracker);
     component = fixture.componentInstance;
