@@ -1,4 +1,4 @@
-import { Component, OnDestroy, signal, inject, viewChild, ElementRef, model, OnInit, OnChanges } from '@angular/core';
+import { Component, OnDestroy, signal, inject, viewChild, ElementRef, model, OnInit, OnChanges, effect, AfterViewInit } from '@angular/core';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
@@ -9,24 +9,27 @@ import { operationalTransformation } from './operational-transformation';
 import { JournalService } from '../../../core/journal/journal.service';
 import { localDateToday } from '../../../core/utils/date-utils';
 import { groupResponse } from '../../../core/groups/group.service';
+import { MainCaretTracker } from "./main-caret-tracker/main-caret-tracker";
 
 @Component({
   selector: 'main-live-journal',
-  imports: [MatFormField, MatInput, FormsModule],
+  imports: [MatFormField, MatInput, FormsModule, MainCaretTracker],
   templateUrl: './main-live-journal.html',
   styleUrl: './main-live-journal.scss',
 })
-export class MainLiveJournal implements OnDestroy, OnInit, OnChanges {
+export class MainLiveJournal implements OnDestroy, OnInit, OnChanges, AfterViewInit{
   private journalSocket = inject(WebsocketService);
   private differ = new textDiff();
   private operationalTransformer = new operationalTransformation();
   private journalService = inject(JournalService);
   private textArea = viewChild.required<ElementRef<HTMLTextAreaElement>>("journalContent");
+  private caretTracker = viewChild.required<MainCaretTracker>("tracker");
 
   childSignal = model.required<Child>();
   contentSignal = model.required<string>();
   groupSignal = model.required<groupResponse>();
 
+  journalScrollTop = signal<number>(0);
 
   async ngOnInit() {
     await this.journalSocket.ensureConnected();
@@ -36,11 +39,13 @@ export class MainLiveJournal implements OnDestroy, OnInit, OnChanges {
 
       if (this.isMyOwnAck(response)) {
         this.inFlight.shift();
+        this.caretTracker().updateCaret(response.userId, this.text(), incoming.position);
       } else {
         for (const myOp of this.inFlight) {
           incoming = this.operationalTransformer.transformClient(incoming, myOp);
         }
         this.applyToLocalContent(incoming);
+        this.caretTracker().updateCaret(response.userId, this.text(), incoming.position);
       }
       this.serverRevision = response.serverRevision;
     });
@@ -53,6 +58,10 @@ export class MainLiveJournal implements OnDestroy, OnInit, OnChanges {
     this.loadJournal();
   }
 
+  ngAfterViewInit(): void {
+    this.caretTracker().updateCanvasEm(this.textArea().nativeElement);
+  }
+
   text = signal('');
   prevText = '';
 
@@ -60,8 +69,6 @@ export class MainLiveJournal implements OnDestroy, OnInit, OnChanges {
   sequence = 0;
 
   inFlight: WsJournalWriteOperation[] = [];
-
-
 
   getRoom(): string {
     if (this.contentSignal() === 'childView') {
@@ -99,7 +106,6 @@ export class MainLiveJournal implements OnDestroy, OnInit, OnChanges {
         this.textArea().nativeElement.setRangeText("", pos, pos + incoming.length, "preserve");
         break;
     }
-
     this.text.set(this.textArea().nativeElement.value);
     this.prevText = this.text();
   }
@@ -152,6 +158,7 @@ export class MainLiveJournal implements OnDestroy, OnInit, OnChanges {
     }
 
     this.sendOperation(operation);
+    this.caretTracker().updateCaret(parseInt(sessionStorage.getItem("UserId")!), this.text(), this.textArea().nativeElement.selectionStart);
   }
 
   sendOperation(operation: WsJournalWriteOperation) {
@@ -164,5 +171,24 @@ export class MainLiveJournal implements OnDestroy, OnInit, OnChanges {
     this.inFlight.push(operation);
 
     this.journalSocket.sendJournalUpdate(message);
+  }
+
+  onScroll() {
+    this.journalScrollTop.set(this.textArea().nativeElement.scrollTop);
+    console.log(this.journalScrollTop());
+    this.caretTracker().refitCarets();
+  }
+
+  onResize() {
+    console.log("Resize");
+    this.caretTracker().updateCanvasEm(this.textArea().nativeElement);
+    this.caretTracker().refitCarets();
+  }
+
+  constructor() {
+    effect(() => {
+      this.text();
+      this.onScroll();
+    });
   }
 }
